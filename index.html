@@ -14,6 +14,7 @@ body{font-family:'Inter',system-ui,sans-serif;background:#050D18;color:#fff;over
 .pg-grid{position:fixed;inset:0;background-image:linear-gradient(rgba(74,159,224,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(74,159,224,.04) 1px,transparent 1px);background-size:52px 52px;pointer-events:none;z-index:0;mask-image:radial-gradient(ellipse 80% 60% at 50% 30%,black,transparent)}
 .pg-aura{position:fixed;border-radius:50%;filter:blur(90px);pointer-events:none;z-index:0;will-change:transform}
 #pg-canvas{position:fixed;inset:0;pointer-events:none;z-index:0}
+#fruit-layer{position:fixed;inset:0;pointer-events:none;z-index:1;overflow:visible}
 .pn{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(5,13,24,.72);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid rgba(74,159,224,.12);padding:0 48px;height:66px;display:flex;align-items:center;justify-content:space-between}
 .pn-logo{display:flex;align-items:center;gap:10px;text-decoration:none}
 .pn-icon{width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,#4A9FE0,#1E6BAB);display:flex;align-items:center;justify-content:center;box-shadow:0 0 20px rgba(74,159,224,.5);flex-shrink:0}
@@ -55,7 +56,7 @@ body{font-family:'Inter',system-ui,sans-serif;background:#050D18;color:#fff;over
 .ps-n{font-family:'Plus Jakarta Sans',system-ui;font-size:30px;font-weight:800;line-height:1.2;display:block;background:linear-gradient(135deg,#fff,#8DCAF2);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
 .ps-n.tl{background:linear-gradient(135deg,#85ECD0,#2ECC9A);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
 .ps-l{font-size:11px;color:#6B9DB7;letter-spacing:.08em;text-transform:uppercase;margin-top:4px;display:block}
-.pc{position:relative;z-index:2;background:linear-gradient(180deg,#060F1A,#0A1628);padding:88px 48px 96px}
+.pc{position:relative;z-index:2;background:linear-gradient(180deg,#06111E 0%,#0A1628 100%);padding:88px 48px 96px}
 .pc-inner{max-width:1100px;margin:0 auto}
 .sec-lbl{display:flex;align-items:center;gap:10px;margin-bottom:12px}
 .sec-lbl::before{content:'';width:28px;height:1.5px;background:linear-gradient(90deg,#4A9FE0,transparent)}
@@ -94,7 +95,18 @@ body{font-family:'Inter',system-ui,sans-serif;background:#050D18;color:#fff;over
 .sico:hover{background:rgba(74,159,224,.15);border-color:rgba(74,159,224,.3)}
 .stitle{font-family:'Plus Jakarta Sans',system-ui;font-size:17px;font-weight:700;margin-bottom:10px;letter-spacing:-.2px}
 .sdesc{font-size:14px;color:#9BBFD8;line-height:1.65;max-width:220px;margin:0 auto}
-.pu{position:relative;z-index:2;background:linear-gradient(180deg,#0D1B2A,#0A1628);padding:88px 48px 96px}
+.pw{background:#EEF6FF;border-top:1px solid rgba(74,159,224,0.15);border-bottom:1px solid rgba(74,159,224,0.12)}
+.pw .sec-h{color:#050D18}
+.pw .sec-h em{color:#1E6BAB}
+.pw .sec-sub{color:#3A5E75}
+.pw .sec-lbl-t{color:#1E6BAB}
+.pw .stitle{color:#050D18}
+.pw .sdesc{color:#3A5E75}
+.pw .sico{background:rgba(74,159,224,0.1);border-color:rgba(74,159,224,0.22)}
+.pw .sico i{color:#1E6BAB}
+.pw .hiw-cl{background:repeating-linear-gradient(90deg,rgba(74,159,224,0.45) 0,rgba(74,159,224,0.45) 6px,transparent 6px,transparent 14px)}
+.pw .sring{border-color:rgba(74,159,224,0.35)}
+.pu{position:relative;z-index:2;background:linear-gradient(180deg,#0A1628 0%,#06111E 100%);padding:88px 48px 96px}
 .pu-inner{max-width:1100px;margin:0 auto}
 .sfrow{display:flex;align-items:center;justify-content:space-between;margin-bottom:32px;gap:12px}
 .sftabs{display:flex;gap:8px;flex-wrap:wrap}
@@ -137,7 +149,7 @@ body{font-family:'Inter',system-ui,sans-serif;background:#050D18;color:#fff;over
 .sc:hover .sc-cta i{transform:translateX(3px)}
 .more-btn{display:block;margin:0 auto;background:transparent;border:1px solid rgba(74,159,224,.28);color:#8DCAF2;padding:13px 32px;border-radius:10px;font-size:13px;font-weight:500;cursor:pointer;font-family:'Inter',system-ui;transition:all .22s}
 .more-btn:hover{background:rgba(74,159,224,.1);border-color:rgba(74,159,224,.5);color:#fff}
-.pr{position:relative;z-index:2;background:linear-gradient(180deg,#060F1A,#0A1628);padding:88px 48px 96px}
+.pr{position:relative;z-index:2;background:linear-gradient(180deg,#060F1A 0%,#0A1932 100%);padding:88px 48px 96px}
 .pr-inner{max-width:1100px;margin:0 auto}
 .pr-qbg{position:absolute;top:40px;left:40px;font-size:260px;font-family:'Plus Jakarta Sans',system-ui;font-weight:800;color:rgba(74,159,224,.04);line-height:1;user-select:none;pointer-events:none;z-index:0}
 .pr-agg{display:flex;align-items:center;gap:16px;margin-bottom:44px;padding:18px 24px;background:rgba(18,34,52,.4);border:1px solid rgba(74,159,224,.1);border-radius:14px;width:fit-content;backdrop-filter:blur(10px)}
@@ -264,6 +276,7 @@ body{font-family:'Inter',system-ui,sans-serif;background:#050D18;color:#fff;over
 <div class="pg-aura" id="pa2" style="width:600px;height:600px;background:radial-gradient(circle,rgba(46,204,154,.14),transparent 65%);top:-120px;right:-180px"></div>
 <div class="pg-aura" id="pa3" style="width:500px;height:500px;background:radial-gradient(circle,rgba(74,159,224,.1),transparent 65%);bottom:-150px;left:35%"></div>
 <canvas id="pg-canvas" aria-hidden="true"></canvas>
+<div id="fruit-layer" aria-hidden="true"></div>
 
 <nav class="pn" aria-label="Primary navigation">
 <a class="pn-logo" href="#"><div class="pn-icon"><i class="ti ti-snowflake" style="font-size:16px;color:#fff" aria-hidden="true"></i></div><span class="pn-wm">FrozenFood<em>Inc</em></span></a>
@@ -369,6 +382,65 @@ function rsz(){cv.width=window.innerWidth;cv.height=window.innerHeight;}rsz();wi
 function mkp(){return{x:Math.random()*cv.width,y:cv.height+10,sz:Math.random()*2.5+.8,sp:Math.random()*.5+.25,op:Math.random()*.55+.25,col:Math.random()>.5?'#4A9FE0':'#2ECC9A',dr:(Math.random()-.5)*.4};}
 for(var i=0;i<30;i++){var p=mkp();p.y=Math.random()*cv.height;pts.push(p);}
 (function loop(){cx.clearRect(0,0,cv.width,cv.height);pts.forEach(function(p,i){p.y-=p.sp;p.x+=p.dr;p.op-=.0007;cx.beginPath();cx.arc(p.x,p.y,p.sz,0,Math.PI*2);cx.fillStyle=p.col;cx.globalAlpha=Math.max(0,p.op);cx.fill();cx.globalAlpha=1;if(p.y<-10||p.op<=0)pts[i]=mkp();});requestAnimationFrame(loop);})();
+var fruitLayer = document.getElementById('fruit-layer');
+var fruitPool = [
+  {type:'icon', cls:'ti ti-leaf',      color:'#2ECC9A'},
+  {type:'icon', cls:'ti ti-snowflake', color:'#8DCAF2'},
+  {type:'icon', cls:'ti ti-leaf',      color:'#52DEB5'},
+  {type:'icon', cls:'ti ti-snowflake', color:'#4A9FE0'},
+  {type:'berry', color:'#2ECC9A'},
+  {type:'berry', color:'#4A9FE0'},
+  {type:'berry', color:'#85ECD0'}
+];
+
+function spawnFruit() {
+  var f = fruitPool[Math.floor(Math.random() * fruitPool.length)];
+  var size     = 10 + Math.random() * 12;
+  var startX   = 3  + Math.random() * 94;
+  var driftX   = (Math.random() - 0.5) * 120;
+  var duration = 10 + Math.random() * 8;
+  var rotation = (Math.random() - 0.5) * 30;
+  var el;
+
+  if (f.type === 'icon') {
+    el = document.createElement('i');
+    el.className = f.cls;
+    el.style.cssText = 'position:absolute;font-size:' + size + 'px;color:' + f.color + ';opacity:0;bottom:0;left:' + startX + '%;pointer-events:none;filter:blur(0.4px)';
+  } else {
+    el = document.createElement('div');
+    el.style.cssText = 'position:absolute;width:' + (size * 0.65) + 'px;height:' + (size * 0.65) + 'px;border-radius:50%;background:' + f.color + ';opacity:0;bottom:0;left:' + startX + '%;pointer-events:none';
+  }
+
+  fruitLayer.appendChild(el);
+
+  var travelY     = -(window.innerHeight + 80);
+  var peakOpacity = 0.16 + Math.random() * 0.14;
+
+  gsap.to(el, {
+    y: travelY, x: driftX, rotation: rotation,
+    duration: duration, ease: 'none',
+    onComplete: function() { if (el.parentNode) el.parentNode.removeChild(el); }
+  });
+  gsap.to(el, {
+    opacity: peakOpacity,
+    duration: duration * 0.18,
+    ease: 'power2.out'
+  });
+  gsap.to(el, {
+    opacity: 0,
+    duration: duration * 0.28,
+    delay: duration * 0.72,
+    ease: 'power2.in'
+  });
+}
+
+var spawnIntervals = [1800, 2400, 1600, 2800, 2100, 3200, 2600];
+spawnIntervals.forEach(function(ms, i) {
+  setTimeout(function() {
+    spawnFruit();
+    setInterval(spawnFruit, ms);
+  }, i * 500);
+});
 gsap.to('#pa1',{x:120,y:-80,scale:1.2,duration:10,repeat:-1,yoyo:true,ease:'sine.inOut'});
 gsap.to('#pa2',{x:-130,y:60,scale:1.15,duration:13,repeat:-1,yoyo:true,ease:'sine.inOut',delay:2});
 gsap.to('#pa3',{x:80,y:-50,scale:1.1,duration:11,repeat:-1,yoyo:true,ease:'sine.inOut',delay:4});
