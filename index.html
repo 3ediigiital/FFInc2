@@ -62,7 +62,7 @@ body.light-mode #mode-toggle{border-color:rgba(30,107,171,0.4);background:rgba(3
 .ps-n.tl{background:linear-gradient(135deg,#85ECD0,#2ECC9A);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
 .ps-l{font-size:11px;color:#6B9DB7;letter-spacing:.08em;text-transform:uppercase;margin-top:4px;display:block}
 .pc{position:relative;z-index:2;background:linear-gradient(180deg,#060F1A,#0A1628);padding:88px 32px 96px}
-.pc-inner{max-width:100%;margin:0}
+.pc-inner{max-width:1200px;margin:0 auto}
 .sec-lbl{display:flex;align-items:center;gap:10px;margin-bottom:12px}
 .sec-lbl::before{content:'';width:28px;height:1.5px;background:linear-gradient(90deg,#4A9FE0,transparent)}
 .sec-lbl-t{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#4A9FE0}
@@ -88,7 +88,7 @@ body.light-mode #mode-toggle{border-color:rgba(30,107,171,0.4);background:rgba(3
 .cc-arr{width:34px;height:34px;border-radius:50%;border:1px solid rgba(74,159,224,.22);display:flex;align-items:center;justify-content:center;color:var(--ac);transition:all .22s;flex-shrink:0}
 .cc:hover .cc-arr{background:var(--ac);color:#050D18;border-color:transparent;transform:translateX(3px)}
 .pw{position:relative;z-index:2;background:linear-gradient(180deg,#0A1628,#0D1B2A);padding:88px 32px 96px}
-.pw-inner{max-width:100%;margin:0}
+.pw-inner{max-width:1200px;margin:0 auto}
 .hiw-row{display:flex;align-items:flex-start}
 .hiw-step{flex:1;text-align:center;padding:0 20px}
 .hiw-conn{flex:0 0 60px;display:flex;align-items:center;margin-top:28px}
@@ -168,7 +168,7 @@ body.light-mode #mode-toggle{border-color:rgba(30,107,171,0.4);background:rgba(3
 .pk{position:relative;z-index:2;background:#050D18}
 .pk-ring{position:absolute;border-radius:50%;pointer-events:none;top:50%;left:50%;transform:translate(-50%,-50%)}
 .pk-cta{position:relative;z-index:2;padding:96px 32px 72px}
-.pk-inner{max-width:100%;margin:0 auto;display:flex;align-items:stretch;gap:32px}
+.pk-inner{max-width:1200px;margin:0 auto;display:flex;align-items:stretch;gap:32px}
 .cta-col{flex:1;padding:40px 36px;border-radius:20px;position:relative;overflow:hidden}
 .cta-col::before{content:'';position:absolute;inset:0;border-radius:20px;border:1px solid;pointer-events:none}
 .cta-col.buyers::before{border-color:rgba(74,159,224,.2);background:rgba(18,34,52,.45)}
@@ -741,19 +741,6 @@ body.light-mode .pg-grid { opacity: 0.25; }
 <div class="cc" id="cc4" style="--ac:#52DEB5"><div class="cc-body"><div class="cc-icon"><i class="ti ti-fish" style="font-size:22px;color:#52DEB5" aria-hidden="true"></i></div><div class="cc-sp"></div><div class="cc-name">Frozen Seafood</div><div class="cc-desc">Fish fillets, shrimp, shellfish and processed seafood from MSC-certified sustainable suppliers.</div><div class="cc-foot"><span class="cc-count"><b>165+</b> suppliers</span><div class="cc-arr"><i class="ti ti-arrow-right" style="font-size:15px" aria-hidden="true"></i></div></div></div></div>
 </div></div></section>
 
-<section class="pw" id="pw-sec" aria-label="How it works">
-<div class="pw-inner">
-<div class="sec-lbl" id="pw-lbl"><span class="sec-lbl-t">Simple process</span></div>
-<h2 class="sec-h" id="pw-h">How FrozenFood<em>Inc</em> Works</h2>
-<p class="sec-sub" id="pw-sub" style="margin-bottom:52px">Three steps from search to sourcing deal — no middlemen, no commission.</p>
-<div class="hiw-row">
-<div class="hiw-step" id="hs1"><div class="snw"><div class="sring" id="sr1"></div><div class="scirc" id="sc1i">1</div></div><div class="sico"><i class="ti ti-search" style="font-size:18px;color:#4A9FE0" aria-hidden="true"></i></div><div class="stitle">Search the database</div><div class="sdesc">Search by category, region, certification and MOQ to find the right supplier match.</div></div>
-<div class="hiw-conn"><div class="hiw-cl" id="hc1"></div></div>
-<div class="hiw-step" id="hs2"><div class="snw"><div class="sring" id="sr2"></div><div class="scirc" id="sc2i">2</div></div><div class="sico"><i class="ti ti-send" style="font-size:18px;color:#4A9FE0" aria-hidden="true"></i></div><div class="stitle">Contact directly</div><div class="sdesc">Send enquiries straight to verified suppliers — no brokers, zero commission.</div></div>
-<div class="hiw-conn"><div class="hiw-cl" id="hc2"></div></div>
-<div class="hiw-step" id="hs3"><div class="snw"><div class="sring" id="sr3"></div><div class="scirc" id="sc3i">3</div></div><div class="sico"><i class="ti ti-shield-check" style="font-size:18px;color:#4A9FE0" aria-hidden="true"></i></div><div class="stitle">Source with confidence</div><div class="sdesc">Every listing is verified and rated. Review credentials before committing.</div></div>
-</div></div></section>
-
 <section class="pu" id="pu-sec" aria-label="Featured suppliers">
 <div class="pu-inner">
 <div class="sec-lbl" id="pu-lbl"><span class="sec-lbl-t">Featured listings</span></div>
@@ -768,6 +755,19 @@ body.light-mode .pg-grid { opacity: 0.25; }
 </div>
 <div style="text-align:center"><button class="more-btn">Browse all 750+ verified suppliers <i class="ti ti-arrow-right" style="font-size:13px;margin-left:4px" aria-hidden="true"></i></button></div>
 </div></section>
+
+<section class="pw" id="pw-sec" aria-label="How it works">
+<div class="pw-inner">
+<div class="sec-lbl" id="pw-lbl"><span class="sec-lbl-t">Simple process</span></div>
+<h2 class="sec-h" id="pw-h">How FrozenFood<em>Inc</em> Works</h2>
+<p class="sec-sub" id="pw-sub" style="margin-bottom:52px">Three steps from search to sourcing deal — no middlemen, no commission.</p>
+<div class="hiw-row">
+<div class="hiw-step" id="hs1"><div class="snw"><div class="sring" id="sr1"></div><div class="scirc" id="sc1i">1</div></div><div class="sico"><i class="ti ti-search" style="font-size:18px;color:#4A9FE0" aria-hidden="true"></i></div><div class="stitle">Search the database</div><div class="sdesc">Search by category, region, certification and MOQ to find the right supplier match.</div></div>
+<div class="hiw-conn"><div class="hiw-cl" id="hc1"></div></div>
+<div class="hiw-step" id="hs2"><div class="snw"><div class="sring" id="sr2"></div><div class="scirc" id="sc2i">2</div></div><div class="sico"><i class="ti ti-send" style="font-size:18px;color:#4A9FE0" aria-hidden="true"></i></div><div class="stitle">Contact directly</div><div class="sdesc">Send enquiries straight to verified suppliers — no brokers, zero commission.</div></div>
+<div class="hiw-conn"><div class="hiw-cl" id="hc2"></div></div>
+<div class="hiw-step" id="hs3"><div class="snw"><div class="sring" id="sr3"></div><div class="scirc" id="sc3i">3</div></div><div class="sico"><i class="ti ti-shield-check" style="font-size:18px;color:#4A9FE0" aria-hidden="true"></i></div><div class="stitle">Source with confidence</div><div class="sdesc">Every listing is verified and rated. Review credentials before committing.</div></div>
+</div></div></section>
 
 <section class="pr" id="pr-sec" aria-label="Customer testimonials">
 <div class="pr-qbg">"</div>
