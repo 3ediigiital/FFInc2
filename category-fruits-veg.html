@@ -307,6 +307,72 @@ body.light-mode .lc-cert{background:rgba(74,159,224,.08) !important;border-color
 body.light-mode .lc-foot{border-top-color:rgba(74,159,224,.15) !important}
 body.light-mode .ch-sub{color:#3A5E75}
 body.light-mode .ch1{color:#050D18}
+/* ── Light-mode legibility pass (mapped to actual page selectors) ── */
+/* Hero */
+body.light-mode .ch1{color:#050D18 !important}
+body.light-mode .ch1 em{color:#0F9B72 !important}
+body.light-mode .ch-sub{color:#3A5E75 !important}
+body.light-mode .ch-bc{color:#6B9DB7 !important}
+body.light-mode .ch-bc .cur{color:#0F9B72 !important}
+body.light-mode .chs-l{color:#6B9DB7 !important}
+body.light-mode .ch-btn-s{border-color:rgba(15,155,114,.4) !important;color:#0F9B72 !important}
+/* Filter bar */
+body.light-mode .fb-cnt{color:#3A5E75 !important}
+body.light-mode .fb-cnt b{color:#0F9B72 !important}
+body.light-mode .fb-s input{color:#050D18 !important}
+body.light-mode .fb-s input::placeholder{color:#9BBFD8 !important}
+/* Section label above grid */
+body.light-mode .ls-lbl{color:#6B9DB7 !important}
+body.light-mode .ls-lbl::after{background:rgba(74,159,224,.2) !important}
+/* Grid cards */
+body.light-mode .lc-n{color:#050D18 !important}
+body.light-mode .lc-loc{color:#6B9DB7 !important}
+body.light-mode .lc-sv{color:#050D18 !important}
+body.light-mode .lc-sl{color:#6B9DB7 !important}
+body.light-mode .lc-tag{background:rgba(74,159,224,.1) !important;border-color:rgba(74,159,224,.22) !important;color:#1E6BAB !important}
+body.light-mode .lc-cert{background:rgba(74,159,224,.08) !important;border-color:rgba(74,159,224,.2) !important;color:#1E6BAB !important}
+body.light-mode .lc-rate span{color:#6B9DB7 !important}
+body.light-mode .lc-stats{background:rgba(238,246,255,.8) !important;border-color:rgba(74,159,224,.18) !important}
+body.light-mode .lc-stat + .lc-stat{border-left-color:rgba(74,159,224,.18) !important}
+body.light-mode .lc-foot{border-top-color:rgba(74,159,224,.15) !important}
+/* List view */
+body.light-mode .lr-name{color:#050D18 !important}
+body.light-mode .lr-loc{color:#6B9DB7 !important}
+body.light-mode .lr-stats{background:rgba(238,246,255,.8) !important;border-color:rgba(74,159,224,.18) !important}
+body.light-mode .lr-stat + .lr-stat{border-left-color:rgba(74,159,224,.18) !important}
+/* Load more */
+body.light-mode .lm-cnt{color:#3A5E75 !important}
+/* Market intelligence — stat boxes */
+body.light-mode .mi-stat{background:rgba(255,255,255,.85) !important;border-color:rgba(74,159,224,.2) !important;box-shadow:0 4px 20px rgba(74,159,224,.08) !important}
+body.light-mode .mi-n{background:linear-gradient(135deg,#050D18,#1E6BAB) !important;-webkit-background-clip:text !important;background-clip:text !important;-webkit-text-fill-color:transparent !important}
+body.light-mode .mi-n.tl{background:linear-gradient(135deg,#0F9B72,#2ECC9A) !important;-webkit-background-clip:text !important;background-clip:text !important;-webkit-text-fill-color:transparent !important}
+body.light-mode .mi-nl{color:#050D18 !important}
+body.light-mode .mi-nd{color:#6B9DB7 !important}
+/* Market intel info boxes */
+body.light-mode .mi-box{background:rgba(255,255,255,.78) !important;border-color:rgba(74,159,224,.18) !important}
+body.light-mode .mi-bt{color:#050D18 !important}
+body.light-mode .mi-cty{color:#050D18 !important}
+body.light-mode .mi-spec{color:#6B9DB7 !important}
+body.light-mode .mi-rank{background:rgba(74,159,224,.12) !important;border-color:rgba(74,159,224,.25) !important;color:#1E6BAB !important}
+body.light-mode .mi-row{border-bottom-color:rgba(74,159,224,.12) !important}
+body.light-mode .mi-st{color:#3A5E75 !important}
+body.light-mode .mi-st b{color:#050D18 !important}
+body.light-mode .mi-seas{border-bottom-color:rgba(74,159,224,.12) !important}
+body.light-mode .mi-dd{background:rgba(238,246,255,.85) !important;border-color:rgba(74,159,224,.15) !important}
+body.light-mode .mi-dt{color:#1E6BAB !important}
+body.light-mode .mi-b{color:#3A5E75 !important}
+body.light-mode .mi-b b{color:#050D18 !important}
+body.light-mode .mi-sub{color:#3A5E75 !important}
+body.light-mode .mi-h{color:#050D18 !important}
+body.light-mode .mi-h em{color:#1E6BAB !important}
+/* Supplier CTA banner */
+body.light-mode .scta-h{color:#050D18 !important}
+body.light-mode .scta-sub{color:#3A5E75 !important}
+/* Category sub-nav */
+body.light-mode .csn-item{color:#6B9DB7 !important}
+body.light-mode .csn-item.on{color:#0F9B72 !important;border-bottom-color:#0F9B72 !important}
+body.light-mode .csn-item:hover:not(.on){color:#050D18 !important}
+body.light-mode .csn-sep{background:rgba(74,159,224,.18) !important}
 
 /* ── Responsive ── */
 @media (max-width:900px){
@@ -318,6 +384,8 @@ body.light-mode .ch1{color:#050D18}
   .csn { overflow-x: auto; padding: 0 16px; }
   .csn-item { padding: 10px 12px; font-size: 11px; }
   .chero { padding: 36px 20px 30px; }
+  .chero { padding-top: 52px !important; }
+  .chero-inner { padding-top: 8px; }
   .ch1 { font-size: 26px; }
   .ch-sub { font-size: 13px; }
   .ch-stats { flex-wrap: wrap; }
@@ -341,6 +409,8 @@ body.light-mode .ch1{color:#050D18}
   .mi-stats { grid-template-columns: 1fr 1fr; }
   .pf-grid { grid-template-columns: 1fr; }
   .ch1 { font-size: 22px; }
+  .chero { padding-top: 44px !important; }
+  .chero-inner { padding-top: 12px; }
 }
 </style>
 </head>
