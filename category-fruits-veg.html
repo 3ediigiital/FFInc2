@@ -165,7 +165,8 @@ body.light-mode #mode-toggle{border-color:rgba(30,107,171,0.4);background:rgba(3
 .mi-row{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid rgba(74,159,224,.08)}
 .mi-row:last-child{border-bottom:none}
 .mi-rank{width:22px;height:22px;border-radius:50%;background:rgba(46,204,154,.12);border:1px solid rgba(46,204,154,.28);color:#2ECC9A;font-family:'Plus Jakarta Sans',system-ui;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.mi-cty{font-size:13px;font-weight:600;color:#fff;flex:1}
+.mi-cty{font-size:13px;font-weight:600;color:#fff;flex:1;display:flex;align-items:center}
+.mi-flag{margin-right:9px;font-size:16px;line-height:1;flex-shrink:0}
 .mi-spec{font-size:11px;color:#6B9DB7;text-align:right}
 .mi-dd{margin-top:18px;background:rgba(10,22,40,.5);border:1px solid rgba(74,159,224,.1);border-radius:12px;padding:16px}
 .mi-dt{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:#2ECC9A;margin-bottom:12px}
@@ -315,6 +316,11 @@ body.light-mode .ch-sub{color:#3A5E75 !important}
 body.light-mode .ch-bc{color:#6B9DB7 !important}
 body.light-mode .ch-bc .cur{color:#0F9B72 !important}
 body.light-mode .chs-l{color:#6B9DB7 !important}
+/* Hero stats pill — lighten in light mode so labels read clearly */
+body.light-mode .ch-stats{background:rgba(255,255,255,.72) !important;border-color:rgba(46,204,154,.3) !important}
+body.light-mode .chs{border-right-color:rgba(74,159,224,.15) !important}
+body.light-mode .chs-n{color:#0F9B72 !important}
+body.light-mode .chs-l{color:#3A5E75 !important}
 body.light-mode .ch-btn-s{border-color:rgba(15,155,114,.4) !important;color:#0F9B72 !important}
 /* Filter bar */
 body.light-mode .fb-cnt{color:#3A5E75 !important}
@@ -517,11 +523,11 @@ body.light-mode .csn-sep{background:rgba(74,159,224,.18) !important}
 <div class="mi-grid">
 <div class="mi-box" id="mi-left">
 <div class="mi-bt"><i class="ti ti-world" aria-hidden="true"></i>Top Sourcing Origins</div>
-<div class="mi-row"><div class="mi-rank">1</div><span class="mi-cty">Netherlands</span><span class="mi-spec">IQF Berries · Mixed Veg</span></div>
-<div class="mi-row"><div class="mi-rank">2</div><span class="mi-cty">Chile</span><span class="mi-spec">Berries · Stone Fruit</span></div>
-<div class="mi-row"><div class="mi-rank">3</div><span class="mi-cty">Spain</span><span class="mi-spec">Mixed Veg · Strawberries</span></div>
-<div class="mi-row"><div class="mi-rank">4</div><span class="mi-cty">Poland</span><span class="mi-spec">IQF Veg · Mushrooms</span></div>
-<div class="mi-row"><div class="mi-rank">5</div><span class="mi-cty">Peru</span><span class="mi-spec">Organic Berries · Mango</span></div>
+<div class="mi-row"><div class="mi-rank">1</div><span class="mi-cty"><span class="mi-flag" aria-hidden="true">🇳🇱</span>Netherlands</span><span class="mi-spec">IQF Berries · Mixed Veg</span></div>
+<div class="mi-row"><div class="mi-rank">2</div><span class="mi-cty"><span class="mi-flag" aria-hidden="true">🇨🇱</span>Chile</span><span class="mi-spec">Berries · Stone Fruit</span></div>
+<div class="mi-row"><div class="mi-rank">3</div><span class="mi-cty"><span class="mi-flag" aria-hidden="true">🇪🇸</span>Spain</span><span class="mi-spec">Mixed Veg · Strawberries</span></div>
+<div class="mi-row"><div class="mi-rank">4</div><span class="mi-cty"><span class="mi-flag" aria-hidden="true">🇵🇱</span>Poland</span><span class="mi-spec">IQF Veg · Mushrooms</span></div>
+<div class="mi-row"><div class="mi-rank">5</div><span class="mi-cty"><span class="mi-flag" aria-hidden="true">🇵🇪</span>Peru</span><span class="mi-spec">Organic Berries · Mango</span></div>
 <div class="mi-dd">
 <div class="mi-dt">Key Demand Drivers</div>
 <div class="mi-b"><span><b>Plant-based diet growth</b> — rising global demand for plant protein and clean-label frozen produce</span></div>
