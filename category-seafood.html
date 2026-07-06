@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>FrozenFoodInc — Frozen Seafood Suppliers | Wholesale Fish, Shrimp &amp; Shellfish Database</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.11.0/dist/tabler-icons.min.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{overflow-x:hidden;max-width:100vw}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',system-ui,sans-serif;background:#050D18;color:#fff;overflow-x:hidden;min-height:100vh}
+
+/* ── Shared background layers (from index.html) ── */
+.pg-grid{position:fixed;inset:0;background-image:linear-gradient(rgba(74,159,224,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(74,159,224,.04) 1px,transparent 1px);background-size:52px 52px;pointer-events:none;z-index:0;mask-image:radial-gradient(ellipse 80% 60% at 50% 30%,black,transparent)}
+.pg-aura{position:fixed;border-radius:50%;filter:blur(90px);pointer-events:none;z-index:0;will-change:transform}
+#pg-canvas{position:fixed;inset:0;pointer-events:none;z-index:0}
+
+/* ── Nav (from index.html) ── */
+.pn{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(5,13,24,.72);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid rgba(82,222,181,.12);padding:0 48px;height:66px;display:flex;align-items:center;justify-content:space-between}
+.pn-logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.pn-icon{width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,#4A9FE0,#1E6BAB);display:flex;align-items:center;justify-content:center;box-shadow:0 0 20px rgba(74,159,224,.5);flex-shrink:0}
+.pn-wm{font-family:'Plus Jakarta Sans',system-ui;font-size:16px;font-weight:800;letter-spacing:-.3px;color:#fff}
+.pn-wm em{color:#4A9FE0;font-style:normal}
+.pn-links{display:flex;align-items:center;gap:28px}
+.pn-links a{font-size:13px;color:#9BBFD8;text-decoration:none;transition:color .2s}
+.pn-links a:hover{color:#fff}
+.pn-div{width:1px;height:18px;background:rgba(74,159,224,.2)}
+.pn-cta{background:linear-gradient(135deg,#4A9FE0,#2D7FC4);color:#fff;border:none;padding:10px 22px;border-radius:9px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',system-ui;box-shadow:0 4px 18px rgba(74,159,224,.4);transition:transform .15s,box-shadow .15s}
+.pn-cta:hover{transform:translateY(-1px);box-shadow:0 6px 26px rgba(74,159,224,.62)}
+#mode-toggle{width:34px;height:34px;border-radius:50%;border:1px solid rgba(74,159,224,0.28);background:rgba(74,159,224,0.08);color:#8DCAF2;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.2s;flex-shrink:0;padding:0}
+#mode-toggle:hover{background:rgba(74,159,224,0.18);border-color:rgba(74,159,224,0.5);color:#fff;transform:scale(1.08)}
+#mode-toggle i{font-size:15px}
+body.light-mode #mode-toggle{border-color:rgba(30,107,171,0.4);background:rgba(30,107,171,0.12);color:#1E6BAB}
+
+/* ── SECTION 1 — Category sub-nav ── */
+.csn{position:sticky;top:66px;z-index:90;background:rgba(6,15,26,.96);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid rgba(82,222,181,.1);display:flex;align-items:center;justify-content:center;padding:0 48px}
+.csn-inner{display:flex;align-items:center;max-width:1200px;width:100%}
+.csn-item{display:inline-flex;align-items:center;gap:7px;padding:12px 16px;font-size:12.5px;font-weight:500;color:#9BBFD8;text-decoration:none;border-bottom:2px solid transparent;transition:color .2s,border-color .2s;cursor:pointer;white-space:nowrap}
+.csn-item i{font-size:15px}
+.csn-item:hover{color:#fff;border-bottom-color:rgba(82,222,181,.3)}
+.csn-item.on{color:#52DEB5;border-bottom-color:#52DEB5}
+.csn-sep{width:1px;height:18px;background:rgba(82,222,181,.12);flex-shrink:0}
+
+/* ── SECTION 2 — Category hero ── */
+.chero{position:relative;overflow:hidden;background:linear-gradient(135deg,#050D18 0%,#061A14 50%,#050D18 100%);padding:52px 48px 44px}
+.chero-aura{position:absolute;border-radius:50%;filter:blur(70px);pointer-events:none;z-index:0}
+.chero-inner{position:relative;z-index:2;max-width:1200px;margin:0 auto}
+.ch-bc{display:flex;align-items:center;gap:6px;font-size:11px;color:#6B9DB7;margin-bottom:16px}
+.ch-bc i{font-size:10px}
+.ch-bc .cur{color:#52DEB5;font-weight:500}
+.ch1{font-family:'Plus Jakarta Sans',system-ui;font-size:48px;font-weight:800;letter-spacing:-1.2px;line-height:1.1;margin-bottom:16px}
+.ch1 em{color:#52DEB5;font-style:normal}
+.ch-sub{font-size:17px;color:#9BBFD8;line-height:1.65;max-width:560px;margin-bottom:24px}
+.ch-stats{display:inline-flex;background:rgba(18,34,52,.5);border:1px solid rgba(82,222,181,.18);border-radius:14px;overflow:hidden;width:fit-content;margin-bottom:24px;flex-wrap:wrap}
+.chs{padding:12px 20px;border-right:1px solid rgba(82,222,181,.12);text-align:left}
+.chs:last-child{border-right:none}
+.chs-n{font-family:'Plus Jakarta Sans',system-ui;font-size:20px;font-weight:800;color:#52DEB5;line-height:1.1;display:block}
+.chs-l{font-size:10px;color:#9BBFD8;text-transform:uppercase;letter-spacing:.05em;margin-top:3px;display:block}
+.ch-acts{display:flex;gap:10px;flex-wrap:wrap}
+.ch-btn-p{display:inline-flex;align-items:center;gap:7px;background:linear-gradient(135deg,#52DEB5,#2ECC9A);color:#04342C;border:none;padding:12px 24px;border-radius:10px;font-family:'Inter',system-ui;font-size:13.5px;font-weight:700;cursor:pointer;box-shadow:0 6px 22px rgba(82,222,181,.38);transition:transform .15s,box-shadow .15s}
+.ch-btn-p:hover{transform:translateY(-2px);box-shadow:0 9px 28px rgba(82,222,181,.55)}
+.ch-btn-s{display:inline-flex;align-items:center;gap:7px;background:transparent;border:1px solid rgba(82,222,181,.3);color:#52DEB5;padding:12px 22px;border-radius:10px;font-family:'Inter',system-ui;font-size:13.5px;font-weight:500;cursor:pointer;transition:background .2s,border-color .2s}
+.ch-btn-s:hover{background:rgba(82,222,181,.08);border-color:rgba(82,222,181,.5)}
+
+/* ── SECTION 3 — Filter bar ── */
+.fb{position:sticky;top:110px;z-index:80;background:rgba(8,18,32,.96);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid rgba(82,222,181,.12);padding:12px 48px}
+.fb-in{display:flex;align-items:center;gap:10px;max-width:1400px;margin:0 auto}
+.fb-s{flex:1;min-width:200px;display:flex;align-items:center;gap:8px;background:rgba(18,34,52,.8);border:1px solid rgba(82,222,181,.18);border-radius:10px;padding:9px 14px;transition:border-color .2s}
+.fb-s i{font-size:15px;color:#4A9FE0;flex-shrink:0}
+.fb-s:focus-within{border-color:rgba(82,222,181,.45)}
+.fb-s input{flex:1;background:transparent;border:none;outline:none;color:#fff;font-family:'Inter',system-ui;font-size:13px}
+.fb-s input::placeholder{color:#3A5E75}
+.fb-sel{background:rgba(18,34,52,.8);border:1px solid rgba(82,222,181,.18);color:#9BBFD8;padding:9px 12px;border-radius:10px;font-size:12px;font-family:'Inter',system-ui;min-width:140px;outline:none;cursor:pointer}
+.fb-r{margin-left:auto;display:flex;gap:10px;align-items:center}
+.fb-cnt{font-size:11.5px;color:#6B9DB7;white-space:nowrap}
+.fb-cnt b{color:#52DEB5;font-weight:600}
+.tog{display:flex;background:rgba(18,34,52,.8);border:1px solid rgba(82,222,181,.18);border-radius:10px;overflow:hidden}
+.tog-b{width:36px;height:36px;display:flex;align-items:center;justify-content:center;background:transparent;border:none;color:#6B9DB7;cursor:pointer;transition:all .2s}
+.tog-b i{font-size:15px}
+.tog-b.on{background:rgba(82,222,181,.2);color:#52DEB5}
+
+/* ── SECTION 4 — Listings ── */
+.ls{background:#050D18;padding:28px 48px 32px;position:relative;z-index:2}
+.ls-inner{max-width:1400px;margin:0 auto}
+.ls-lbl{display:flex;align-items:center;gap:10px;font-size:10px;color:#3A5E75;text-transform:uppercase;letter-spacing:.08em;margin-bottom:18px}
+.ls-lbl::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,rgba(82,222,181,.15),transparent)}
+#grid-view{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+#list-view{display:none;flex-direction:column;gap:10px}
+
+/* Grid card */
+.lc{position:relative;background:rgba(18,34,52,.48);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(82,222,181,.1);border-radius:18px;padding:20px;overflow:hidden;cursor:pointer;transition:transform .28s cubic-bezier(.34,1.3,.64,1),border-color .25s,box-shadow .28s}
+.lc::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(82,222,181,.5),transparent)}
+.lc:hover{transform:translateY(-5px);border-color:rgba(82,222,181,.28);box-shadow:0 18px 52px rgba(0,0,0,.45),0 0 36px -16px #52DEB5}
+.lc-head{display:flex;gap:10px;margin-bottom:12px}
+.lc-logo{width:40px;height:40px;border-radius:10px;background:rgba(82,222,181,.12);border:1px solid rgba(82,222,181,.25);display:flex;align-items:center;justify-content:center;color:#52DEB5;font-family:'Plus Jakarta Sans',system-ui;font-size:12px;font-weight:700;flex-shrink:0}
+.lc-ng{flex:1;min-width:0}
+.lc-n{font-size:13px;font-weight:600;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:3px}
+.lc-loc{font-size:10.5px;color:#9BBFD8;display:flex;align-items:center;gap:4px}
+.lc-loc i{font-size:10px}
+.lc-bdgs{display:flex;flex-direction:column;gap:4px;flex-shrink:0;align-items:flex-end}
+.bdg{display:inline-flex;align-items:center;gap:3px;font-size:9px;font-weight:600;padding:2px 7px;border-radius:8px;white-space:nowrap}
+.bdg-f{background:rgba(82,222,181,.12);color:#52DEB5;border:1px solid rgba(82,222,181,.28)}
+.bdg-v{background:rgba(82,222,181,.1);color:#52DEB5;border:1px solid rgba(82,222,181,.25)}
+.lc-tags{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:10px}
+.lc-tag{background:rgba(26,48,72,.8);border:1px solid rgba(82,222,181,.12);color:#9BBFD8;font-size:9.5px;padding:2px 7px;border-radius:5px}
+.lc-stats{display:flex;background:rgba(10,22,40,.5);border:1px solid rgba(82,222,181,.1);border-radius:9px;overflow:hidden;margin-bottom:10px}
+.lc-stat{flex:1;padding:8px 6px;text-align:center;border-left:1px solid rgba(82,222,181,.1)}
+.lc-stat:first-child{border-left:none}
+.lc-sv{display:block;font-family:'Plus Jakarta Sans',system-ui;font-size:13px;font-weight:700;color:#fff;line-height:1.2}
+.lc-sl{display:block;font-size:8.5px;color:#6B9DB7;text-transform:uppercase;letter-spacing:.04em;margin-top:2px}
+.lc-certs{display:flex;flex-wrap:wrap;gap:3px;margin-bottom:11px}
+.lc-cert{background:rgba(82,222,181,.08);border:1px solid rgba(82,222,181,.14);color:#8DCAF2;font-size:9px;padding:2px 6px;border-radius:4px}
+.lc-foot{display:flex;align-items:center;justify-content:space-between;border-top:1px solid rgba(82,222,181,.08);padding-top:10px}
+.lc-rate{font-size:11px;color:#F59E0B;display:flex;align-items:center;gap:4px}
+.lc-rate span{color:#6B9DB7;font-size:10px}
+.rq-btn{background:linear-gradient(135deg,#52DEB5,#2ECC9A);color:#04342C;border:none;padding:6px 13px;border-radius:7px;font-family:'Inter',system-ui;font-size:10.5px;font-weight:700;cursor:pointer;transition:transform .15s,box-shadow .15s;flex-shrink:0}
+.rq-btn:hover{transform:translateY(-1px);box-shadow:0 4px 14px rgba(82,222,181,.4)}
+
+/* List row */
+.lrow{display:flex;align-items:center;gap:16px;background:rgba(18,34,52,.48);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(82,222,181,.1);border-radius:14px;padding:16px 22px;cursor:pointer;transition:transform .25s cubic-bezier(.34,1.3,.64,1),border-color .25s,box-shadow .25s}
+.lrow:hover{border-color:rgba(82,222,181,.28);transform:translateX(3px);box-shadow:0 12px 34px rgba(0,0,0,.4)}
+.lr-main{flex:1;min-width:0}
+.lr-top{display:flex;align-items:center;gap:8px;margin-bottom:5px}
+.lr-name{font-size:13.5px;font-weight:600;color:#fff}
+.lr-loc{font-size:10.5px;color:#9BBFD8;display:flex;align-items:center;gap:4px}
+.lr-loc i{font-size:10px}
+.lr-tags{display:flex;flex-wrap:wrap;gap:4px}
+.lr-stats{display:flex;gap:0;background:rgba(10,22,40,.5);border:1px solid rgba(82,222,181,.1);border-radius:9px;overflow:hidden;flex-shrink:0}
+.lr-stat{padding:6px 14px;text-align:center;border-left:1px solid rgba(82,222,181,.1)}
+.lr-stat:first-child{border-left:none}
+.lr-certs{display:flex;gap:3px;flex-shrink:0}
+.lr-right{display:flex;align-items:center;gap:14px;flex-shrink:0}
+@media (max-width:1100px){.lr-stats,.lr-certs{display:none}}
+
+/* ── SECTION 5 — Load more ── */
+.lm{background:#050D18;border-top:1px solid rgba(82,222,181,.08);padding:20px 48px 28px;text-align:center;position:relative;z-index:2}
+.lm-cnt{font-size:12.5px;color:#6B9DB7;margin-bottom:14px}
+.lm-cnt b{color:#52DEB5;font-weight:600}
+.lm-btn{display:inline-flex;align-items:center;gap:8px;background:transparent;border:1px solid rgba(82,222,181,.28);color:#8DCAF2;padding:11px 32px;border-radius:10px;font-family:'Inter',system-ui;font-size:13px;font-weight:500;cursor:pointer;transition:all .2s}
+.lm-btn:hover{background:rgba(82,222,181,.08);border-color:rgba(82,222,181,.5);color:#fff}
+
+/* ── SECTION 6 — Market intelligence ── */
+.mi{position:relative;overflow:hidden;background:linear-gradient(180deg,#060F1A,#0A1628);padding:56px 48px 64px}
+.mi-aura{position:absolute;border-radius:50%;filter:blur(70px);pointer-events:none;z-index:0}
+.mi-inner{position:relative;z-index:2;max-width:1200px;margin:0 auto}
+.mi-pill{display:inline-flex;align-items:center;gap:6px;background:rgba(82,222,181,.08);border:1px solid rgba(82,222,181,.2);color:#52DEB5;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;padding:5px 12px;border-radius:20px;margin-bottom:14px}
+.mi-h{font-family:'Plus Jakarta Sans',system-ui;font-size:32px;font-weight:800;letter-spacing:-.6px;margin-bottom:10px}
+.mi-h em{color:#52DEB5;font-style:normal}
+.mi-sub{font-size:14px;color:#9BBFD8;line-height:1.6;max-width:480px;margin-bottom:32px}
+.mi-stats{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:12px;margin-bottom:28px}
+.mi-stat{position:relative;background:rgba(18,34,52,.42);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(82,222,181,.1);border-radius:18px;padding:22px 18px;overflow:hidden;transition:border-color .25s,transform .25s}
+.mi-stat::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--ac,#52DEB5),transparent);opacity:.5}
+.mi-stat:hover{border-color:rgba(82,222,181,.28);transform:translateY(-4px)}
+.mi-n{font-family:'Plus Jakarta Sans',system-ui;font-size:26px;font-weight:800;line-height:1.2;background:linear-gradient(135deg,#fff,#8DCAF2);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;display:block}
+.mi-n.tl{background:linear-gradient(135deg,#85ECD0,#52DEB5);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.mi-nl{font-size:12px;font-weight:500;color:#fff;margin:6px 0 3px;display:block}
+.mi-nd{font-size:10.5px;color:#6B9DB7}
+.mi-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.mi-box{background:rgba(18,34,52,.4);border:1px solid rgba(82,222,181,.1);border-radius:16px;padding:22px}
+.mi-bt{display:flex;align-items:center;gap:8px;font-family:'Plus Jakarta Sans',system-ui;font-size:15px;font-weight:700;margin-bottom:16px}
+.mi-bt i{font-size:17px;color:#52DEB5}
+.mi-row{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid rgba(82,222,181,.08)}
+.mi-row:last-child{border-bottom:none}
+.mi-rank{width:22px;height:22px;border-radius:50%;background:rgba(82,222,181,.12);border:1px solid rgba(82,222,181,.28);color:#52DEB5;font-family:'Plus Jakarta Sans',system-ui;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.mi-cty{font-size:13px;font-weight:600;color:#fff;flex:1;display:flex;align-items:center}
+.mi-flag{margin-right:9px;font-size:16px;line-height:1;flex-shrink:0}
+.mi-spec{font-size:11px;color:#6B9DB7;text-align:right}
+.mi-dd{margin-top:18px;background:rgba(10,22,40,.5);border:1px solid rgba(82,222,181,.1);border-radius:12px;padding:16px}
+.mi-dt{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:#52DEB5;margin-bottom:12px}
+.mi-b{display:flex;gap:9px;margin-bottom:11px;font-size:12px;color:#9BBFD8;line-height:1.55}
+.mi-b:last-child{margin-bottom:0}
+.mi-b::before{content:'';width:5px;height:5px;border-radius:50%;background:#52DEB5;flex-shrink:0;margin-top:6px}
+.mi-b b{color:#fff;font-weight:600}
+.mi-seas{margin-bottom:16px}
+.mi-seas:last-child{margin-bottom:0}
+.mi-badge{display:inline-flex;align-items:center;font-size:10px;font-weight:700;padding:3px 10px;border-radius:8px;margin-bottom:6px}
+.mi-badge.tl{background:rgba(82,222,181,.12);color:#52DEB5;border:1px solid rgba(82,222,181,.3)}
+.mi-badge.bl{background:rgba(74,159,224,.12);color:#8DCAF2;border:1px solid rgba(74,159,224,.3)}
+.mi-badge.am{background:rgba(82,222,181,.12);color:#52DEB5;border:1px solid rgba(82,222,181,.3)}
+.mi-st{font-size:12px;color:#9BBFD8;line-height:1.55}
+
+/* ── SECTION 8 — Supplier CTA banner ── */
+.scta{position:relative;overflow:hidden;background:linear-gradient(135deg,rgba(82,222,181,.1),rgba(46,204,154,.06));border-top:1px solid rgba(82,222,181,.2);border-bottom:1px solid rgba(82,222,181,.2);padding:40px 48px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.scta-aura{position:absolute;border-radius:50%;filter:blur(70px);pointer-events:none;z-index:0;width:300px;height:300px;background:radial-gradient(circle,rgba(82,222,181,.14),transparent 70%);top:-100px;right:-40px}
+.scta-l{position:relative;z-index:2}
+.scta-h{font-family:'Plus Jakarta Sans',system-ui;font-size:22px;font-weight:800;margin-bottom:8px}
+.scta-sub{font-size:13.5px;color:#9BBFD8;line-height:1.65;max-width:440px}
+.scta-btn{position:relative;z-index:2;display:inline-flex;align-items:center;gap:7px;background:linear-gradient(135deg,#52DEB5,#2ECC9A);color:#04342C;border:none;padding:13px 26px;border-radius:12px;font-family:'Inter',system-ui;font-size:14px;font-weight:700;cursor:pointer;box-shadow:0 6px 22px rgba(82,222,181,.36);flex-shrink:0;transition:transform .15s,box-shadow .15s}
+.scta-btn:hover{transform:translateY(-2px);box-shadow:0 9px 30px rgba(82,222,181,.55)}
+
+/* ── Footer (from index.html) ── */
+.pf{background:#040A12;position:relative;overflow:hidden}
+.pf-topglow{position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent 5%,rgba(74,159,224,.28) 35%,rgba(74,159,224,.2) 65%,transparent 95%);z-index:1}
+.pf-bgaura{position:absolute;top:-150px;left:50%;transform:translateX(-50%);width:800px;height:320px;background:radial-gradient(ellipse,rgba(74,159,224,.055),transparent 70%);pointer-events:none}
+.pf-gbg{position:absolute;inset:0;background-image:linear-gradient(rgba(74,159,224,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(74,159,224,.025) 1px,transparent 1px);background-size:52px 52px;pointer-events:none;mask-image:radial-gradient(ellipse 90% 60% at 50% 0%,black,transparent)}
+.pf-main{position:relative;z-index:2;padding:64px 32px 40px;max-width:100%;margin:0 auto}
+.pf-grid{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:32px;margin-bottom:48px}
+.pf-logo{display:flex;align-items:center;gap:10px;text-decoration:none;margin-bottom:14px}
+.pf-li{width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,#4A9FE0,#1E6BAB);display:flex;align-items:center;justify-content:center;box-shadow:0 0 18px rgba(74,159,224,.44)}
+.pf-lt{font-family:'Plus Jakarta Sans',system-ui;font-size:16px;font-weight:800;letter-spacing:-.3px;color:#fff}
+.pf-lt em{color:#4A9FE0;font-style:normal}
+.pf-desc{font-size:13px;color:#6B9DB7;line-height:1.7;margin-bottom:20px;max-width:240px}
+.pf-social{display:flex;gap:8px}
+.pf-si{width:34px;height:34px;border-radius:9px;border:1px solid rgba(74,159,224,.2);display:flex;align-items:center;justify-content:center;color:#6B9DB7;cursor:pointer;transition:all .2s;text-decoration:none}
+.pf-si:hover{color:#4A9FE0;border-color:rgba(74,159,224,.48);background:rgba(74,159,224,.08);transform:translateY(-2px)}
+.pf-ct{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#3A5E75;margin-bottom:18px;display:flex;align-items:center;gap:8px}
+.pf-ct::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,rgba(74,159,224,.15),transparent)}
+.pf-lk{display:flex;align-items:center;gap:7px;font-size:13px;color:#9BBFD8;margin-bottom:11px;cursor:pointer;transition:color .2s,transform .2s;text-decoration:none}
+.pf-lk i{font-size:11px;color:#3A5E75;transition:color .2s;flex-shrink:0}
+.pf-lk:hover{color:#8DCAF2;transform:translateX(5px)}
+.pf-lk:hover i{color:#4A9FE0}
+.pf-new{display:inline-flex;align-items:center;font-size:9.5px;font-weight:600;padding:2px 7px;border-radius:8px;background:rgba(74,159,224,.1);border:1px solid rgba(74,159,224,.22);color:#52DEB5;margin-left:5px}
+.pf-bot{border-top:1px solid rgba(74,159,224,.1);padding:18px 32px;display:flex;align-items:center;justify-content:space-between;gap:16px;position:relative;z-index:2;max-width:100%;margin:0 auto}
+.pf-copy{font-size:11px;color:#3A5E75}
+.pf-status{display:flex;align-items:center;gap:7px;font-size:11px;color:#52DEB5}
+.pf-sdot{width:7px;height:7px;border-radius:50%;background:#4A9FE0;box-shadow:0 0 9px #4A9FE0}
+.pf-legal{display:flex;gap:18px}
+.pf-legal a{font-size:11px;color:#3A5E75;text-decoration:none;transition:color .2s;cursor:pointer}
+.pf-legal a:hover{color:#6B9DB7}
+
+/* ── SECTION 7 — Quote modal ── */
+.qm-ov{display:none;position:fixed;inset:0;z-index:500;background:rgba(5,13,24,.85);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);align-items:center;justify-content:center;padding:20px}
+.qm-ov.open{display:flex}
+.qm{position:relative;background:rgba(10,22,40,.96);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(82,222,181,.28);border-radius:22px;padding:32px;width:100%;max-width:480px;box-shadow:0 28px 80px rgba(0,0,0,.65),0 0 60px -22px rgba(82,222,181,.22);max-height:92vh;overflow-y:auto}
+.qm::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,#52DEB5,transparent)}
+.qm-x{position:absolute;top:18px;right:18px;width:28px;height:28px;border-radius:50%;background:rgba(18,34,52,.8);border:1px solid rgba(82,222,181,.18);color:#9BBFD8;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .2s}
+.qm-x:hover{border-color:rgba(82,222,181,.45);color:#fff}
+.qm-x i{font-size:15px}
+.qm-sup{display:flex;align-items:center;gap:12px;padding-bottom:18px;border-bottom:1px solid rgba(82,222,181,.1);margin-bottom:18px}
+.qm-logo{width:42px;height:42px;border-radius:11px;background:rgba(82,222,181,.12);border:1px solid rgba(82,222,181,.25);color:#52DEB5;font-family:'Plus Jakarta Sans',system-ui;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.qm-sn{font-size:14px;font-weight:600;color:#fff}
+.qm-sl{font-size:11px;color:#9BBFD8;display:flex;align-items:center;gap:4px;margin-top:2px}
+.qm-sl i{font-size:10px}
+.qm-h{font-family:'Plus Jakarta Sans',system-ui;font-size:22px;font-weight:800;letter-spacing:-.4px;margin-bottom:4px}
+.qm-sub{font-size:12.5px;color:#9BBFD8;line-height:1.55;margin-bottom:22px}
+.qm-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.qm-f{display:flex;flex-direction:column}
+.qm-f.full{grid-column:1/-1}
+.qm-lb{font-size:11px;font-weight:500;color:#9BBFD8;letter-spacing:.03em;display:block;margin-bottom:5px}
+.qm-in,.qm-ta,.qm-se{background:rgba(18,34,52,.8);border:1px solid rgba(82,222,181,.18);border-radius:10px;padding:10px 14px;font-size:13px;color:#fff;font-family:'Inter',system-ui;outline:none;width:100%;transition:border-color .2s}
+.qm-in:focus,.qm-ta:focus,.qm-se:focus{border-color:rgba(82,222,181,.5)}
+.qm-in::placeholder,.qm-ta::placeholder{color:#3A5E75}
+.qm-ta{resize:vertical;min-height:92px;line-height:1.5}
+.qm-se{cursor:pointer}
+.qm-sub-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;background:linear-gradient(135deg,#52DEB5,#2ECC9A);color:#04342C;border:none;padding:15px;border-radius:12px;font-family:'Inter',system-ui;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 6px 24px rgba(82,222,181,.38);margin-top:8px;transition:transform .15s,box-shadow .15s}
+.qm-sub-btn:hover{transform:translateY(-1px);box-shadow:0 10px 32px rgba(82,222,181,.55)}
+.qm-priv{font-size:10.5px;color:#3A5E75;text-align:center;margin-top:10px;line-height:1.5}
+
+/* ── Light mode (shared components + page-specific) ── */
+body.light-mode{background:#EEF6FF !important}
+body.light-mode .pn{background:rgba(238,246,255,0.88) !important;border-bottom-color:rgba(74,159,224,0.2)}
+body.light-mode .pn-wm{color:#050D18}
+body.light-mode .pn-links a{color:#3A5E75}
+body.light-mode .pn-links a:hover{color:#050D18}
+body.light-mode .pg-aura{opacity:0.15}
+body.light-mode .pg-grid{opacity:0.25}
+body.light-mode .ls{background:#EEF6FF !important}
+body.light-mode .lm{background:#EEF6FF !important}
+body.light-mode .ls-lbl{color:#6B9DB7}
+body.light-mode .lm-cnt{color:#3A5E75}
+body.light-mode .csn-item{color:#3A5E75}
+body.light-mode .csn-item:hover{color:#050D18}
+body.light-mode .lc-n,body.light-mode .lr-name{color:#050D18 !important}
+body.light-mode .lc-loc,body.light-mode .lr-loc,body.light-mode .lc-sl{color:#6B9DB7}
+body.light-mode .lc-sv{color:#050D18}
+body.light-mode .mi-nl{color:#050D18 !important}
+body.light-mode .mi-cty{color:#050D18}
+body.light-mode .mi-bt{color:#050D18}
+body.light-mode .mi-sub,body.light-mode .mi-st,body.light-mode .mi-b{color:#3A5E75}
+body.light-mode .scta-h{color:#050D18}
+body.light-mode .scta-sub{color:#3A5E75}
+/* Footer light mode (from index.html) */
+body.light-mode .pf{background:#dce9ff !important}
+body.light-mode .pf-topglow{background:linear-gradient(90deg,transparent 5%,rgba(74,159,224,0.2) 35%,rgba(74,159,224,0.15) 65%,transparent 95%) !important}
+body.light-mode .pf-lt{color:#050D18 !important}
+body.light-mode .pf-desc{color:#3A5E75 !important}
+body.light-mode .pf-ct{color:#6B9DB7 !important}
+body.light-mode .pf-ct::after{background:linear-gradient(90deg,rgba(74,159,224,0.2),transparent) !important}
+body.light-mode .pf-lk{color:#3A5E75 !important}
+body.light-mode .pf-lk i{color:#9BBFD8 !important}
+body.light-mode .pf-lk:hover{color:#050D18 !important}
+body.light-mode .pf-lk:hover i{color:#4A9FE0 !important}
+body.light-mode .pf-copy{color:#6B9DB7 !important}
+body.light-mode .pf-status{color:#2D7FC4 !important}
+body.light-mode .pf-legal a{color:#6B9DB7 !important}
+body.light-mode .pf-si{border-color:rgba(74,159,224,0.25) !important;color:#6B9DB7 !important}
+body.light-mode .pf-si:hover{background:rgba(74,159,224,0.12) !important;color:#1E6BAB !important}
+/* Page-specific light mode (from build spec) */
+body.light-mode .chero{background:linear-gradient(135deg,#EEF6FF,#F0FFF8,#EEF6FF) !important}
+body.light-mode .mi{background:linear-gradient(180deg,#EEF6FF,#E8F4FF) !important}
+body.light-mode .scta{background:linear-gradient(135deg,rgba(82,222,181,.08),rgba(82,222,181,.05)) !important}
+body.light-mode .fb{background:rgba(238,246,255,.96) !important;border-bottom-color:rgba(82,222,181,.18)}
+body.light-mode .csn{background:rgba(238,246,255,.96) !important}
+body.light-mode .fb-s,body.light-mode .fb-sel,body.light-mode .tog{background:rgba(255,255,255,.7) !important;border-color:rgba(82,222,181,.2) !important}
+body.light-mode .fb-s input{color:#050D18 !important}
+body.light-mode .fb-sel{color:#3A5E75 !important}
+body.light-mode .lc,body.light-mode .lrow{background:rgba(255,255,255,.65) !important;border-color:rgba(82,222,181,.2) !important;box-shadow:0 4px 20px rgba(82,222,181,.1),inset 0 1px 0 rgba(255,255,255,.95) !important}
+body.light-mode .lc-n,body.light-mode .lr-name{color:#050D18 !important}
+body.light-mode .mi-stat{background:rgba(255,255,255,.65) !important;border-color:rgba(82,222,181,.2) !important}
+body.light-mode .mi-box{background:rgba(255,255,255,.6) !important;border-color:rgba(82,222,181,.18) !important}
+body.light-mode .lc-stats,body.light-mode .lr-stats{background:rgba(238,246,255,.8) !important;border-color:rgba(82,222,181,.18) !important}
+body.light-mode .lc-stat,body.light-mode .lr-stat{border-left-color:rgba(82,222,181,.18) !important}
+body.light-mode .lc-tag{background:rgba(82,222,181,.1) !important;border-color:rgba(82,222,181,.22) !important;color:#1DB89A !important}
+body.light-mode .lc-cert{background:rgba(82,222,181,.08) !important;border-color:rgba(82,222,181,.2) !important;color:#1DB89A !important}
+body.light-mode .lc-foot{border-top-color:rgba(82,222,181,.15) !important}
+body.light-mode .ch-sub{color:#3A5E75}
+body.light-mode .ch1{color:#050D18}
+/* ── Light-mode legibility pass (mapped to actual page selectors) ── */
+/* Hero */
+body.light-mode .ch1{color:#050D18 !important}
+body.light-mode .ch1 em{color:#1DB89A !important}
+body.light-mode .ch-sub{color:#3A5E75 !important}
+body.light-mode .ch-bc{color:#6B9DB7 !important}
+body.light-mode .ch-bc .cur{color:#1DB89A !important}
+body.light-mode .chs-l{color:#6B9DB7 !important}
+/* Hero stats pill — lighten in light mode so labels read clearly */
+body.light-mode .ch-stats{background:rgba(255,255,255,.72) !important;border-color:rgba(82,222,181,.3) !important}
+body.light-mode .chs{border-right-color:rgba(82,222,181,.15) !important}
+body.light-mode .chs-n{color:#1DB89A !important}
+body.light-mode .chs-l{color:#3A5E75 !important}
+body.light-mode .ch-btn-s{border-color:rgba(29,184,154,.4) !important;color:#1DB89A !important}
+/* Filter bar */
+body.light-mode .fb-cnt{color:#3A5E75 !important}
+body.light-mode .fb-cnt b{color:#1DB89A !important}
+body.light-mode .fb-s input{color:#050D18 !important}
+body.light-mode .fb-s input::placeholder{color:#9BBFD8 !important}
+/* Section label above grid */
+body.light-mode .ls-lbl{color:#6B9DB7 !important}
+body.light-mode .ls-lbl::after{background:rgba(82,222,181,.2) !important}
+/* Grid cards */
+body.light-mode .lc-n{color:#050D18 !important}
+body.light-mode .lc-loc{color:#6B9DB7 !important}
+body.light-mode .lc-sv{color:#050D18 !important}
+body.light-mode .lc-sl{color:#6B9DB7 !important}
+body.light-mode .lc-tag{background:rgba(82,222,181,.1) !important;border-color:rgba(82,222,181,.22) !important;color:#1DB89A !important}
+body.light-mode .lc-cert{background:rgba(82,222,181,.08) !important;border-color:rgba(82,222,181,.2) !important;color:#1DB89A !important}
+body.light-mode .lc-rate span{color:#6B9DB7 !important}
+body.light-mode .lc-stats{background:rgba(238,246,255,.8) !important;border-color:rgba(82,222,181,.18) !important}
+body.light-mode .lc-stat + .lc-stat{border-left-color:rgba(82,222,181,.18) !important}
+body.light-mode .lc-foot{border-top-color:rgba(82,222,181,.15) !important}
+/* List view */
+body.light-mode .lr-name{color:#050D18 !important}
+body.light-mode .lr-loc{color:#6B9DB7 !important}
+body.light-mode .lr-stats{background:rgba(238,246,255,.8) !important;border-color:rgba(82,222,181,.18) !important}
+body.light-mode .lr-stat + .lr-stat{border-left-color:rgba(82,222,181,.18) !important}
+/* Load more */
+body.light-mode .lm-cnt{color:#3A5E75 !important}
+body.light-mode .lm-btn{border-color:rgba(29,184,154,.4) !important;color:#1DB89A !important}
+body.light-mode .lm-btn:hover{background:rgba(82,222,181,.12) !important;border-color:rgba(29,184,154,.6) !important;color:#050D18 !important}
+/* Market intelligence — stat boxes */
+body.light-mode .mi-stat{background:rgba(255,255,255,.85) !important;border-color:rgba(82,222,181,.2) !important;box-shadow:0 4px 20px rgba(82,222,181,.08) !important}
+body.light-mode .mi-n{background:linear-gradient(135deg,#050D18,#1DB89A) !important;-webkit-background-clip:text !important;background-clip:text !important;-webkit-text-fill-color:transparent !important}
+body.light-mode .mi-n.tl{background:linear-gradient(135deg,#1DB89A,#52DEB5) !important;-webkit-background-clip:text !important;background-clip:text !important;-webkit-text-fill-color:transparent !important}
+body.light-mode .mi-nl{color:#050D18 !important}
+body.light-mode .mi-nd{color:#6B9DB7 !important}
+/* Market intel info boxes */
+body.light-mode .mi-box{background:rgba(255,255,255,.78) !important;border-color:rgba(82,222,181,.18) !important}
+body.light-mode .mi-bt{color:#050D18 !important}
+body.light-mode .mi-cty{color:#050D18 !important}
+body.light-mode .mi-spec{color:#6B9DB7 !important}
+body.light-mode .mi-rank{background:rgba(82,222,181,.12) !important;border-color:rgba(82,222,181,.25) !important;color:#1DB89A !important}
+body.light-mode .mi-row{border-bottom-color:rgba(82,222,181,.12) !important}
+body.light-mode .mi-st{color:#3A5E75 !important}
+body.light-mode .mi-st b{color:#050D18 !important}
+body.light-mode .mi-seas{border-bottom-color:rgba(82,222,181,.12) !important}
+body.light-mode .mi-dd{background:rgba(238,246,255,.85) !important;border-color:rgba(82,222,181,.15) !important}
+body.light-mode .mi-dt{color:#1DB89A !important}
+body.light-mode .mi-b{color:#3A5E75 !important}
+body.light-mode .mi-b b{color:#050D18 !important}
+body.light-mode .mi-sub{color:#3A5E75 !important}
+body.light-mode .mi-h{color:#050D18 !important}
+body.light-mode .mi-h em{color:#1DB89A !important}
+/* Supplier CTA banner */
+body.light-mode .scta-h{color:#050D18 !important}
+body.light-mode .scta-sub{color:#3A5E75 !important}
+/* Category sub-nav */
+body.light-mode .csn-item{color:#6B9DB7 !important}
+body.light-mode .csn-item.on{color:#1DB89A !important;border-bottom-color:#1DB89A !important}
+body.light-mode .csn-item:hover:not(.on){color:#050D18 !important}
+body.light-mode .csn-sep{background:rgba(82,222,181,.18) !important}
+
+/* ── Beef & Meat light-mode accent (Change 12) ── */
+body.light-mode .ch1 em { color: #1DB89A !important; }
+body.light-mode .csn-item.on { color: #1DB89A !important; border-bottom-color: #1DB89A !important; }
+body.light-mode .rq-btn { background: linear-gradient(135deg,#52DEB5,#2ECC9A) !important; color: #fff !important; }
+body.light-mode .ch-btn-p { background: linear-gradient(135deg,#52DEB5,#2ECC9A) !important; color: #fff !important; }
+body.light-mode .mi-n { background: linear-gradient(135deg,#1A0F00,#1DB89A) !important; -webkit-background-clip: text !important; background-clip: text !important; -webkit-text-fill-color: transparent !important; }
+body.light-mode .bdg-f { background: rgba(82,222,181,.15) !important; color: #1DB89A !important; border-color: rgba(82,222,181,.35) !important; }
+
+/* ── Seafood light-mode accent (Change 12) ── */
+body.light-mode .ch1 em { color: #1DB89A !important; }
+body.light-mode .csn-item.on { color: #1DB89A !important; border-bottom-color: #1DB89A !important; }
+body.light-mode .rq-btn { background: linear-gradient(135deg,#2ECC9A,#1DB89A) !important; color: #04342C !important; }
+body.light-mode .ch-btn-p { background: linear-gradient(135deg,#2ECC9A,#1DB89A) !important; color: #04342C !important; }
+body.light-mode .mi-n { background: linear-gradient(135deg,#050D18,#1DB89A) !important; -webkit-background-clip: text !important; background-clip: text !important; -webkit-text-fill-color: transparent !important; }
+body.light-mode .bdg-f { background: rgba(82,222,181,.15) !important; color: #1DB89A !important; border-color: rgba(82,222,181,.35) !important; }
+body.light-mode .scta-h { color: #050D18 !important; }
+body.light-mode .scta-sub { color: #3A5E75 !important; }
+
+/* ── Responsive ── */
+@media (max-width:900px){
+.pn{padding:0 20px}
+.pn-links a{display:none}
+.pn-div{display:none}
+}
+@media (max-width: 768px) {
+  .csn { overflow-x: auto; padding: 0 16px; }
+  .csn-item { padding: 10px 12px; font-size: 11px; }
+  .chero { padding: 36px 20px 30px; }
+  .chero { padding-top: 52px !important; }
+  .chero-inner { padding-top: 8px; }
+  .ch1 { font-size: 26px; }
+  .ch-sub { font-size: 13px; }
+  .ch-stats { flex-wrap: wrap; }
+  .chs { flex: 1 1 45%; }
+  .fb { padding: 10px 16px; }
+  .fb-in { flex-wrap: wrap; }
+  .fb-s { min-width: 100%; order: -1; }
+  .fb-r { margin-left: 0; width: 100%; justify-content: space-between; }
+  .ls { padding: 20px 16px; }
+  #grid-view { grid-template-columns: 1fr 1fr; }
+  .mi { padding: 40px 20px 48px; }
+  .mi-stats { grid-template-columns: 1fr 1fr; }
+  .mi-grid { grid-template-columns: 1fr; }
+  .scta { flex-direction: column; padding: 28px 20px; text-align: center; }
+  .scta-sub { max-width: 100%; }
+  .pf-grid { grid-template-columns: 1fr 1fr; }
+  .pf-bot { flex-direction: column; gap: 8px; text-align: center; }
+}
+@media (max-width: 480px) {
+  #grid-view { grid-template-columns: 1fr; }
+  .mi-stats { grid-template-columns: 1fr 1fr; }
+  .pf-grid { grid-template-columns: 1fr; }
+  .ch1 { font-size: 22px; }
+  .chero { padding-top: 44px !important; }
+  .chero-inner { padding-top: 12px; }
+}
+</style>
+</head>
+<body>
+<div class="pg-grid"></div>
+<div class="pg-aura" id="pa1" style="width:700px;height:700px;background:radial-gradient(circle,rgba(74,159,224,.22),transparent 65%);top:-260px;left:-200px"></div>
+<div class="pg-aura" id="pa2" style="width:600px;height:600px;background:radial-gradient(circle,rgba(74,159,224,.14),transparent 65%);top:-120px;right:-180px"></div>
+<div class="pg-aura" id="pa3" style="width:500px;height:500px;background:radial-gradient(circle,rgba(74,159,224,.1),transparent 65%);bottom:-150px;left:35%"></div>
+<canvas id="pg-canvas" aria-hidden="true"></canvas>
+
+<nav class="pn" aria-label="Primary navigation">
+<a class="pn-logo" href="index.html"><div class="pn-icon"><i class="ti ti-snowflake" style="font-size:16px;color:#fff" aria-hidden="true"></i></div><span class="pn-wm">FrozenFood<em>Inc</em></span></a>
+<div class="pn-links"><a href="index.html">Database</a><a href="#">Services</a><a href="#">For Suppliers</a><div class="pn-div"></div><a href="#">Sign In</a><button id="mode-toggle" aria-label="Switch to light mode" title="Toggle light/dark mode"><i class="ti ti-sun" id="mode-icon"></i></button><button class="pn-cta">List Your Business</button></div>
+</nav>
+
+<!-- SECTION 1 — Category sub-nav -->
+<div class="csn" aria-label="Category navigation">
+<div class="csn-inner">
+<a class="csn-item" href="category-fruits-veg.html"><i class="ti ti-leaf" aria-hidden="true"></i>Fruits &amp; Veg</a>
+<span class="csn-sep"></span>
+<a class="csn-item" href="category-poultry.html"><i class="ti ti-feather" aria-hidden="true"></i>Poultry</a>
+<span class="csn-sep"></span>
+<a class="csn-item" href="category-beef-meat.html"><i class="ti ti-flame" aria-hidden="true"></i>Beef &amp; Meat</a>
+<span class="csn-sep"></span>
+<a class="csn-item on" href="category-seafood.html"><i class="ti ti-fish" aria-hidden="true"></i>Seafood</a>
+<span class="csn-sep"></span>
+<a class="csn-item" href="#"><i class="ti ti-truck" aria-hidden="true"></i>Services</a>
+</div>
+</div>
+
+<!-- SECTION 2 — Category hero -->
+<section class="chero" aria-label="Category hero">
+<div class="chero-aura" style="width:400px;height:400px;background:radial-gradient(circle,rgba(82,222,181,.18),transparent 70%);top:-120px;right:-80px"></div>
+<div class="chero-aura" style="width:300px;height:300px;background:radial-gradient(circle,rgba(82,222,181,.1),transparent 70%);bottom:-60px;left:-60px"></div>
+<div class="chero-inner">
+<div class="ch-bc" id="ch-bc"><a href="index.html" style="color:#6B9DB7;text-decoration:none">Database</a><i class="ti ti-chevron-right" aria-hidden="true"></i><span class="cur">Frozen Seafood</span></div>
+<h1 class="ch1" id="ch-h1">Frozen <em>Seafood</em> Suppliers</h1>
+<p class="ch-sub" id="ch-sub">Source fish fillets, shrimp, shellfish and processed seafood from MSC-certified and sustainably sourced global suppliers. Direct contact, zero commission.</p>
+<div class="ch-stats" id="ch-stats">
+<div class="chs"><span class="chs-n">165+</span><span class="chs-l">Suppliers</span></div>
+<div class="chs"><span class="chs-n">38</span><span class="chs-l">Countries</span></div>
+<div class="chs"><span class="chs-n">500kg</span><span class="chs-l">From MOQ</span></div>
+<div class="chs"><span class="chs-n">5.1%</span><span class="chs-l">Mkt CAGR</span></div>
+</div>
+<div class="ch-acts" id="ch-acts">
+<button class="ch-btn-p" data-quote data-name="Nordic Seafood Group" data-initials="NS" data-loc="Norway"><i class="ti ti-message-circle" aria-hidden="true"></i>Request a Quote</button>
+<button class="ch-btn-s">Browse all suppliers</button>
+</div>
+</div>
+</section>
+
+<!-- SECTION 3 — Filter bar -->
+<div class="fb" aria-label="Filters">
+<div class="fb-in">
+<label class="fb-s"><i class="ti ti-search" aria-hidden="true"></i><input type="text" placeholder="Search suppliers, products, origins..." aria-label="Search suppliers"></label>
+<select class="fb-sel" aria-label="Product Type">
+<option>All Products</option><option>Fish Fillets</option><option>Whole Fish</option><option>Shrimp &amp; Prawns</option><option>Squid &amp; Octopus</option><option>Shellfish &amp; Crab</option><option>Salmon &amp; Trout</option><option>Tuna &amp; Swordfish</option><option>Processed &amp; IQF</option>
+</select>
+<select class="fb-sel" aria-label="Certification">
+<option>All Certifications</option><option>MSC Certified</option><option>ASC Certified</option><option>BRC Grade A</option><option>Friend of the Sea</option><option>HACCP</option><option>Organic</option><option>Halal</option><option>BAP Certified</option>
+</select>
+<select class="fb-sel" aria-label="MOQ Range">
+<option>All MOQ</option><option>Less than 500kg</option><option>500kg – 2T</option><option>2T – 10T</option><option>10T+</option><option>1 Container</option>
+</select>
+<div class="fb-r">
+<span class="fb-cnt">Showing 12 of <b>165+</b> suppliers</span>
+<div class="tog">
+<button class="tog-b on" id="tog-grid" aria-label="Grid view"><i class="ti ti-layout-grid" aria-hidden="true"></i></button>
+<button class="tog-b" id="tog-list" aria-label="List view"><i class="ti ti-list" aria-hidden="true"></i></button>
+</div>
+</div>
+</div>
+</div>
+
+<!-- SECTION 4 — Supplier listings -->
+<section class="ls" aria-label="Supplier listings">
+<div class="ls-inner">
+<div class="ls-lbl" id="ls-lbl">165+ verified suppliers · Grid view</div>
+<div id="grid-view"></div>
+<div id="list-view"></div>
+</div>
+</section>
+
+<!-- SECTION 5 — Load more -->
+<div class="lm">
+<div class="lm-cnt">Showing 12 of <b>165+</b> verified Frozen Seafood suppliers</div>
+<button class="lm-btn"><i class="ti ti-refresh" aria-hidden="true"></i>Load More Suppliers</button>
+</div>
+
+<!-- SECTION 6 — Market intelligence -->
+<section class="mi" id="mi-sec" aria-label="Market intelligence">
+<div class="mi-aura" style="width:340px;height:340px;background:radial-gradient(circle,rgba(82,222,181,.1),transparent 70%);top:-100px;right:-60px"></div>
+<div class="mi-aura" style="width:260px;height:260px;background:radial-gradient(circle,rgba(82,222,181,.07),transparent 70%);bottom:-60px;left:-40px"></div>
+<div class="mi-inner">
+<div class="mi-pill"><i class="ti ti-chart-bar" aria-hidden="true"></i>Market Intelligence</div>
+<h2 class="mi-h">Frozen Seafood — <em>Market Data</em></h2>
+<p class="mi-sub">Real market data to inform your seafood sourcing strategy. Updated quarterly by the FFInc research team.</p>
+<div class="mi-stats">
+<div class="mi-stat" style="--ac:#52DEB5"><span class="mi-n">$38.2B</span><span class="mi-nl">Global Market Size</span><span class="mi-nd">2024 valuation</span></div>
+<div class="mi-stat" style="--ac:#52DEB5"><span class="mi-n tl">5.1%</span><span class="mi-nl">Annual Growth Rate</span><span class="mi-nd">CAGR through 2030</span></div>
+<div class="mi-stat" style="--ac:#52DEB5"><span class="mi-n">$51.6B</span><span class="mi-nl">Projected by 2030</span><span class="mi-nd">At current CAGR</span></div>
+<div class="mi-stat" style="--ac:#52DEB5"><span class="mi-n tl">165+</span><span class="mi-nl">Database Suppliers</span><span class="mi-nd">In this category</span></div>
+</div>
+<div class="mi-grid">
+<div class="mi-box" id="mi-left">
+<div class="mi-bt"><i class="ti ti-world" aria-hidden="true"></i>Top Sourcing Origins</div>
+<div class="mi-row"><div class="mi-rank">1</div><span class="mi-cty"><span class="mi-flag" aria-hidden="true">🇳🇴</span>Norway</span><span class="mi-spec">Salmon · Cod · Arctic Fish</span></div>
+<div class="mi-row"><div class="mi-rank">2</div><span class="mi-cty"><span class="mi-flag" aria-hidden="true">🇹🇭</span>Thailand</span><span class="mi-spec">Shrimp · Vannamei · Processed</span></div>
+<div class="mi-row"><div class="mi-rank">3</div><span class="mi-cty"><span class="mi-flag" aria-hidden="true">🇪🇨</span>Ecuador</span><span class="mi-spec">White Shrimp · Vannamei IQF</span></div>
+<div class="mi-row"><div class="mi-rank">4</div><span class="mi-cty"><span class="mi-flag" aria-hidden="true">🇻🇳</span>Vietnam</span><span class="mi-spec">Pangasius · Tilapia · Shrimp</span></div>
+<div class="mi-row"><div class="mi-rank">5</div><span class="mi-cty"><span class="mi-flag" aria-hidden="true">🇮🇸</span>Iceland</span><span class="mi-spec">Cod · Haddock · Capelin</span></div>
+<div class="mi-dd">
+<div class="mi-dt">Key Demand Drivers</div>
+<div class="mi-b"><span><b>Sustainability credentials</b> — MSC and ASC certification increasingly mandatory for EU and North American retail buyers, driving premium pricing for certified stock</span></div>
+<div class="mi-b"><span><b>Shrimp demand growth</b> — vannamei shrimp remains the world’s most traded seafood product with consistent global demand across foodservice and retail</span></div>
+<div class="mi-b"><span><b>Health &amp; omega positioning</b> — rising consumer demand for omega-3 rich frozen fish driving salmon and oily fish import growth across Asian and Middle Eastern markets</span></div>
+</div>
+</div>
+<div class="mi-box" id="mi-right">
+<div class="mi-bt"><i class="ti ti-calendar" aria-hidden="true"></i>Peak Sourcing Windows</div>
+<div class="mi-seas"><span class="mi-badge tl">Jan–Apr</span><div class="mi-st"><b style="color:#fff">Norwegian salmon peak</b> — highest volume and most competitive FOB pricing on Atlantic salmon fillets and portions. Ideal window for securing annual retail supply contracts.</div></div>
+<div class="mi-seas"><span class="mi-badge tl">Apr–Aug</span><div class="mi-st"><b style="color:#fff">South American shrimp season</b> — Ecuador and Peru at peak harvest. Best pricing on vannamei and white shrimp IQF. High container availability Apr–Jun.</div></div>
+<div class="mi-seas"><span class="mi-badge bl">Year-round</span><div class="mi-st"><b style="color:#fff">Thailand processed</b> — consistent year-round IQF shrimp, cooked formats and value-added products. Ideal for retail-ready and foodservice pack sizes.</div></div>
+<div class="mi-seas"><span class="mi-badge tl">Sep–Feb</span><div class="mi-st"><b style="color:#fff">North Atlantic whitefish peak</b> — Iceland, Norway and Faroe Islands at highest cod and haddock throughput. Lowest annual FOB pricing for bulk fillets and portions.</div></div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- SECTION 8 — Supplier CTA banner -->
+<section class="scta" aria-label="Supplier call to action">
+<div class="scta-aura"></div>
+<div class="scta-l">
+<div class="scta-h">Are you a Frozen Seafood supplier?</div>
+<div class="scta-sub">List your MSC-certified, sustainably sourced or conventional seafood business for free and start receiving direct quote requests from wholesale buyers actively sourcing in this category. Zero commission on every deal closed through FFInc.</div>
+</div>
+<button class="scta-btn"><i class="ti ti-plus" aria-hidden="true"></i>Create Free Listing</button>
+</section>
+
+<!-- SECTION 9 — Footer -->
+<footer class="pf" aria-label="Site footer">
+<div class="pf-topglow"></div><div class="pf-bgaura"></div><div class="pf-gbg"></div>
+<div class="pf-main"><div class="pf-grid">
+<div><a class="pf-logo" href="index.html"><div class="pf-li"><i class="ti ti-snowflake" style="font-size:15px;color:#fff" aria-hidden="true"></i></div><span class="pf-lt">FrozenFood<em>Inc</em></span></a><p class="pf-desc">The global B2B wholesale frozen food database — connecting buyers with verified suppliers worldwide.</p><div class="pf-social"><a class="pf-si" href="#" aria-label="LinkedIn"><i class="ti ti-brand-linkedin" style="font-size:15px" aria-hidden="true"></i></a><a class="pf-si" href="#" aria-label="X"><i class="ti ti-brand-x" style="font-size:14px" aria-hidden="true"></i></a><a class="pf-si" href="#" aria-label="Email"><i class="ti ti-mail" style="font-size:15px" aria-hidden="true"></i></a></div></div>
+<div><div class="pf-ct">Database</div><a class="pf-lk" href="category-fruits-veg.html"><i class="ti ti-chevron-right" aria-hidden="true"></i>Frozen Fruits &amp; Veg <span class="pf-new">New</span></a><a class="pf-lk" href="#"><i class="ti ti-chevron-right" aria-hidden="true"></i>Frozen Poultry</a><a class="pf-lk" href="#"><i class="ti ti-chevron-right" aria-hidden="true"></i>Frozen Beef &amp; Meat</a><a class="pf-lk" href="#"><i class="ti ti-chevron-right" aria-hidden="true"></i>Frozen Seafood</a></div>
+<div><div class="pf-ct">Services</div><a class="pf-lk" href="#"><i class="ti ti-chevron-right" aria-hidden="true"></i>Cold Storage</a><a class="pf-lk" href="#"><i class="ti ti-chevron-right" aria-hidden="true"></i>Refrigerated Transport</a><a class="pf-lk" href="#"><i class="ti ti-chevron-right" aria-hidden="true"></i>Packaging</a><a class="pf-lk" href="#"><i class="ti ti-chevron-right" aria-hidden="true"></i>Quality Testing</a></div>
+<div><div class="pf-ct">Company</div><a class="pf-lk" href="#"><i class="ti ti-chevron-right" aria-hidden="true"></i>About FFInc</a><a class="pf-lk" href="#" style="color:#4A9FE0"><i class="ti ti-plus" style="color:#4A9FE0" aria-hidden="true"></i>List Your Business</a><a class="pf-lk" href="#"><i class="ti ti-chevron-right" aria-hidden="true"></i>Contact Us</a><a class="pf-lk" href="#"><i class="ti ti-chevron-right" aria-hidden="true"></i>Privacy Policy</a></div>
+</div></div>
+<div class="pf-bot"><span class="pf-copy">© 2026 FrozenFood Incorporated. All rights reserved.</span><div class="pf-status"><div class="pf-sdot" id="pf-sdot"></div>All systems operational</div><div class="pf-legal"><a href="#">Terms</a><a href="#">Privacy</a><a href="#">Cookies</a></div></div>
+</footer>
+
+<!-- SECTION 7 — Quote request modal -->
+<div class="qm-ov" id="qm-ov" aria-hidden="true">
+<div class="qm" id="qm-card" role="dialog" aria-modal="true" aria-label="Request a quote">
+<button class="qm-x" id="qm-x" aria-label="Close"><i class="ti ti-x" aria-hidden="true"></i></button>
+<div class="qm-sup">
+<div class="qm-logo" id="qm-logo">NS</div>
+<div><div class="qm-sn" id="qm-sn">Nordic Seafood Group</div><div class="qm-sl"><i class="ti ti-map-pin" aria-hidden="true"></i><span id="qm-sl">Norway · Verified Supplier</span></div></div>
+</div>
+<div class="qm-h">Request a Quote</div>
+<div class="qm-sub">Complete the form below — the supplier will respond directly to your email. FFInc charges zero commission.</div>
+<form id="qm-form" onsubmit="return false">
+<div class="qm-grid">
+<div class="qm-f"><label class="qm-lb">Your Name</label><input class="qm-in" type="text" placeholder="Jane Doe"></div>
+<div class="qm-f"><label class="qm-lb">Company Name</label><input class="qm-in" type="text" placeholder="Acme Foods Ltd"></div>
+<div class="qm-f"><label class="qm-lb">Email Address</label><input class="qm-in" type="email" placeholder="you@company.com"></div>
+<div class="qm-f"><label class="qm-lb">Country</label><input class="qm-in" type="text" placeholder="United Kingdom"></div>
+<div class="qm-f"><label class="qm-lb">Product Required</label><select class="qm-se"><option>Salmon Fillets</option><option>Cod &amp; Haddock</option><option>Vannamei Shrimp</option><option>Black Tiger Shrimp</option><option>Squid &amp; Octopus</option><option>Shellfish &amp; Crab</option><option>Tuna &amp; Swordfish</option><option>Processed &amp; IQF</option><option>Other</option></select></div>
+<div class="qm-f"><label class="qm-lb">Quantity / MOQ Required</label><input class="qm-in" type="text" placeholder="e.g. 5 Metric Tonnes"></div>
+<div class="qm-f"><label class="qm-lb">Delivery Terms</label><select class="qm-se"><option>FOB</option><option>CIF</option><option>DDP</option><option>EXW</option></select></div>
+<div class="qm-f"><label class="qm-lb">Target Price per MT</label><input class="qm-in" type="text" placeholder="e.g. $1,200/MT"></div>
+<div class="qm-f full"><label class="qm-lb">Additional Requirements</label><textarea class="qm-ta" rows="4" placeholder="Certifications needed, packaging specs, delivery timeline, labelling requirements..."></textarea></div>
+</div>
+<button class="qm-sub-btn" type="submit"><i class="ti ti-send" aria-hidden="true"></i>Send Quote Request</button>
+<div class="qm-priv">Your details are sent directly to the supplier. FrozenFoodInc does not store quote request data or charge any commission.</div>
+</form>
+</div>
+</div>
+
+<script>
+(function(){
+/* ── Particle canvas (from index.html) ── */
+var cv=document.getElementById('pg-canvas'),cx=cv.getContext('2d'),pts=[];
+function rsz(){cv.width=window.innerWidth;cv.height=window.innerHeight;}rsz();window.addEventListener('resize',rsz);
+function mkp(){return{x:Math.random()*cv.width,y:cv.height+10,sz:Math.random()*2.5+.8,sp:Math.random()*.5+.25,op:Math.random()*.55+.25,col:Math.random()>.5?'#4A9FE0':'#4A9FE0',dr:(Math.random()-.5)*.4};}
+for(var i=0;i<30;i++){var p=mkp();p.y=Math.random()*cv.height;pts.push(p);}
+(function loop(){cx.clearRect(0,0,cv.width,cv.height);pts.forEach(function(p,i){p.y-=p.sp;p.x+=p.dr;p.op-=.0007;cx.beginPath();cx.arc(p.x,p.y,p.sz,0,Math.PI*2);cx.fillStyle=p.col;cx.globalAlpha=Math.max(0,p.op);cx.fill();cx.globalAlpha=1;if(p.y<-10||p.op<=0)pts[i]=mkp();});requestAnimationFrame(loop);})();
+
+/* ── Aurora blobs (from index.html) ── */
+gsap.to('#pa1',{x:120,y:-80,scale:1.2,duration:10,repeat:-1,yoyo:true,ease:'sine.inOut'});
+gsap.to('#pa2',{x:-130,y:60,scale:1.15,duration:13,repeat:-1,yoyo:true,ease:'sine.inOut',delay:2});
+gsap.to('#pa3',{x:80,y:-50,scale:1.1,duration:11,repeat:-1,yoyo:true,ease:'sine.inOut',delay:4});
+gsap.to('#pf-sdot',{opacity:.28,scale:.6,duration:1.4,repeat:-1,yoyo:true,ease:'sine.inOut'});
+
+/* ── Dark/light toggle (from index.html) ── */
+var modeToggle=document.getElementById('mode-toggle'),modeIcon=document.getElementById('mode-icon'),isLight=false;
+modeToggle.addEventListener('click',function(){isLight=!isLight;document.body.classList.toggle('light-mode',isLight);modeIcon.className=isLight?'ti ti-moon':'ti ti-sun';modeToggle.setAttribute('aria-label',isLight?'Switch to dark mode':'Switch to light mode');});
+
+/* ── Supplier data (12) ── */
+var SUPPLIERS=[
+{i:'NS',n:'Nordic Seafood Group',c:'Norway',y:1998,feat:true,tags:['Salmon Fillets','Cod','Haddock','MSC'],moq:'500kg',ctry:'42',resp:'<8h',certs:['MSC Certified','BRC Grade A','IQF'],rate:'4.7',rev:19,stars:4},
+{i:'TH',n:'Thai Shrimp Export Co',c:'Thailand',y:2000,feat:false,tags:['Vannamei Shrimp','Black Tiger','IQF'],moq:'2T',ctry:'45',resp:'<12h',certs:['BAP Certified','BRC','HACCP'],rate:'4.8',rev:33,stars:5},
+{i:'EC',n:'Ecuador Seafood SA',c:'Ecuador',y:1995,feat:false,tags:['White Shrimp','Vannamei','Cooked'],moq:'3T',ctry:'38',resp:'<18h',certs:['ASC Certified','BRC Grade A'],rate:'4.9',rev:27,stars:5},
+{i:'VI',n:'Vietnam Ocean Foods',c:'Vietnam',y:2003,feat:false,tags:['Pangasius','Tilapia','Shrimp','IQF'],moq:'5T',ctry:'35',resp:'<12h',certs:['BRC','HACCP','Friend of the Sea'],rate:'4.6',rev:22,stars:4},
+{i:'IC',n:'Iceland Seafood Intl',c:'Iceland',y:1985,feat:false,tags:['Cod','Haddock','Capelin','Arctic Fish'],moq:'1T',ctry:'30',resp:'<6h',certs:['MSC Certified','BRC Grade A'],rate:'4.9',rev:38,stars:5},
+{i:'CN',n:'China Ocean Export',c:'China',y:2001,feat:false,tags:['Squid','Octopus','Crab','Mixed IQF'],moq:'5T',ctry:'50',resp:'<24h',certs:['HACCP','BRC','GACC Registered'],rate:'4.5',rev:18,stars:4},
+{i:'IN',n:'India Seafood Exports',c:'India',y:1997,feat:false,tags:['Vannamei Shrimp','Squid','Fish Meal'],moq:'3T',ctry:'40',resp:'<18h',certs:['BRC','HACCP','Halal','BAP'],rate:'4.6',rev:24,stars:4},
+{i:'CL',n:'Chilean Sea Products',c:'Chile',y:1992,feat:false,tags:['Salmon','Mussel','Sea Bass','IQF'],moq:'1T',ctry:'28',resp:'<8h',certs:['MSC Certified','ASC','BRC'],rate:'4.8',rev:21,stars:5},
+{i:'MO',n:'Morocco Fish Export',c:'Morocco',y:2006,feat:false,tags:['Sardines','Octopus','Squid','Anchovy'],moq:'2T',ctry:'25',resp:'<24h',certs:['BRC','HACCP','Friend of the Sea'],rate:'4.6',rev:12,stars:4},
+{i:'DK',n:'Denmark Aqua Export',c:'Denmark',y:1979,feat:true,tags:['Salmon','Trout','Herring','Organic'],moq:'500kg',ctry:'44',resp:'<4h',certs:['MSC','ASC','Organic EU','BRC Grade A'],rate:'4.9',rev:34,stars:5},
+{i:'PE',n:'Peru Pacific Exports',c:'Peru',y:2004,feat:false,tags:['Squid','Anchovy','Scallops','IQF'],moq:'5T',ctry:'30',resp:'<18h',certs:['HACCP','Friend of the Sea','BRC'],rate:'4.7',rev:14,stars:4},
+{i:'AU',n:'AusOcean Seafood',c:'Australia',y:1990,feat:false,tags:['Lobster','Abalone','Barramundi','IQF'],moq:'500kg',ctry:'22',resp:'<6h',certs:['MSC Certified','HACCP','BRC'],rate:'4.8',rev:16,stars:5}
+];
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function stars(n){return '★★★★★☆☆☆☆☆'.slice(5-n,10-n);}
+function badges(s){var h='';if(s.feat)h+='<span class="bdg bdg-f"><i class="ti ti-star" style="font-size:9px" aria-hidden="true"></i>Featured</span>';h+='<span class="bdg bdg-v"><i class="ti ti-circle-check" style="font-size:9px" aria-hidden="true"></i>Verified</span>';return h;}
+function tagHtml(s,cls){return s.tags.map(function(t){return '<span class="'+cls+'">'+esc(t)+'</span>';}).join('');}
+function certHtml(s,cls){return s.certs.map(function(c){return '<span class="'+cls+'">'+esc(c)+'</span>';}).join('');}
+function qattr(s){return 'data-quote data-name="'+esc(s.n)+'" data-initials="'+s.i+'" data-loc="'+esc(s.c)+'"';}
+
+function gridCard(s){
+return '<div class="lc">'
++'<div class="lc-head"><div class="lc-logo">'+s.i+'</div>'
++'<div class="lc-ng"><div class="lc-n" title="'+esc(s.n)+'">'+esc(s.n)+'</div><div class="lc-loc"><i class="ti ti-map-pin" aria-hidden="true"></i>'+esc(s.c)+' · Est. '+s.y+'</div></div>'
++'<div class="lc-bdgs">'+badges(s)+'</div></div>'
++'<div class="lc-tags">'+tagHtml(s,'lc-tag')+'</div>'
++'<div class="lc-stats"><div class="lc-stat"><span class="lc-sv">'+esc(s.moq)+'</span><span class="lc-sl">Min. Order</span></div><div class="lc-stat"><span class="lc-sv">'+s.ctry+'</span><span class="lc-sl">Countries</span></div><div class="lc-stat"><span class="lc-sv">'+esc(s.resp)+'</span><span class="lc-sl">Response</span></div></div>'
++'<div class="lc-certs">'+certHtml(s,'lc-cert')+'</div>'
++'<div class="lc-foot"><div class="lc-rate">'+stars(s.stars)+' <span>'+s.rate+' · '+s.rev+' reviews</span></div><button class="rq-btn" '+qattr(s)+'>Request Quote</button></div>'
++'</div>';
+}
+function listRow(s){
+return '<div class="lrow">'
++'<div class="lc-logo">'+s.i+'</div>'
++'<div class="lr-main"><div class="lr-top"><span class="lr-name">'+esc(s.n)+'</span><span class="lr-loc"><i class="ti ti-map-pin" aria-hidden="true"></i>'+esc(s.c)+' · Est. '+s.y+'</span></div><div class="lr-tags">'+tagHtml(s,'lc-tag')+'</div></div>'
++'<div class="lr-stats"><div class="lr-stat"><span class="lc-sv">'+esc(s.moq)+'</span><span class="lc-sl">MOQ</span></div><div class="lr-stat"><span class="lc-sv">'+s.ctry+'</span><span class="lc-sl">Countries</span></div><div class="lr-stat"><span class="lc-sv">'+esc(s.resp)+'</span><span class="lc-sl">Response</span></div></div>'
++'<div class="lr-certs">'+certHtml(s,'lc-cert')+'</div>'
++'<div class="lr-right"><span class="bdg bdg-v"><i class="ti ti-circle-check" style="font-size:9px" aria-hidden="true"></i>Verified</span><div class="lc-rate">'+stars(s.stars)+' <span>'+s.rate+'</span></div><button class="rq-btn" '+qattr(s)+'>Request Quote</button></div>'
++'</div>';
+}
+document.getElementById('grid-view').innerHTML=SUPPLIERS.map(gridCard).join('');
+document.getElementById('list-view').innerHTML=SUPPLIERS.map(listRow).join('');
+
+/* ── Grid/List toggle ── */
+var gv=document.getElementById('grid-view'),lv=document.getElementById('list-view'),
+    tg=document.getElementById('tog-grid'),tl=document.getElementById('tog-list'),lbl=document.getElementById('ls-lbl');
+tg.addEventListener('click',function(){gv.style.display='grid';lv.style.display='none';tg.classList.add('on');tl.classList.remove('on');lbl.textContent='165+ verified suppliers · Grid view';});
+tl.addEventListener('click',function(){gv.style.display='none';lv.style.display='flex';tl.classList.add('on');tg.classList.remove('on');lbl.textContent='165+ verified suppliers · List view';});
+
+/* ── Quote modal ── */
+var ov=document.getElementById('qm-ov'),card=document.getElementById('qm-card');
+function openModal(name,initials,loc){
+  document.getElementById('qm-sn').textContent=name||'GlobalFresh Produce Ltd';
+  document.getElementById('qm-logo').textContent=initials||'GF';
+  document.getElementById('qm-sl').textContent=loc||'Netherlands';
+  ov.classList.add('open');ov.setAttribute('aria-hidden','false');
+  gsap.fromTo(ov,{opacity:0},{opacity:1,duration:.25,ease:'power2.out'});
+  gsap.fromTo(card,{scale:.94,opacity:0},{scale:1,opacity:1,duration:.35,ease:'back.out(1.4)'});
+}
+function closeModal(){
+  gsap.to(card,{scale:.94,opacity:0,duration:.2,ease:'power2.in'});
+  gsap.to(ov,{opacity:0,duration:.25,delay:.05,ease:'power2.in',onComplete:function(){ov.classList.remove('open');ov.setAttribute('aria-hidden','true');}});
+}
+document.addEventListener('click',function(e){
+  var t=e.target.closest('[data-quote]');
+  if(t){openModal(t.getAttribute('data-name'),t.getAttribute('data-initials'),t.getAttribute('data-loc'));return;}
+});
+document.getElementById('qm-x').addEventListener('click',closeModal);
+ov.addEventListener('click',function(e){if(e.target===ov)closeModal();});
+document.addEventListener('keydown',function(e){if(e.key==='Escape'&&ov.classList.contains('open'))closeModal();});
+
+/* ── Hero entrance timeline ── */
+var htl=gsap.timeline({defaults:{ease:'power3.out'}});
+htl.fromTo('#ch-bc',{y:20,opacity:0},{y:0,opacity:1,duration:.6})
+   .fromTo('#ch-h1',{y:30,opacity:0},{y:0,opacity:1,duration:.7},'-=.5')
+   .fromTo('#ch-sub',{y:24,opacity:0},{y:0,opacity:1,duration:.65},'-=.5')
+   .fromTo('#ch-stats',{y:20,opacity:0},{y:0,opacity:1,duration:.6},'-=.45')
+   .fromTo('#ch-acts',{y:18,opacity:0},{y:0,opacity:1,duration:.55},'-=.4');
+
+/* ── IntersectionObserver helper ── */
+function io(sel,fn,thresh){
+  var obs=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){fn(e.target);obs.unobserve(e.target);}});},{threshold:thresh||.12});
+  document.querySelectorAll(sel).forEach(function(el){obs.observe(el);});
+}
+/* Listings animate in */
+io('.ls',function(){
+  gsap.fromTo('#grid-view .lc, #list-view .lrow',{opacity:0,y:30,scale:.97},{opacity:1,y:0,scale:1,duration:.65,stagger:.06,ease:'power3.out'});
+},.05);
+/* Market intel animate in */
+io('#mi-sec',function(){
+  gsap.fromTo('.mi-stat',{opacity:0,y:28,scale:.97},{opacity:1,y:0,scale:1,duration:.6,stagger:.1,ease:'power3.out'});
+  gsap.fromTo(['#mi-left','#mi-right'],{opacity:0,y:30},{opacity:1,y:0,duration:.7,stagger:.15,ease:'power3.out',delay:.25});
+},.1);
+})();
+</script>
+</body>
+</html>
