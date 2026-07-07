@@ -556,6 +556,45 @@ body.light-mode .scta-sub { color: #3A5E75 !important; }
     padding: 9px 12px;
   }
 }
+@media (max-width: 768px) {
+
+  /* Grid card footer — stack rating and
+     button vertically so nothing overlaps */
+  .lc-foot {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    padding-top: 10px;
+  }
+
+  /* Button stretches full card width */
+  .rq-btn {
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+    display: flex;
+    padding: 9px 12px;
+    font-size: 11px;
+  }
+
+  /* Rating sits cleanly above button */
+  .lc-rate {
+    font-size: 11px;
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+
+  .lc-foot {
+    gap: 6px;
+  }
+
+  .rq-btn {
+    padding: 10px 12px;
+    font-size: 11.5px;
+  }
+}
 </style>
 </head>
 <body>
