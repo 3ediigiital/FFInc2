@@ -430,6 +430,132 @@ body.light-mode .scta-sub { color: #3A5E75 !important; }
   .chero { padding-top: 44px !important; }
   .chero-inner { padding-top: 12px; }
 }
+@media (max-width: 768px) {
+
+  /* List rows stack vertically on mobile */
+  .lrow {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 14px 16px;
+  }
+
+  /* Top row: logo + name + location */
+  .lr-top {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+  }
+
+  /* Name and location */
+  .lr-main {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .lr-name {
+    font-size: 13px;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .lr-loc {
+    font-size: 11px;
+    margin-top: 2px;
+  }
+
+  /* Tags wrap naturally full width */
+  .lr-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    width: 100%;
+  }
+
+  /* Stats spread evenly full width */
+  .lr-stats {
+    display: flex;
+    width: 100%;
+    gap: 0;
+    background: rgba(10,22,40,.5);
+    border: 1px solid rgba(74,159,224,.1);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .lr-stat {
+    flex: 1;
+    padding: 7px 6px;
+    text-align: center;
+    border-right: 1px solid rgba(74,159,224,.1);
+  }
+
+  .lr-stat:last-child {
+    border-right: none;
+  }
+
+  /* Certs wrap full width */
+  .lr-certs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    width: 100%;
+  }
+
+  /* Bottom action row: badge + rating + button */
+  .lr-right {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding-top: 8px;
+    border-top: 1px solid rgba(74,159,224,.08);
+    gap: 8px;
+  }
+
+  .bdg-v {
+    flex-shrink: 0;
+  }
+
+  .lc-rate {
+    flex: 1;
+    font-size: 11px;
+  }
+
+  .rq-btn {
+    flex-shrink: 0;
+    white-space: nowrap;
+    font-size: 10.5px;
+    padding: 7px 12px;
+  }
+}
+
+@media (max-width: 480px) {
+
+  .lrow {
+    padding: 12px 14px;
+  }
+
+  .lr-name {
+    font-size: 12.5px;
+  }
+
+  .lr-right {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .rq-btn {
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+    display: flex;
+    padding: 9px 12px;
+  }
+}
 </style>
 </head>
 <body>
@@ -494,7 +620,7 @@ body.light-mode .scta-sub { color: #3A5E75 !important; }
 <option>All Regions</option><option>Europe</option><option>North America</option><option>South America</option><option>Middle East &amp; Africa</option><option>Asia Pacific</option><option>Global Coverage</option>
 </select>
 <div class="fb-r">
-<span class="fb-cnt">Showing 12 of <b>320+</b> providers</span>
+<span class="fb-cnt">Showing 9 of <b>320+</b> providers</span>
 <div class="tog">
 <button class="tog-b on" id="tog-grid" aria-label="Grid view"><i class="ti ti-layout-grid" aria-hidden="true"></i></button>
 <button class="tog-b" id="tog-list" aria-label="List view"><i class="ti ti-list" aria-hidden="true"></i></button>
@@ -514,7 +640,7 @@ body.light-mode .scta-sub { color: #3A5E75 !important; }
 
 <!-- SECTION 5 — Load more -->
 <div class="lm">
-<div class="lm-cnt">Showing 12 of <b>320+</b> verified cold chain service providers</div>
+<div class="lm-cnt">Showing 9 of <b>320+</b> verified cold chain service providers</div>
 <button class="lm-btn"><i class="ti ti-refresh" aria-hidden="true"></i>Load More Suppliers</button>
 </div>
 
@@ -637,10 +763,7 @@ var SUPPLIERS=[
 {i:'CC',n:'CustomsClear Intl',c:'UK',y:2000,feat:false,tags:['Customs Brokerage','Compliance','Import'],moq:'Global',ctry:'Unlimited',resp:'24h clearance',certs:['AEO Certified','GDP','ISO 9001'],rate:'4.6',rev:19,stars:4},
 {i:'SG',n:'SingaCold Logistics',c:'Singapore',y:2006,feat:false,tags:['Cold Storage','Distribution','3PL'],moq:'Asia Pacific',ctry:'35,000 m³',resp:'48h',certs:['BRC Storage','HACCP','ISO 22000'],rate:'4.8',rev:17,stars:5},
 {i:'BF',n:'BlastFreeze Poland',c:'Poland',y:2010,feat:false,tags:['Blast Freezing','Processing','IQF'],moq:'Central EU',ctry:'80T/day',resp:'48h',certs:['BRC','FSSC 22000','EU Organic'],rate:'4.7',rev:13,stars:4},
-{i:'SA',n:'SouthAfrica ColdHub',c:'South Africa',y:2004,feat:false,tags:['Cold Storage','Port Handling','Africa'],moq:'Sub-Saharan',ctry:'25,000 m³',resp:'72h',certs:['HACCP','ISO 22000','FSSC 22000'],rate:'4.6',rev:11,stars:4},
-{i:'GC',n:'GlobalCold Network',c:'Switzerland',y:1995,feat:true,tags:['Global 3PL','Cold Chain','Compliance'],moq:'60 Countries',ctry:'500,000 m³',resp:'24h',certs:['GDP','ISO 22000','BRC Storage','AEO'],rate:'4.9',rev:52,stars:5},
-{i:'BR',n:'BrazilFreeze Logistics',c:'Brazil',y:2007,feat:false,tags:['Cold Storage','Port','South America'],moq:'South America',ctry:'40,000 m³',resp:'48h',certs:['HACCP','ISO 22000','ANVISA'],rate:'4.7',rev:15,stars:4},
-{i:'AU',n:'AusCold Transport',c:'Australia',y:1999,feat:false,tags:['Refrigerated Transport','3PL','Oceania'],moq:'Oceania',ctry:'85 Reefers',resp:'24h',certs:['HACCP','GDP Certified','ISO 22000'],rate:'4.8',rev:20,stars:5}
+{i:'SA',n:'SouthAfrica ColdHub',c:'South Africa',y:2004,feat:false,tags:['Cold Storage','Port Handling','Africa'],moq:'Sub-Saharan',ctry:'25,000 m³',resp:'72h',certs:['HACCP','ISO 22000','FSSC 22000'],rate:'4.6',rev:11,stars:4}
 ];
 function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 function stars(n){return '★★★★★☆☆☆☆☆'.slice(5-n,10-n);}

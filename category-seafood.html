@@ -430,6 +430,132 @@ body.light-mode .scta-sub { color: #3A5E75 !important; }
   .chero { padding-top: 44px !important; }
   .chero-inner { padding-top: 12px; }
 }
+@media (max-width: 768px) {
+
+  /* List rows stack vertically on mobile */
+  .lrow {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 14px 16px;
+  }
+
+  /* Top row: logo + name + location */
+  .lr-top {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+  }
+
+  /* Name and location */
+  .lr-main {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .lr-name {
+    font-size: 13px;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .lr-loc {
+    font-size: 11px;
+    margin-top: 2px;
+  }
+
+  /* Tags wrap naturally full width */
+  .lr-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    width: 100%;
+  }
+
+  /* Stats spread evenly full width */
+  .lr-stats {
+    display: flex;
+    width: 100%;
+    gap: 0;
+    background: rgba(10,22,40,.5);
+    border: 1px solid rgba(74,159,224,.1);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .lr-stat {
+    flex: 1;
+    padding: 7px 6px;
+    text-align: center;
+    border-right: 1px solid rgba(74,159,224,.1);
+  }
+
+  .lr-stat:last-child {
+    border-right: none;
+  }
+
+  /* Certs wrap full width */
+  .lr-certs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    width: 100%;
+  }
+
+  /* Bottom action row: badge + rating + button */
+  .lr-right {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding-top: 8px;
+    border-top: 1px solid rgba(74,159,224,.08);
+    gap: 8px;
+  }
+
+  .bdg-v {
+    flex-shrink: 0;
+  }
+
+  .lc-rate {
+    flex: 1;
+    font-size: 11px;
+  }
+
+  .rq-btn {
+    flex-shrink: 0;
+    white-space: nowrap;
+    font-size: 10.5px;
+    padding: 7px 12px;
+  }
+}
+
+@media (max-width: 480px) {
+
+  .lrow {
+    padding: 12px 14px;
+  }
+
+  .lr-name {
+    font-size: 12.5px;
+  }
+
+  .lr-right {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .rq-btn {
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+    display: flex;
+    padding: 9px 12px;
+  }
+}
 </style>
 </head>
 <body>
@@ -494,7 +620,7 @@ body.light-mode .scta-sub { color: #3A5E75 !important; }
 <option>All MOQ</option><option>Less than 500kg</option><option>500kg–2T</option><option>2T–10T</option><option>10T+</option><option>1 Container</option>
 </select>
 <div class="fb-r">
-<span class="fb-cnt">Showing 12 of <b>165+</b> suppliers</span>
+<span class="fb-cnt">Showing 9 of <b>165+</b> suppliers</span>
 <div class="tog">
 <button class="tog-b on" id="tog-grid" aria-label="Grid view"><i class="ti ti-layout-grid" aria-hidden="true"></i></button>
 <button class="tog-b" id="tog-list" aria-label="List view"><i class="ti ti-list" aria-hidden="true"></i></button>
@@ -514,7 +640,7 @@ body.light-mode .scta-sub { color: #3A5E75 !important; }
 
 <!-- SECTION 5 — Load more -->
 <div class="lm">
-<div class="lm-cnt">Showing 12 of <b>165+</b> verified Frozen Seafood suppliers</div>
+<div class="lm-cnt">Showing 9 of <b>165+</b> verified Frozen Seafood suppliers</div>
 <button class="lm-btn"><i class="ti ti-refresh" aria-hidden="true"></i>Load More Suppliers</button>
 </div>
 
@@ -637,10 +763,7 @@ var SUPPLIERS=[
 {i:'CN',n:'China Ocean Export',c:'China',y:2001,feat:false,tags:['Squid','Octopus','Crab','Mixed IQF'],moq:'5T',ctry:'50',resp:'<24h',certs:['HACCP','BRC','GACC Registered'],rate:'4.5',rev:18,stars:4},
 {i:'IN',n:'India Seafood Exports',c:'India',y:1997,feat:false,tags:['Vannamei Shrimp','Squid','Fish Meal'],moq:'3T',ctry:'40',resp:'<18h',certs:['BRC','HACCP','Halal','BAP'],rate:'4.6',rev:24,stars:4},
 {i:'CL',n:'Chilean Sea Products',c:'Chile',y:1992,feat:false,tags:['Salmon','Mussel','Sea Bass','IQF'],moq:'1T',ctry:'28',resp:'<8h',certs:['MSC Certified','ASC','BRC'],rate:'4.8',rev:21,stars:5},
-{i:'MO',n:'Morocco Fish Export',c:'Morocco',y:2006,feat:false,tags:['Sardines','Octopus','Squid','Anchovy'],moq:'2T',ctry:'25',resp:'<24h',certs:['BRC','HACCP','Friend of the Sea'],rate:'4.6',rev:12,stars:4},
-{i:'DK',n:'Denmark Aqua Export',c:'Denmark',y:1979,feat:true,tags:['Salmon','Trout','Herring','Organic'],moq:'500kg',ctry:'44',resp:'<4h',certs:['MSC','ASC','Organic EU','BRC Grade A'],rate:'4.9',rev:34,stars:5},
-{i:'PE',n:'Peru Pacific Exports',c:'Peru',y:2004,feat:false,tags:['Squid','Anchovy','Scallops','IQF'],moq:'5T',ctry:'30',resp:'<18h',certs:['HACCP','Friend of the Sea','BRC'],rate:'4.7',rev:14,stars:4},
-{i:'AU',n:'AusOcean Seafood',c:'Australia',y:1990,feat:false,tags:['Lobster','Abalone','Barramundi','IQF'],moq:'500kg',ctry:'22',resp:'<6h',certs:['MSC Certified','HACCP','BRC'],rate:'4.8',rev:16,stars:5}
+{i:'MO',n:'Morocco Fish Export',c:'Morocco',y:2006,feat:false,tags:['Sardines','Octopus','Squid','Anchovy'],moq:'2T',ctry:'25',resp:'<24h',certs:['BRC','HACCP','Friend of the Sea'],rate:'4.6',rev:12,stars:4}
 ];
 function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 function stars(n){return '★★★★★☆☆☆☆☆'.slice(5-n,10-n);}
