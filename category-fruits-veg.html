@@ -420,6 +420,171 @@ body.light-mode .csn-sep{background:rgba(74,159,224,.18) !important}
   .chero { padding-top: 44px !important; }
   .chero-inner { padding-top: 12px; }
 }
+@media (max-width: 768px) {
+
+  /* List rows stack vertically on mobile */
+  .lrow {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 14px 16px;
+  }
+
+  /* Top row: logo + name + location */
+  .lr-top {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+  }
+
+  /* Name and location */
+  .lr-main {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .lr-name {
+    font-size: 13px;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .lr-loc {
+    font-size: 11px;
+    margin-top: 2px;
+  }
+
+  /* Tags wrap naturally full width */
+  .lr-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    width: 100%;
+  }
+
+  /* Stats spread evenly full width */
+  .lr-stats {
+    display: flex;
+    width: 100%;
+    gap: 0;
+    background: rgba(10,22,40,.5);
+    border: 1px solid rgba(74,159,224,.1);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .lr-stat {
+    flex: 1;
+    padding: 7px 6px;
+    text-align: center;
+    border-right: 1px solid rgba(74,159,224,.1);
+  }
+
+  .lr-stat:last-child {
+    border-right: none;
+  }
+
+  /* Certs wrap full width */
+  .lr-certs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    width: 100%;
+  }
+
+  /* Bottom action row: badge + rating + button */
+  .lr-right {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding-top: 8px;
+    border-top: 1px solid rgba(74,159,224,.08);
+    gap: 8px;
+  }
+
+  .bdg-v {
+    flex-shrink: 0;
+  }
+
+  .lc-rate {
+    flex: 1;
+    font-size: 11px;
+  }
+
+  .rq-btn {
+    flex-shrink: 0;
+    white-space: nowrap;
+    font-size: 10.5px;
+    padding: 7px 12px;
+  }
+}
+
+@media (max-width: 480px) {
+
+  .lrow {
+    padding: 12px 14px;
+  }
+
+  .lr-name {
+    font-size: 12.5px;
+  }
+
+  .lr-right {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .rq-btn {
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+    display: flex;
+    padding: 9px 12px;
+  }
+}
+@media (max-width: 768px) {
+
+  /* Grid card footer — stack rating and
+     button vertically so nothing overlaps */
+  .lc-foot {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    padding-top: 10px;
+  }
+
+  /* Button stretches full card width */
+  .rq-btn {
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+    display: flex;
+    padding: 9px 12px;
+    font-size: 11px;
+  }
+
+  /* Rating sits cleanly above button */
+  .lc-rate {
+    font-size: 11px;
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+
+  .lc-foot {
+    gap: 6px;
+  }
+
+  .rq-btn {
+    padding: 10px 12px;
+    font-size: 11.5px;
+  }
+}
 </style>
 </head>
 <body>
@@ -484,7 +649,7 @@ body.light-mode .csn-sep{background:rgba(74,159,224,.18) !important}
 <option>All MOQ</option><option>Less than 1T</option><option>1T – 5T</option><option>5T – 20T</option><option>20T+</option>
 </select>
 <div class="fb-r">
-<span class="fb-cnt">Showing 12 of <b>180+</b> suppliers</span>
+<span class="fb-cnt">Showing 9 of <b>180+</b> suppliers</span>
 <div class="tog">
 <button class="tog-b on" id="tog-grid" aria-label="Grid view"><i class="ti ti-layout-grid" aria-hidden="true"></i></button>
 <button class="tog-b" id="tog-list" aria-label="List view"><i class="ti ti-list" aria-hidden="true"></i></button>
@@ -504,7 +669,7 @@ body.light-mode .csn-sep{background:rgba(74,159,224,.18) !important}
 
 <!-- SECTION 5 — Load more -->
 <div class="lm">
-<div class="lm-cnt">Showing 12 of <b>180+</b> verified Frozen Fruits &amp; Vegetables suppliers</div>
+<div class="lm-cnt">Showing 9 of <b>180+</b> verified Frozen Fruits &amp; Vegetables suppliers</div>
 <button class="lm-btn"><i class="ti ti-refresh" aria-hidden="true"></i>Load More Suppliers</button>
 </div>
 
@@ -627,10 +792,7 @@ var SUPPLIERS=[
 {i:'MF',n:'MoroccoFresh Export',c:'Morocco',y:2011,feat:false,tags:['Strawberries','Peas','Green Beans'],moq:'2T',ctry:'18',resp:'<24h',certs:['GlobalGAP','IFS'],rate:'4.6',rev:11,stars:4},
 {i:'EA',n:'EastAfrica Agri Export',c:'Kenya',y:2008,feat:false,tags:['Mango','Passion Fruit','Pineapple'],moq:'1T',ctry:'20',resp:'<18h',certs:['Organic EU','Rainforest Alliance'],rate:'4.7',rev:15,stars:4},
 {i:'EV',n:'EuroVeg Exports',c:'Belgium',y:2001,feat:false,tags:['Brussels Sprouts','Spinach','Kale'],moq:'5T',ctry:'42',resp:'<6h',certs:['BRC Grade A','GlobalGAP'],rate:'4.6',rev:22,stars:4},
-{i:'TF',n:'TropicsFresh Ltd',c:'Costa Rica',y:2013,feat:false,tags:['Tropical Mix','Papaya','Pineapple'],moq:'2T',ctry:'25',resp:'<12h',certs:['Rainforest Alliance','GlobalGAP'],rate:'4.8',rev:16,stars:5},
-{i:'NB',n:'NordicBerry AB',c:'Sweden',y:1997,feat:true,tags:['Wild Berries','Lingonberry','Cloudberry'],moq:'500kg',ctry:'40',resp:'<4h',certs:['BRC Grade A','EU Organic'],rate:'4.9',rev:28,stars:5},
-{i:'SM',n:'SaharaMed Fresh',c:'Egypt',y:2009,feat:false,tags:['Strawberries','Artichokes','Figs'],moq:'3T',ctry:'22',resp:'<18h',certs:['GlobalGAP','HACCP'],rate:'4.7',rev:13,stars:4},
-{i:'AV',n:'AgriVerde Export',c:'Mexico',y:2006,feat:false,tags:['Frozen Avocado','Mango','Lime'],moq:'2T',ctry:'28',resp:'<12h',certs:['USDA','GlobalGAP','Organic'],rate:'4.8',rev:20,stars:5}
+{i:'TF',n:'TropicsFresh Ltd',c:'Costa Rica',y:2013,feat:false,tags:['Tropical Mix','Papaya','Pineapple'],moq:'2T',ctry:'25',resp:'<12h',certs:['Rainforest Alliance','GlobalGAP'],rate:'4.8',rev:16,stars:5}
 ];
 function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 function stars(n){return '★★★★★☆☆☆☆☆'.slice(5-n,10-n);}

@@ -428,6 +428,171 @@ body.light-mode .bdg-f { background: rgba(245,158,11,.15) !important; color: #B4
   .chero { padding-top: 44px !important; }
   .chero-inner { padding-top: 12px; }
 }
+@media (max-width: 768px) {
+
+  /* List rows stack vertically on mobile */
+  .lrow {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 14px 16px;
+  }
+
+  /* Top row: logo + name + location */
+  .lr-top {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+  }
+
+  /* Name and location */
+  .lr-main {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .lr-name {
+    font-size: 13px;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .lr-loc {
+    font-size: 11px;
+    margin-top: 2px;
+  }
+
+  /* Tags wrap naturally full width */
+  .lr-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    width: 100%;
+  }
+
+  /* Stats spread evenly full width */
+  .lr-stats {
+    display: flex;
+    width: 100%;
+    gap: 0;
+    background: rgba(10,22,40,.5);
+    border: 1px solid rgba(74,159,224,.1);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .lr-stat {
+    flex: 1;
+    padding: 7px 6px;
+    text-align: center;
+    border-right: 1px solid rgba(74,159,224,.1);
+  }
+
+  .lr-stat:last-child {
+    border-right: none;
+  }
+
+  /* Certs wrap full width */
+  .lr-certs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    width: 100%;
+  }
+
+  /* Bottom action row: badge + rating + button */
+  .lr-right {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding-top: 8px;
+    border-top: 1px solid rgba(74,159,224,.08);
+    gap: 8px;
+  }
+
+  .bdg-v {
+    flex-shrink: 0;
+  }
+
+  .lc-rate {
+    flex: 1;
+    font-size: 11px;
+  }
+
+  .rq-btn {
+    flex-shrink: 0;
+    white-space: nowrap;
+    font-size: 10.5px;
+    padding: 7px 12px;
+  }
+}
+
+@media (max-width: 480px) {
+
+  .lrow {
+    padding: 12px 14px;
+  }
+
+  .lr-name {
+    font-size: 12.5px;
+  }
+
+  .lr-right {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .rq-btn {
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+    display: flex;
+    padding: 9px 12px;
+  }
+}
+@media (max-width: 768px) {
+
+  /* Grid card footer — stack rating and
+     button vertically so nothing overlaps */
+  .lc-foot {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    padding-top: 10px;
+  }
+
+  /* Button stretches full card width */
+  .rq-btn {
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+    display: flex;
+    padding: 9px 12px;
+    font-size: 11px;
+  }
+
+  /* Rating sits cleanly above button */
+  .lc-rate {
+    font-size: 11px;
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+
+  .lc-foot {
+    gap: 6px;
+  }
+
+  .rq-btn {
+    padding: 10px 12px;
+    font-size: 11.5px;
+  }
+}
 </style>
 </head>
 <body>
@@ -492,7 +657,7 @@ body.light-mode .bdg-f { background: rgba(245,158,11,.15) !important; color: #B4
 <option>All MOQ</option><option>Less than 1T</option><option>1T – 5T</option><option>5T – 20T</option><option>1 Container</option><option>20T+</option>
 </select>
 <div class="fb-r">
-<span class="fb-cnt">Showing 12 of <b>210+</b> suppliers</span>
+<span class="fb-cnt">Showing 9 of <b>210+</b> suppliers</span>
 <div class="tog">
 <button class="tog-b on" id="tog-grid" aria-label="Grid view"><i class="ti ti-layout-grid" aria-hidden="true"></i></button>
 <button class="tog-b" id="tog-list" aria-label="List view"><i class="ti ti-list" aria-hidden="true"></i></button>
@@ -512,7 +677,7 @@ body.light-mode .bdg-f { background: rgba(245,158,11,.15) !important; color: #B4
 
 <!-- SECTION 5 — Load more -->
 <div class="lm">
-<div class="lm-cnt">Showing 12 of <b>210+</b> verified Frozen Beef &amp; Meat suppliers</div>
+<div class="lm-cnt">Showing 9 of <b>210+</b> verified Frozen Beef &amp; Meat suppliers</div>
 <button class="lm-btn"><i class="ti ti-refresh" aria-hidden="true"></i>Load More Suppliers</button>
 </div>
 
@@ -635,10 +800,7 @@ var SUPPLIERS=[
 {i:'SA',n:'SouthAfrica Meat Co',c:'South Africa',y:1997,feat:false,tags:['Beef Cuts','Offal','Halal','Pork'],moq:'5T',ctry:'22',resp:'<24h',certs:['Halal Certified','HACCP','Origin ZA'],rate:'4.6',rev:13,stars:4},
 {i:'UR',n:'UralMeat Export',c:'Russia',y:2005,feat:false,tags:['Pork Cuts','Ground Pork','Lard'],moq:'10T',ctry:'20',resp:'<24h',certs:['HACCP','ISO 22000'],rate:'4.5',rev:10,stars:4},
 {i:'NZ',n:'NZ Premium Meats',c:'New Zealand',y:1991,feat:false,tags:['Lamb','Venison','Grass-Fed Beef'],moq:'2T',ctry:'38',resp:'<6h',certs:['NZFSA','Halal','EU Approved'],rate:'4.9',rev:28,stars:5},
-{i:'IN',n:'IndiaBeef Exports Ltd',c:'India',y:2008,feat:false,tags:['Buffalo Meat','Halal','Frozen Cuts'],moq:'5T',ctry:'30',resp:'<18h',certs:['Halal Certified','APEDA','HACCP'],rate:'4.6',rev:15,stars:4},
-{i:'TY',n:'Tyson Export Division',c:'USA',y:1935,feat:true,tags:['Ground Beef','Chicken','Pork','USDA'],moq:'1×40ft',ctry:'65',resp:'<4h',certs:['USDA','Halal Certified','BRC Grade A'],rate:'4.9',rev:56,stars:5},
-{i:'PL',n:'PolMeat Trading',c:'Poland',y:2003,feat:false,tags:['Pork Cuts','Bacon','Processed Meats'],moq:'3T',ctry:'32',resp:'<12h',certs:['EU Approved','BRC','HACCP'],rate:'4.7',rev:16,stars:4},
-{i:'UR',n:'Uruguay Beef Export',c:'Uruguay',y:1999,feat:false,tags:['Grass-Fed Beef','Ribeye','Short Ribs'],moq:'5T',ctry:'35',resp:'<18h',certs:['INAC','Halal Certified','EU Approved'],rate:'4.8',rev:21,stars:5}
+{i:'IN',n:'IndiaBeef Exports Ltd',c:'India',y:2008,feat:false,tags:['Buffalo Meat','Halal','Frozen Cuts'],moq:'5T',ctry:'30',resp:'<18h',certs:['Halal Certified','APEDA','HACCP'],rate:'4.6',rev:15,stars:4}
 ];
 function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 function stars(n){return '★★★★★☆☆☆☆☆'.slice(5-n,10-n);}
