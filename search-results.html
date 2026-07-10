@@ -57,7 +57,7 @@ body.light-mode #mode-toggle{border-color:rgba(30,107,171,0.4);background:rgba(3
 .ch-bc .cur{color:#4A9FE0;font-weight:500}
 
 /* ── SECTION 1 — Search hero ── */
-.sh{position:relative;background:linear-gradient(180deg,#050D18,#061428);padding:32px 48px 28px;overflow:hidden;border-bottom:1px solid rgba(74,159,224,.1);margin-top:66px}
+.sh{position:relative;background:linear-gradient(180deg,#050D18,#061428);padding:80px 48px 28px;overflow:hidden;border-bottom:1px solid rgba(74,159,224,.1);margin-top:66px}
 .sh-inner{position:relative;z-index:2;max-width:900px;margin:0 auto}
 .sh-meta{display:flex;align-items:center;gap:8px;font-size:13px;color:#9BBFD8;margin-bottom:14px;flex-wrap:wrap}
 .sh-meta-ct{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;padding:3px 10px;border-radius:10px;background:rgba(74,159,224,.1);color:#4A9FE0;border:1px solid rgba(74,159,224,.22)}
@@ -76,7 +76,7 @@ body.light-mode #mode-toggle{border-color:rgba(30,107,171,0.4);background:rgba(3
 .sh-chip:hover:not(.on){background:rgba(74,159,224,.1)}
 
 /* ── SECTION 2 — Filter bar (reuse .fb) ── */
-.fb{position:sticky;top:110px;z-index:80;background:rgba(8,18,32,.96);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid rgba(74,159,224,.12);padding:10px 48px}
+.fb{position:sticky;top:66px;z-index:80;background:rgba(8,18,32,.96);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid rgba(74,159,224,.12);padding:10px 48px}
 .fb-in{display:flex;align-items:center;gap:10px;max-width:1400px;margin:0 auto}
 .fb-sel{background:rgba(18,34,52,.8);border:1px solid rgba(74,159,224,.18);color:#9BBFD8;padding:9px 12px;border-radius:10px;font-size:12px;font-family:'Inter',system-ui;min-width:140px;outline:none;cursor:pointer}
 .fb-r{margin-left:auto;display:flex;gap:10px;align-items:center}
@@ -310,7 +310,7 @@ body.light-mode .cat-grp-ct{color:#6B9DB7 !important}
 .pn-div{display:none}
 }
 @media (max-width: 768px) {
-  .sh { padding: 24px 20px 20px; }
+  .sh { padding: 52px 20px 20px; }
   .sh-bar { flex-direction: column; }
   .sh-btn { width: 100%; justify-content: center; }
   .sr-section { padding: 16px 16px 24px; }
@@ -331,7 +331,7 @@ body.light-mode .cat-grp-ct{color:#6B9DB7 !important}
   .cat-grp .lc-grid {
     grid-template-columns: 1fr !important;
   }
-  .sh { padding: 20px 16px 18px; }
+  .sh { padding: 44px 16px 18px; }
 }
 </style>
 </head>
@@ -346,21 +346,6 @@ body.light-mode .cat-grp-ct{color:#6B9DB7 !important}
 <a class="pn-logo" href="index.html"><div class="pn-icon"><i class="ti ti-snowflake" style="font-size:16px;color:#fff" aria-hidden="true"></i></div><span class="pn-wm">FrozenFood<em>Inc</em></span></a>
 <div class="pn-links"><a href="index.html">Database</a><a href="#">Services</a><a href="#">For Suppliers</a><div class="pn-div"></div><a href="#">Sign In</a><button id="mode-toggle" aria-label="Switch to light mode" title="Toggle light/dark mode"><i class="ti ti-sun" id="mode-icon"></i></button><button class="pn-cta">List Your Business</button></div>
 </nav>
-
-<!-- Category sub-nav -->
-<div class="csn" aria-label="Category navigation">
-<div class="csn-inner">
-<a class="csn-item" href="category-fruits-veg.html"><i class="ti ti-leaf" aria-hidden="true"></i>Fruits &amp; Veg</a>
-<span class="csn-sep"></span>
-<a class="csn-item" href="category-poultry.html"><i class="ti ti-feather" aria-hidden="true"></i>Poultry</a>
-<span class="csn-sep"></span>
-<a class="csn-item" href="category-beef-meat.html"><i class="ti ti-flame" aria-hidden="true"></i>Beef &amp; Meat</a>
-<span class="csn-sep"></span>
-<a class="csn-item" href="category-seafood.html"><i class="ti ti-fish" aria-hidden="true"></i>Seafood</a>
-<span class="csn-sep"></span>
-<a class="csn-item" href="category-services.html"><i class="ti ti-truck" aria-hidden="true"></i>Services</a>
-</div>
-</div>
 
 <!-- SECTION 1 — Search hero -->
 <section class="sh" aria-label="Search results hero">
