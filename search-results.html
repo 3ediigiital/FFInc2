@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Search Results — "halal chicken" | FrozenFoodInc 2.0</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.11.0/dist/tabler-icons.min.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{overflow-x:hidden;max-width:100vw}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',system-ui,sans-serif;background:#050D18;color:#fff;overflow-x:hidden;min-height:100vh}
+
+/* ── Shared background layers (from index.html) ── */
+.pg-grid{position:fixed;inset:0;background-image:linear-gradient(rgba(74,159,224,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(74,159,224,.04) 1px,transparent 1px);background-size:52px 52px;pointer-events:none;z-index:0;mask-image:radial-gradient(ellipse 80% 60% at 50% 30%,black,transparent)}
+.pg-aura{position:fixed;border-radius:50%;filter:blur(90px);pointer-events:none;z-index:0;will-change:transform}
+#pg-canvas{position:fixed;inset:0;pointer-events:none;z-index:0}
+
+/* ── Nav (from index.html) ── */
+.pn{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(5,13,24,.72);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid rgba(74,159,224,.12);padding:0 48px;height:66px;display:flex;align-items:center;justify-content:space-between}
+.pn-logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.pn-icon{width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,#4A9FE0,#1E6BAB);display:flex;align-items:center;justify-content:center;box-shadow:0 0 20px rgba(74,159,224,.5);flex-shrink:0}
+.pn-wm{font-family:'Plus Jakarta Sans',system-ui;font-size:16px;font-weight:800;letter-spacing:-.3px;color:#fff}
+.pn-wm em{color:#4A9FE0;font-style:normal}
+.pn-links{display:flex;align-items:center;gap:28px}
+.pn-links a{font-size:13px;color:#9BBFD8;text-decoration:none;transition:color .2s}
+.pn-links a:hover{color:#fff}
+.pn-div{width:1px;height:18px;background:rgba(74,159,224,.2)}
+.pn-cta{background:linear-gradient(135deg,#4A9FE0,#2D7FC4);color:#fff;border:none;padding:10px 22px;border-radius:9px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',system-ui;box-shadow:0 4px 18px rgba(74,159,224,.4);transition:transform .15s,box-shadow .15s}
+.pn-cta:hover{transform:translateY(-1px);box-shadow:0 6px 26px rgba(74,159,224,.62)}
+#mode-toggle{width:34px;height:34px;border-radius:50%;border:1px solid rgba(74,159,224,0.28);background:rgba(74,159,224,0.08);color:#8DCAF2;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.2s;flex-shrink:0;padding:0}
+#mode-toggle:hover{background:rgba(74,159,224,0.18);border-color:rgba(74,159,224,0.5);color:#fff;transform:scale(1.08)}
+#mode-toggle i{font-size:15px}
+body.light-mode #mode-toggle{border-color:rgba(30,107,171,0.4);background:rgba(30,107,171,0.12);color:#1E6BAB}
+
+/* ── Category sub-nav (from category pages) ── */
+.csn{position:sticky;top:66px;z-index:90;background:rgba(6,15,26,.96);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid rgba(74,159,224,.1);display:flex;align-items:center;justify-content:center;padding:0 48px}
+.csn-inner{display:flex;align-items:center;max-width:1200px;width:100%}
+.csn-item{display:inline-flex;align-items:center;gap:7px;padding:12px 16px;font-size:12.5px;font-weight:500;color:#9BBFD8;text-decoration:none;border-bottom:2px solid transparent;transition:color .2s,border-color .2s;cursor:pointer;white-space:nowrap}
+.csn-item i{font-size:15px}
+.csn-item:hover{color:#fff;border-bottom-color:rgba(74,159,224,.3)}
+.csn-item.on{color:#2ECC9A;border-bottom-color:#2ECC9A}
+.csn-sep{width:1px;height:18px;background:rgba(74,159,224,.12);flex-shrink:0}
+
+/* ── Shared badges (from category pages) ── */
+.bdg{display:inline-flex;align-items:center;gap:3px;font-size:9px;font-weight:600;padding:2px 7px;border-radius:8px;white-space:nowrap}
+.bdg-f{background:rgba(245,158,11,.12);color:#F59E0B;border:1px solid rgba(245,158,11,.28)}
+.bdg-v{background:rgba(46,204,154,.1);color:#52DEB5;border:1px solid rgba(46,204,154,.25)}
+.chero-aura{position:absolute;border-radius:50%;filter:blur(70px);pointer-events:none;z-index:0}
+
+/* ── Breadcrumb (reuse .ch-bc) ── */
+.ch-bc{display:flex;align-items:center;gap:6px;font-size:11px;color:#6B9DB7;margin-bottom:16px}
+.ch-bc a{color:#6B9DB7;text-decoration:none}
+.ch-bc i{font-size:10px;color:#3A5E75}
+.ch-bc .cur{color:#4A9FE0;font-weight:500}
+
+/* ── SECTION 1 — Search hero ── */
+.sh{position:relative;background:linear-gradient(180deg,#050D18,#061428);padding:32px 48px 28px;overflow:hidden;border-bottom:1px solid rgba(74,159,224,.1);margin-top:66px}
+.sh-inner{position:relative;z-index:2;max-width:900px;margin:0 auto}
+.sh-meta{display:flex;align-items:center;gap:8px;font-size:13px;color:#9BBFD8;margin-bottom:14px;flex-wrap:wrap}
+.sh-meta-ct{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;padding:3px 10px;border-radius:10px;background:rgba(74,159,224,.1);color:#4A9FE0;border:1px solid rgba(74,159,224,.22)}
+.sh-bar{display:flex;gap:8px;background:rgba(18,34,52,.72);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(74,159,224,.2);border-radius:12px;padding:7px;margin-bottom:14px;transition:border-color .3s}
+.sh-bar:focus-within{border-color:rgba(74,159,224,.5);box-shadow:0 0 0 4px rgba(74,159,224,.08)}
+.sh-si{flex:1;display:flex;align-items:center;gap:8px;padding:0 8px}
+.sh-si i{font-size:16px;color:#4A9FE0;flex-shrink:0}
+.sh-in{background:transparent;border:none;outline:none;font-size:13.5px;color:#fff;font-family:'Inter',system-ui;width:100%}
+.sh-in::placeholder{color:#3A5E75}
+.sh-btn{background:linear-gradient(135deg,#4A9FE0,#2D7FC4);color:#fff;border:none;padding:10px 20px;border-radius:9px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',system-ui;display:inline-flex;align-items:center;gap:5px;box-shadow:0 4px 16px rgba(74,159,224,.4);flex-shrink:0;transition:transform .15s}
+.sh-btn:hover{transform:scale(1.03)}
+.sh-chips{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.sh-cl{font-size:11px;color:#6B9DB7}
+.sh-chip{display:inline-flex;align-items:center;gap:5px;font-size:11px;padding:4px 12px;border-radius:20px;border:1px solid rgba(74,159,224,.18);color:#8DCAF2;background:rgba(74,159,224,.06);cursor:pointer;transition:all .2s}
+.sh-chip.on{background:rgba(74,159,224,.15);border-color:rgba(74,159,224,.4);color:#fff}
+.sh-chip:hover:not(.on){background:rgba(74,159,224,.1)}
+
+/* ── SECTION 2 — Filter bar (reuse .fb) ── */
+.fb{position:sticky;top:110px;z-index:80;background:rgba(8,18,32,.96);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid rgba(74,159,224,.12);padding:10px 48px}
+.fb-in{display:flex;align-items:center;gap:10px;max-width:1400px;margin:0 auto}
+.fb-sel{background:rgba(18,34,52,.8);border:1px solid rgba(74,159,224,.18);color:#9BBFD8;padding:9px 12px;border-radius:10px;font-size:12px;font-family:'Inter',system-ui;min-width:140px;outline:none;cursor:pointer}
+.fb-r{margin-left:auto;display:flex;gap:10px;align-items:center}
+.fb-cnt{font-size:11.5px;color:#6B9DB7;white-space:nowrap}
+.fb-cnt b{color:#4A9FE0;font-weight:600}
+.tog{display:flex;background:rgba(18,34,52,.8);border:1px solid rgba(74,159,224,.18);border-radius:10px;overflow:hidden}
+.tog-b{width:36px;height:36px;display:flex;align-items:center;justify-content:center;background:transparent;border:none;color:#6B9DB7;cursor:pointer;transition:all .2s}
+.tog-b i{font-size:15px}
+.tog-b.on{background:rgba(74,159,224,.2);color:#4A9FE0}
+.grp-btn{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:500;padding:6px 12px;border-radius:8px;border:1px solid rgba(74,159,224,.2);color:#9BBFD8;background:transparent;cursor:pointer;font-family:'Inter',system-ui;transition:all .2s;white-space:nowrap}
+.grp-btn.on{background:rgba(74,159,224,.14);color:#4A9FE0;border-color:rgba(74,159,224,.38)}
+
+/* ── SECTION 3 — Results ── */
+.sr-section{background:#050D18;padding:22px 48px 28px;position:relative;z-index:2}
+.sr-lbl{font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#3A5E75;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.sr-lbl::after{content:'';flex:1;height:1px;background:rgba(74,159,224,.1)}
+.lc-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+.sr-list{display:flex;flex-direction:column;gap:10px}
+
+/* Category badges on cards */
+.rc-cat{display:inline-flex;align-items:center;gap:4px;font-size:9px;font-weight:600;padding:2px 8px;border-radius:8px;margin-bottom:7px}
+.rc-cat.bl{background:rgba(74,159,224,.1);color:#4A9FE0;border:1px solid rgba(74,159,224,.22)}
+.rc-cat.am{background:rgba(245,158,11,.1);color:#F59E0B;border:1px solid rgba(245,158,11,.22)}
+.rc-cat.tl{background:rgba(46,204,154,.1);color:#2ECC9A;border:1px solid rgba(46,204,154,.22)}
+.rc-cat.lt{background:rgba(82,222,181,.1);color:#52DEB5;border:1px solid rgba(82,222,181,.22)}
+.rc-cat.pu{background:rgba(167,139,250,.1);color:#A78BFA;border:1px solid rgba(167,139,250,.22)}
+
+/* Category group headers */
+.cat-grp{margin-bottom:24px}
+.cat-grp-hd{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:10px;border-left:3px solid;margin-bottom:12px}
+.cat-grp-name{font-family:'Plus Jakarta Sans',system-ui;font-size:14px;font-weight:700;color:#fff}
+.cat-grp-ct{font-size:11px;color:#9BBFD8;margin-left:auto}
+.cat-grp-ct b{color:#4A9FE0}
+
+/* ── Grid card (reused .lc, blue accent) ── */
+.lc{position:relative;background:rgba(18,34,52,.48);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(74,159,224,.1);border-radius:18px;padding:20px;overflow:hidden;cursor:pointer;transition:transform .28s cubic-bezier(.34,1.3,.64,1),border-color .25s,box-shadow .28s}
+.lc::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(74,159,224,.5),transparent)}
+.lc:hover{transform:translateY(-5px);border-color:rgba(74,159,224,.28);box-shadow:0 18px 52px rgba(0,0,0,.45),0 0 36px -16px #4A9FE0}
+.lc-head{display:flex;gap:10px;margin-bottom:12px}
+.lc-logo{width:40px;height:40px;border-radius:10px;background:rgba(74,159,224,.12);border:1px solid rgba(74,159,224,.25);display:flex;align-items:center;justify-content:center;color:#4A9FE0;font-family:'Plus Jakarta Sans',system-ui;font-size:12px;font-weight:700;flex-shrink:0}
+.lc-ng{flex:1;min-width:0}
+.lc-n{font-size:13px;font-weight:600;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:3px}
+.lc-loc{font-size:10.5px;color:#9BBFD8;display:flex;align-items:center;gap:4px}
+.lc-loc i{font-size:10px}
+.lc-bdgs{display:flex;flex-direction:column;gap:4px;flex-shrink:0;align-items:flex-end}
+.lc-tags{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:10px}
+.lc-tag{background:rgba(26,48,72,.8);border:1px solid rgba(74,159,224,.12);color:#9BBFD8;font-size:9.5px;padding:2px 7px;border-radius:5px}
+.lc-stats{display:flex;background:rgba(10,22,40,.5);border:1px solid rgba(74,159,224,.1);border-radius:9px;overflow:hidden;margin-bottom:10px}
+.lc-stat{flex:1;padding:8px 6px;text-align:center;border-left:1px solid rgba(74,159,224,.1)}
+.lc-stat:first-child{border-left:none}
+.lc-sv{display:block;font-family:'Plus Jakarta Sans',system-ui;font-size:13px;font-weight:700;color:#fff;line-height:1.2}
+.lc-sl{display:block;font-size:8.5px;color:#6B9DB7;text-transform:uppercase;letter-spacing:.04em;margin-top:2px}
+.lc-certs{display:flex;flex-wrap:wrap;gap:3px;margin-bottom:11px}
+.lc-cert{background:rgba(74,159,224,.08);border:1px solid rgba(74,159,224,.14);color:#8DCAF2;font-size:9px;padding:2px 6px;border-radius:4px}
+.lc-foot{display:flex;align-items:center;justify-content:space-between;border-top:1px solid rgba(74,159,224,.08);padding-top:10px}
+.lc-rate{font-size:11px;color:#F59E0B;display:flex;align-items:center;gap:4px}
+.lc-rate span{color:#6B9DB7;font-size:10px}
+.rq-btn{background:linear-gradient(135deg,#4A9FE0,#2D7FC4);color:#fff;border:none;padding:6px 13px;border-radius:7px;font-family:'Inter',system-ui;font-size:10.5px;font-weight:700;cursor:pointer;transition:transform .15s,box-shadow .15s;flex-shrink:0}
+.rq-btn:hover{transform:translateY(-1px);box-shadow:0 4px 14px rgba(74,159,224,.4)}
+
+/* ── List row (reused .lrow, blue accent) ── */
+.lrow{display:flex;align-items:center;gap:16px;background:rgba(18,34,52,.48);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(74,159,224,.1);border-radius:14px;padding:16px 22px;cursor:pointer;transition:transform .25s cubic-bezier(.34,1.3,.64,1),border-color .25s,box-shadow .25s}
+.lrow:hover{border-color:rgba(74,159,224,.28);transform:translateX(3px);box-shadow:0 12px 34px rgba(0,0,0,.4)}
+.lr-main{flex:1;min-width:0}
+.lr-top{display:flex;align-items:center;gap:8px;margin-bottom:5px;flex-wrap:wrap}
+.lr-name{font-size:13.5px;font-weight:600;color:#fff}
+.lr-loc{font-size:10.5px;color:#9BBFD8;display:flex;align-items:center;gap:4px}
+.lr-loc i{font-size:10px}
+.lr-tags{display:flex;flex-wrap:wrap;gap:4px}
+.lr-stats{display:flex;gap:0;background:rgba(10,22,40,.5);border:1px solid rgba(74,159,224,.1);border-radius:9px;overflow:hidden;flex-shrink:0}
+.lr-stat{padding:6px 14px;text-align:center;border-left:1px solid rgba(74,159,224,.1)}
+.lr-stat:first-child{border-left:none}
+.lr-certs{display:flex;gap:3px;flex-shrink:0}
+.lr-right{display:flex;align-items:center;gap:14px;flex-shrink:0}
+.lr-stat .lc-sv{font-size:12px}
+.lr-stat .lc-sl{font-size:8px}
+@media (max-width:1100px){.lr-stats,.lr-certs{display:none}}
+
+/* ── Load more (reused .lm) ── */
+.lm{background:#050D18;border-top:1px solid rgba(74,159,224,.08);padding:20px 48px 28px;text-align:center;position:relative;z-index:2}
+.lm-cnt{font-size:12.5px;color:#6B9DB7;margin-bottom:14px}
+.lm-cnt b{color:#4A9FE0;font-weight:600}
+.lm-btn{display:inline-flex;align-items:center;gap:8px;background:transparent;border:1px solid rgba(74,159,224,.28);color:#8DCAF2;padding:11px 32px;border-radius:10px;font-family:'Inter',system-ui;font-size:13px;font-weight:500;cursor:pointer;transition:all .2s}
+.lm-btn:hover{background:rgba(74,159,224,.08);border-color:rgba(74,159,224,.5);color:#fff}
+
+/* ── Footer (from index.html) ── */
+.pf{background:#040A12;position:relative;overflow:hidden}
+.pf-topglow{position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent 5%,rgba(74,159,224,.28) 35%,rgba(46,204,154,.2) 65%,transparent 95%);z-index:1}
+.pf-bgaura{position:absolute;top:-150px;left:50%;transform:translateX(-50%);width:800px;height:320px;background:radial-gradient(ellipse,rgba(74,159,224,.055),transparent 70%);pointer-events:none}
+.pf-gbg{position:absolute;inset:0;background-image:linear-gradient(rgba(74,159,224,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(74,159,224,.025) 1px,transparent 1px);background-size:52px 52px;pointer-events:none;mask-image:radial-gradient(ellipse 90% 60% at 50% 0%,black,transparent)}
+.pf-main{position:relative;z-index:2;padding:64px 32px 40px;max-width:100%;margin:0 auto}
+.pf-grid{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:32px;margin-bottom:48px}
+.pf-logo{display:flex;align-items:center;gap:10px;text-decoration:none;margin-bottom:14px}
+.pf-li{width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,#4A9FE0,#1E6BAB);display:flex;align-items:center;justify-content:center;box-shadow:0 0 18px rgba(74,159,224,.44)}
+.pf-lt{font-family:'Plus Jakarta Sans',system-ui;font-size:16px;font-weight:800;letter-spacing:-.3px;color:#fff}
+.pf-lt em{color:#4A9FE0;font-style:normal}
+.pf-desc{font-size:13px;color:#6B9DB7;line-height:1.7;margin-bottom:20px;max-width:240px}
+.pf-social{display:flex;gap:8px}
+.pf-si{width:34px;height:34px;border-radius:9px;border:1px solid rgba(74,159,224,.2);display:flex;align-items:center;justify-content:center;color:#6B9DB7;cursor:pointer;transition:all .2s;text-decoration:none}
+.pf-si:hover{color:#4A9FE0;border-color:rgba(74,159,224,.48);background:rgba(74,159,224,.08);transform:translateY(-2px)}
+.pf-ct{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#3A5E75;margin-bottom:18px;display:flex;align-items:center;gap:8px}
+.pf-ct::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,rgba(74,159,224,.15),transparent)}
+.pf-lk{display:flex;align-items:center;gap:7px;font-size:13px;color:#9BBFD8;margin-bottom:11px;cursor:pointer;transition:color .2s,transform .2s;text-decoration:none}
+.pf-lk i{font-size:11px;color:#3A5E75;transition:color .2s;flex-shrink:0}
+.pf-lk:hover{color:#8DCAF2;transform:translateX(5px)}
+.pf-lk:hover i{color:#4A9FE0}
+.pf-new{display:inline-flex;align-items:center;font-size:9.5px;font-weight:600;padding:2px 7px;border-radius:8px;background:rgba(46,204,154,.1);border:1px solid rgba(46,204,154,.22);color:#52DEB5;margin-left:5px}
+.pf-bot{border-top:1px solid rgba(74,159,224,.1);padding:18px 32px;display:flex;align-items:center;justify-content:space-between;gap:16px;position:relative;z-index:2;max-width:100%;margin:0 auto}
+.pf-copy{font-size:11px;color:#3A5E75}
+.pf-status{display:flex;align-items:center;gap:7px;font-size:11px;color:#52DEB5}
+.pf-sdot{width:7px;height:7px;border-radius:50%;background:#2ECC9A;box-shadow:0 0 9px #2ECC9A}
+.pf-legal{display:flex;gap:18px}
+.pf-legal a{font-size:11px;color:#3A5E75;text-decoration:none;transition:color .2s;cursor:pointer}
+.pf-legal a:hover{color:#6B9DB7}
+
+/* ── Quote modal (from category pages) ── */
+.qm-ov{display:none;position:fixed;inset:0;z-index:500;background:rgba(5,13,24,.85);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);align-items:center;justify-content:center;padding:20px}
+.qm-ov.open{display:flex}
+.qm{position:relative;background:rgba(10,22,40,.96);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(46,204,154,.28);border-radius:22px;padding:32px;width:100%;max-width:480px;box-shadow:0 28px 80px rgba(0,0,0,.65),0 0 60px -22px rgba(46,204,154,.22);max-height:92vh;overflow-y:auto}
+.qm::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,#2ECC9A,transparent)}
+.qm-x{position:absolute;top:18px;right:18px;width:28px;height:28px;border-radius:50%;background:rgba(18,34,52,.8);border:1px solid rgba(74,159,224,.18);color:#9BBFD8;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .2s}
+.qm-x:hover{border-color:rgba(74,159,224,.45);color:#fff}
+.qm-x i{font-size:15px}
+.qm-sup{display:flex;align-items:center;gap:12px;padding-bottom:18px;border-bottom:1px solid rgba(74,159,224,.1);margin-bottom:18px}
+.qm-logo{width:42px;height:42px;border-radius:11px;background:rgba(46,204,154,.12);border:1px solid rgba(46,204,154,.25);color:#2ECC9A;font-family:'Plus Jakarta Sans',system-ui;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.qm-sn{font-size:14px;font-weight:600;color:#fff}
+.qm-sl{font-size:11px;color:#9BBFD8;display:flex;align-items:center;gap:4px;margin-top:2px}
+.qm-sl i{font-size:10px}
+.qm-h{font-family:'Plus Jakarta Sans',system-ui;font-size:22px;font-weight:800;letter-spacing:-.4px;margin-bottom:4px}
+.qm-sub{font-size:12.5px;color:#9BBFD8;line-height:1.55;margin-bottom:22px}
+.qm-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.qm-f{display:flex;flex-direction:column}
+.qm-f.full{grid-column:1/-1}
+.qm-lb{font-size:11px;font-weight:500;color:#9BBFD8;letter-spacing:.03em;display:block;margin-bottom:5px}
+.qm-in,.qm-ta,.qm-se{background:rgba(18,34,52,.8);border:1px solid rgba(74,159,224,.18);border-radius:10px;padding:10px 14px;font-size:13px;color:#fff;font-family:'Inter',system-ui;outline:none;width:100%;transition:border-color .2s}
+.qm-in:focus,.qm-ta:focus,.qm-se:focus{border-color:rgba(46,204,154,.5)}
+.qm-in::placeholder,.qm-ta::placeholder{color:#3A5E75}
+.qm-ta{resize:vertical;min-height:92px;line-height:1.5}
+.qm-se{cursor:pointer}
+.qm-sub-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;background:linear-gradient(135deg,#2ECC9A,#1DB89A);color:#04342C;border:none;padding:15px;border-radius:12px;font-family:'Inter',system-ui;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 6px 24px rgba(46,204,154,.38);margin-top:8px;transition:transform .15s,box-shadow .15s}
+.qm-sub-btn:hover{transform:translateY(-1px);box-shadow:0 10px 32px rgba(46,204,154,.55)}
+.qm-priv{font-size:10.5px;color:#3A5E75;text-align:center;margin-top:10px;line-height:1.5}
+
+/* ── Light mode (shared components, from category-fruits-veg.html) ── */
+body.light-mode{background:#EEF6FF !important}
+body.light-mode .pn{background:rgba(238,246,255,0.88) !important;border-bottom-color:rgba(74,159,224,0.2)}
+body.light-mode .pn-wm{color:#050D18}
+body.light-mode .pn-links a{color:#3A5E75}
+body.light-mode .pn-links a:hover{color:#050D18}
+body.light-mode .pg-aura{opacity:0.15}
+body.light-mode .pg-grid{opacity:0.25}
+body.light-mode .ls{background:#EEF6FF !important}
+body.light-mode .lm{background:#EEF6FF !important}
+body.light-mode .ls-lbl{color:#6B9DB7}
+body.light-mode .lm-cnt{color:#3A5E75}
+body.light-mode .csn-item{color:#3A5E75}
+body.light-mode .csn-item:hover{color:#050D18}
+body.light-mode .lc-n,body.light-mode .lr-name{color:#050D18 !important}
+body.light-mode .lc-loc,body.light-mode .lr-loc,body.light-mode .lc-sl{color:#6B9DB7}
+body.light-mode .lc-sv{color:#050D18}
+body.light-mode .scta-h{color:#050D18}
+body.light-mode .scta-sub{color:#3A5E75}
+/* Footer light mode (from index.html) */
+body.light-mode .pf{background:#dce9ff !important}
+body.light-mode .pf-topglow{background:linear-gradient(90deg,transparent 5%,rgba(74,159,224,0.2) 35%,rgba(46,204,154,0.15) 65%,transparent 95%) !important}
+body.light-mode .pf-lt{color:#050D18 !important}
+body.light-mode .pf-desc{color:#3A5E75 !important}
+body.light-mode .pf-ct{color:#6B9DB7 !important}
+body.light-mode .pf-ct::after{background:linear-gradient(90deg,rgba(74,159,224,0.2),transparent) !important}
+body.light-mode .pf-lk{color:#3A5E75 !important}
+body.light-mode .pf-lk i{color:#9BBFD8 !important}
+body.light-mode .pf-lk:hover{color:#050D18 !important}
+body.light-mode .pf-lk:hover i{color:#4A9FE0 !important}
+body.light-mode .pf-copy{color:#6B9DB7 !important}
+body.light-mode .pf-status{color:#1DB89A !important}
+body.light-mode .pf-legal a{color:#6B9DB7 !important}
+body.light-mode .pf-si{border-color:rgba(74,159,224,0.25) !important;color:#6B9DB7 !important}
+body.light-mode .pf-si:hover{background:rgba(74,159,224,0.12) !important;color:#1E6BAB !important}
+/* Category sub-nav */
+body.light-mode .csn{background:rgba(238,246,255,.96) !important}
+body.light-mode .csn-item{color:#6B9DB7 !important}
+body.light-mode .csn-item.on{color:#0F9B72 !important;border-bottom-color:#0F9B72 !important}
+body.light-mode .csn-item:hover:not(.on){color:#050D18 !important}
+body.light-mode .csn-sep{background:rgba(74,159,224,.18) !important}
+/* Breadcrumb */
+body.light-mode .ch-bc{color:#6B9DB7 !important}
+body.light-mode .ch-bc a{color:#6B9DB7 !important}
+body.light-mode .ch-bc .cur{color:#1E6BAB !important}
+/* Filter bar */
+body.light-mode .fb{background:rgba(238,246,255,.96) !important;border-bottom-color:rgba(74,159,224,.18)}
+body.light-mode .fb-sel,body.light-mode .tog{background:rgba(255,255,255,.7) !important;border-color:rgba(74,159,224,.2) !important}
+body.light-mode .fb-sel{color:#3A5E75 !important}
+body.light-mode .fb-cnt{color:#3A5E75 !important}
+body.light-mode .fb-cnt b{color:#1E6BAB !important}
+/* Cards */
+body.light-mode .lc,body.light-mode .lrow{background:rgba(255,255,255,.65) !important;border-color:rgba(74,159,224,.2) !important;box-shadow:0 4px 20px rgba(74,159,224,.1),inset 0 1px 0 rgba(255,255,255,.95) !important}
+body.light-mode .lc-n,body.light-mode .lr-name{color:#050D18 !important}
+body.light-mode .lc-loc,body.light-mode .lr-loc{color:#6B9DB7 !important}
+body.light-mode .lc-sv{color:#050D18 !important}
+body.light-mode .lc-sl{color:#6B9DB7 !important}
+body.light-mode .lc-tag{background:rgba(74,159,224,.1) !important;border-color:rgba(74,159,224,.22) !important;color:#1E6BAB !important}
+body.light-mode .lc-cert{background:rgba(74,159,224,.08) !important;border-color:rgba(74,159,224,.2) !important;color:#1E6BAB !important}
+body.light-mode .lc-rate span{color:#6B9DB7 !important}
+body.light-mode .lc-stats,body.light-mode .lr-stats{background:rgba(238,246,255,.8) !important;border-color:rgba(74,159,224,.18) !important}
+body.light-mode .lc-stat,body.light-mode .lr-stat{border-left-color:rgba(74,159,224,.18) !important}
+body.light-mode .lc-foot{border-top-color:rgba(74,159,224,.15) !important}
+body.light-mode .lm-cnt{color:#3A5E75 !important}
+body.light-mode .lm-btn{border-color:rgba(30,107,171,.4) !important;color:#1E6BAB !important}
+body.light-mode .lm-btn:hover{background:rgba(74,159,224,.12) !important;border-color:rgba(30,107,171,.6) !important;color:#050D18 !important}
+
+/* ── Additional light mode rules (search-results elements) ── */
+body.light-mode .sh{background:linear-gradient(180deg,#EEF6FF,#E8F4FF) !important;border-bottom-color:rgba(74,159,224,.15) !important}
+body.light-mode .sh-meta{color:#3A5E75 !important}
+body.light-mode .sh-meta strong{color:#050D18 !important}
+body.light-mode .sh-bar{background:rgba(255,255,255,.75) !important;border-color:rgba(74,159,224,.25) !important;box-shadow:0 4px 16px rgba(74,159,224,.08) !important}
+body.light-mode .sh-in{color:#050D18 !important}
+body.light-mode .sh-in::placeholder{color:#9BBFD8 !important}
+body.light-mode .sh-chip{background:rgba(255,255,255,.65) !important;border-color:rgba(74,159,224,.22) !important;color:#1E6BAB !important}
+body.light-mode .sh-chip.on{background:rgba(74,159,224,.15) !important;color:#050D18 !important}
+body.light-mode .sh-cl{color:#6B9DB7 !important}
+body.light-mode .sr-section{background:#EEF6FF !important}
+body.light-mode .sr-lbl{color:#6B9DB7 !important}
+body.light-mode .cat-grp-hd{background:rgba(255,255,255,.65) !important}
+body.light-mode .cat-grp-name{color:#050D18 !important}
+body.light-mode .cat-grp-ct{color:#6B9DB7 !important}
+
+/* ── Responsive ── */
+@media (max-width:900px){
+.pn{padding:0 20px}
+.pn-links a{display:none}
+.pn-div{display:none}
+}
+@media (max-width: 768px) {
+  .sh { padding: 24px 20px 20px; }
+  .sh-bar { flex-direction: column; }
+  .sh-btn { width: 100%; justify-content: center; }
+  .sr-section { padding: 16px 16px 24px; }
+  #ungrouped-grid .lc-grid,
+  .cat-grp .lc-grid {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 10px !important;
+  }
+  .grp-btn { font-size: 10px; padding: 5px 9px; }
+  .sh-chips { gap: 6px; }
+  .sh-chip { font-size: 10px; padding: 3px 9px; }
+  .fb { padding: 10px 16px; }
+  .fb-in { flex-wrap: wrap; gap: 6px; }
+  .fb-r { margin-left: 0; width: 100%; justify-content: space-between; }
+}
+@media (max-width: 480px) {
+  #ungrouped-grid .lc-grid,
+  .cat-grp .lc-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .sh { padding: 20px 16px 18px; }
+}
+</style>
+</head>
+<body>
+<div class="pg-grid"></div>
+<div class="pg-aura" id="pa1" style="width:700px;height:700px;background:radial-gradient(circle,rgba(74,159,224,.22),transparent 65%);top:-260px;left:-200px"></div>
+<div class="pg-aura" id="pa2" style="width:600px;height:600px;background:radial-gradient(circle,rgba(46,204,154,.14),transparent 65%);top:-120px;right:-180px"></div>
+<div class="pg-aura" id="pa3" style="width:500px;height:500px;background:radial-gradient(circle,rgba(74,159,224,.1),transparent 65%);bottom:-150px;left:35%"></div>
+<canvas id="pg-canvas" aria-hidden="true"></canvas>
+
+<nav class="pn" aria-label="Primary navigation">
+<a class="pn-logo" href="index.html"><div class="pn-icon"><i class="ti ti-snowflake" style="font-size:16px;color:#fff" aria-hidden="true"></i></div><span class="pn-wm">FrozenFood<em>Inc</em></span></a>
+<div class="pn-links"><a href="index.html">Database</a><a href="#">Services</a><a href="#">For Suppliers</a><div class="pn-div"></div><a href="#">Sign In</a><button id="mode-toggle" aria-label="Switch to light mode" title="Toggle light/dark mode"><i class="ti ti-sun" id="mode-icon"></i></button><button class="pn-cta">List Your Business</button></div>
+</nav>
+
+<!-- Category sub-nav -->
+<div class="csn" aria-label="Category navigation">
+<div class="csn-inner">
+<a class="csn-item" href="category-fruits-veg.html"><i class="ti ti-leaf" aria-hidden="true"></i>Fruits &amp; Veg</a>
+<span class="csn-sep"></span>
+<a class="csn-item" href="category-poultry.html"><i class="ti ti-feather" aria-hidden="true"></i>Poultry</a>
+<span class="csn-sep"></span>
+<a class="csn-item" href="category-beef-meat.html"><i class="ti ti-flame" aria-hidden="true"></i>Beef &amp; Meat</a>
+<span class="csn-sep"></span>
+<a class="csn-item" href="category-seafood.html"><i class="ti ti-fish" aria-hidden="true"></i>Seafood</a>
+<span class="csn-sep"></span>
+<a class="csn-item" href="category-services.html"><i class="ti ti-truck" aria-hidden="true"></i>Services</a>
+</div>
+</div>
+
+<!-- SECTION 1 — Search hero -->
+<section class="sh" aria-label="Search results hero">
+<div class="chero-aura" style="width:360px;height:360px;background:radial-gradient(circle,rgba(74,159,224,.14),transparent 70%);top:-100px;right:-60px"></div>
+<div class="chero-aura" style="width:260px;height:260px;background:radial-gradient(circle,rgba(74,159,224,.08),transparent 70%);bottom:-60px;left:-40px"></div>
+<div class="sh-inner" id="sh-inner">
+<div class="ch-bc sh-bc"><a href="index.html">Database</a><i class="ti ti-chevron-right" aria-hidden="true"></i><span class="cur">Search Results</span></div>
+<div class="sh-meta">
+<span class="sh-meta-ct"><i class="ti ti-search" style="font-size:11px" aria-hidden="true"></i>27 results</span>
+found for <strong style="color:#fff">"halal chicken"</strong><span style="color:#3A5E75">— across all categories</span>
+</div>
+<div class="sh-bar">
+<label class="sh-si"><i class="ti ti-search" aria-hidden="true"></i><input class="sh-in" type="text" value="halal chicken" placeholder="Search suppliers, products..." aria-label="Search"></label>
+<button class="sh-btn"><i class="ti ti-search" style="font-size:13px" aria-hidden="true"></i>Search</button>
+</div>
+<div class="sh-chips">
+<span class="sh-cl">Filter by:</span>
+<button class="sh-chip on"><i class="ti ti-feather" aria-hidden="true"></i>Poultry</button>
+<button class="sh-chip"><i class="ti ti-flame" aria-hidden="true"></i>Beef &amp; Meat</button>
+<button class="sh-chip"><i class="ti ti-leaf" aria-hidden="true"></i>Fruits &amp; Veg</button>
+<button class="sh-chip"><i class="ti ti-fish" aria-hidden="true"></i>Seafood</button>
+<button class="sh-chip"><i class="ti ti-truck" aria-hidden="true"></i>Services</button>
+</div>
+</div>
+</section>
+
+<!-- SECTION 2 — Filter bar -->
+<div class="fb" aria-label="Filters">
+<div class="fb-in">
+<select class="fb-sel" aria-label="Category">
+<option>All Categories</option><option>Frozen Poultry</option><option>Frozen Beef &amp; Meat</option><option>Frozen Fruits &amp; Veg</option><option>Frozen Seafood</option><option>Cold Chain Services</option>
+</select>
+<select class="fb-sel" aria-label="Certification">
+<option>All Certifications</option><option>Halal Certified</option><option>USDA Inspected</option><option>Organic EU</option><option>BRC Grade A</option><option>MSC Certified</option><option>HACCP</option><option>GlobalGAP</option>
+</select>
+<select class="fb-sel" aria-label="MOQ Range">
+<option>All MOQ</option><option>Less than 1T</option><option>1T–5T</option><option>5T–20T</option><option>1 Container+</option><option>20T+</option>
+</select>
+<select class="fb-sel" aria-label="Sort By">
+<option>Sort: Relevance</option><option>Sort: Rating (High–Low)</option><option>Sort: Most Reviews</option><option>Sort: Newest Listed</option>
+</select>
+<div class="fb-r">
+<span class="fb-cnt">Showing 9 of <b>27</b></span>
+<button class="grp-btn" id="grp-btn"><i class="ti ti-layout-rows" aria-hidden="true"></i>Group by Category</button>
+<div class="tog">
+<button class="tog-b on" id="tog-grid" aria-label="Grid view"><i class="ti ti-layout-grid" aria-hidden="true"></i></button>
+<button class="tog-b" id="tog-list" aria-label="List view"><i class="ti ti-list" aria-hidden="true"></i></button>
+</div>
+</div>
+</div>
+</div>
+
+<!-- SECTION 3 — Results -->
+<section class="sr-section" aria-label="Search results">
+<div class="sr-lbl">27 results · Sorted by relevance</div>
+<div id="ungrouped-grid"><div class="lc-grid"></div></div>
+<div id="ungrouped-list" style="display:none"><div class="sr-list"></div></div>
+<div id="grouped-grid" style="display:none"></div>
+</section>
+
+<!-- SECTION 4 — Load more -->
+<div class="lm">
+<div class="lm-cnt">Showing 9 of <b>27</b> results for "halal chicken"</div>
+<button class="lm-btn"><i class="ti ti-refresh" aria-hidden="true"></i>Load more results</button>
+</div>
+
+<!-- SECTION 6 — Footer -->
+<footer class="pf" aria-label="Site footer">
+<div class="pf-topglow"></div><div class="pf-bgaura"></div><div class="pf-gbg"></div>
+<div class="pf-main"><div class="pf-grid">
+<div><a class="pf-logo" href="index.html"><div class="pf-li"><i class="ti ti-snowflake" style="font-size:15px;color:#fff" aria-hidden="true"></i></div><span class="pf-lt">FrozenFood<em>Inc</em></span></a><p class="pf-desc">The global B2B wholesale frozen food database — connecting buyers with verified suppliers worldwide.</p><div class="pf-social"><a class="pf-si" href="#" aria-label="LinkedIn"><i class="ti ti-brand-linkedin" style="font-size:15px" aria-hidden="true"></i></a><a class="pf-si" href="#" aria-label="X"><i class="ti ti-brand-x" style="font-size:14px" aria-hidden="true"></i></a><a class="pf-si" href="#" aria-label="Email"><i class="ti ti-mail" style="font-size:15px" aria-hidden="true"></i></a></div></div>
+<div><div class="pf-ct">Database</div><a class="pf-lk" href="category-fruits-veg.html"><i class="ti ti-chevron-right" aria-hidden="true"></i>Frozen Fruits &amp; Veg <span class="pf-new">New</span></a><a class="pf-lk" href="category-poultry.html"><i class="ti ti-chevron-right" aria-hidden="true"></i>Frozen Poultry</a><a class="pf-lk" href="category-beef-meat.html"><i class="ti ti-chevron-right" aria-hidden="true"></i>Frozen Beef &amp; Meat</a><a class="pf-lk" href="category-seafood.html"><i class="ti ti-chevron-right" aria-hidden="true"></i>Frozen Seafood</a></div>
+<div><div class="pf-ct">Services</div><a class="pf-lk" href="category-services.html"><i class="ti ti-chevron-right" aria-hidden="true"></i>Cold Storage</a><a class="pf-lk" href="category-services.html"><i class="ti ti-chevron-right" aria-hidden="true"></i>Refrigerated Transport</a><a class="pf-lk" href="category-services.html"><i class="ti ti-chevron-right" aria-hidden="true"></i>Packaging</a><a class="pf-lk" href="category-services.html"><i class="ti ti-chevron-right" aria-hidden="true"></i>Quality Testing</a></div>
+<div><div class="pf-ct">Company</div><a class="pf-lk" href="#"><i class="ti ti-chevron-right" aria-hidden="true"></i>About FFInc</a><a class="pf-lk" href="#" style="color:#2ECC9A"><i class="ti ti-plus" style="color:#2ECC9A" aria-hidden="true"></i>List Your Business</a><a class="pf-lk" href="#"><i class="ti ti-chevron-right" aria-hidden="true"></i>Contact Us</a><a class="pf-lk" href="#"><i class="ti ti-chevron-right" aria-hidden="true"></i>Privacy Policy</a></div>
+</div></div>
+<div class="pf-bot"><span class="pf-copy">© 2026 FrozenFood Incorporated. All rights reserved.</span><div class="pf-status"><div class="pf-sdot" id="pf-sdot"></div>All systems operational</div><div class="pf-legal"><a href="#">Terms</a><a href="#">Privacy</a><a href="#">Cookies</a></div></div>
+</footer>
+
+<!-- SECTION 5 — Quote request modal -->
+<div class="qm-ov" id="qm-overlay" aria-hidden="true">
+<div class="qm" id="qm-card" role="dialog" aria-modal="true" aria-label="Request a quote">
+<button class="qm-x" id="qm-x" aria-label="Close"><i class="ti ti-x" aria-hidden="true"></i></button>
+<div class="qm-sup">
+<div class="qm-logo" id="qm-logo">BF</div>
+<div><div class="qm-sn" id="qm-sn">BrasilFrango Export</div><div class="qm-sl"><i class="ti ti-map-pin" aria-hidden="true"></i><span id="qm-sl">Brazil · Verified Supplier</span></div></div>
+</div>
+<div class="qm-h">Request a Quote</div>
+<div class="qm-sub">Complete the form below — the supplier will respond directly to your email. FFInc charges zero commission.</div>
+<form id="qm-form" onsubmit="return false">
+<div class="qm-grid">
+<div class="qm-f"><label class="qm-lb">Your Name</label><input class="qm-in" type="text" placeholder="Jane Doe"></div>
+<div class="qm-f"><label class="qm-lb">Company Name</label><input class="qm-in" type="text" placeholder="Acme Foods Ltd"></div>
+<div class="qm-f"><label class="qm-lb">Email Address</label><input class="qm-in" type="email" placeholder="you@company.com"></div>
+<div class="qm-f"><label class="qm-lb">Country</label><input class="qm-in" type="text" placeholder="United Kingdom"></div>
+<div class="qm-f"><label class="qm-lb">Product Required</label><select class="qm-se"><option>Whole Chicken</option><option>Chicken Paws</option><option>Drumsticks</option><option>Chicken Wings</option><option>Beef Cuts</option><option>Offal</option><option>Ground Beef</option><option>Cold Storage</option><option>Other</option></select></div>
+<div class="qm-f"><label class="qm-lb">Quantity / MOQ Required</label><input class="qm-in" type="text" placeholder="e.g. 5 Metric Tonnes"></div>
+<div class="qm-f"><label class="qm-lb">Delivery Terms</label><select class="qm-se"><option>FOB</option><option>CIF</option><option>DDP</option><option>EXW</option></select></div>
+<div class="qm-f"><label class="qm-lb">Target Price per MT</label><input class="qm-in" type="text" placeholder="e.g. $1,200/MT"></div>
+<div class="qm-f full"><label class="qm-lb">Additional Requirements</label><textarea class="qm-ta" rows="4" placeholder="Certifications needed, packaging specs, delivery timeline, labelling requirements..."></textarea></div>
+</div>
+<button class="qm-sub-btn" type="submit"><i class="ti ti-send" aria-hidden="true"></i>Send Quote Request</button>
+<div class="qm-priv">Your details are sent directly to the supplier. FrozenFoodInc does not store quote request data or charge any commission.</div>
+</form>
+</div>
+</div>
+
+<script>
+(function(){
+/* ── Particle canvas (from index.html) ── */
+var cv=document.getElementById('pg-canvas'),cx=cv.getContext('2d'),pts=[];
+function rsz(){cv.width=window.innerWidth;cv.height=window.innerHeight;}rsz();window.addEventListener('resize',rsz);
+function mkp(){return{x:Math.random()*cv.width,y:cv.height+10,sz:Math.random()*2.5+.8,sp:Math.random()*.5+.25,op:Math.random()*.55+.25,col:Math.random()>.5?'#4A9FE0':'#2ECC9A',dr:(Math.random()-.5)*.4};}
+for(var i=0;i<30;i++){var p=mkp();p.y=Math.random()*cv.height;pts.push(p);}
+(function loop(){cx.clearRect(0,0,cv.width,cv.height);pts.forEach(function(p,i){p.y-=p.sp;p.x+=p.dr;p.op-=.0007;cx.beginPath();cx.arc(p.x,p.y,p.sz,0,Math.PI*2);cx.fillStyle=p.col;cx.globalAlpha=Math.max(0,p.op);cx.fill();cx.globalAlpha=1;if(p.y<-10||p.op<=0)pts[i]=mkp();});requestAnimationFrame(loop);})();
+
+/* ── Aurora blobs (from index.html) ── */
+gsap.to('#pa1',{x:120,y:-80,scale:1.2,duration:10,repeat:-1,yoyo:true,ease:'sine.inOut'});
+gsap.to('#pa2',{x:-130,y:60,scale:1.15,duration:13,repeat:-1,yoyo:true,ease:'sine.inOut',delay:2});
+gsap.to('#pa3',{x:80,y:-50,scale:1.1,duration:11,repeat:-1,yoyo:true,ease:'sine.inOut',delay:4});
+gsap.to('#pf-sdot',{opacity:.28,scale:.6,duration:1.4,repeat:-1,yoyo:true,ease:'sine.inOut'});
+
+/* ── Dark/light toggle (from index.html) ── */
+var modeToggle=document.getElementById('mode-toggle'),modeIcon=document.getElementById('mode-icon'),isLight=false;
+modeToggle.addEventListener('click',function(){isLight=!isLight;document.body.classList.toggle('light-mode',isLight);modeIcon.className=isLight?'ti ti-moon':'ti ti-sun';modeToggle.setAttribute('aria-label',isLight?'Switch to dark mode':'Switch to light mode');});
+
+/* ── Result data (9) ── */
+var CATS={
+poultry:{cls:'bl',icon:'ti-feather',label:'Poultry',lc:'#4A9FE0',lb:'rgba(74,159,224,.12)',lbd:'rgba(74,159,224,.25)'},
+beef:{cls:'am',icon:'ti-flame',label:'Beef &amp; Meat',lc:'#F59E0B',lb:'rgba(245,158,11,.12)',lbd:'rgba(245,158,11,.25)'},
+services:{cls:'pu',icon:'ti-truck',label:'Services',lc:'#A78BFA',lb:'rgba(167,139,250,.12)',lbd:'rgba(167,139,250,.25)'}
+};
+var RESULTS=[
+{i:'BF',n:'BrasilFrango Export',c:'Brazil',cat:'poultry',feat:true,tags:['Whole Chicken','Paws','Halal'],moq:'1×20ft',ctry:'50+',certs:['Halal Certified','MAPA'],rate:'4.8',rev:31,stars:5},
+{i:'HB',n:'HalalBirds Malaysia',c:'Malaysia',cat:'poultry',feat:false,tags:['Halal Chicken','Wings','Feet'],moq:'1×20ft',ctry:'28',certs:['JAKIM Halal','BRC'],rate:'4.9',rev:24,stars:5},
+{i:'JB',n:'JBS Global Export',c:'Brazil',cat:'beef',feat:false,tags:['Whole Cuts','Offal','Halal'],moq:'1×40ft',ctry:'60+',certs:['Halal Certified','MAPA'],rate:'4.8',rev:42,stars:5},
+{i:'TM',n:'TurkeyMaster Foods',c:'Turkey',cat:'poultry',feat:false,tags:['Whole Chicken','Turkey','Halal'],moq:'5T',ctry:'40',certs:['Halal Certified','EU Approved'],rate:'4.9',rev:22,stars:5},
+{i:'SA',n:'SouthAfrica Meat Co',c:'South Africa',cat:'beef',feat:false,tags:['Beef Cuts','Offal','Halal'],moq:'5T',ctry:'22',certs:['Halal Certified','HACCP'],rate:'4.6',rev:13,stars:4},
+{i:'CK',n:'ChickenKing USA',c:'USA',cat:'poultry',feat:false,tags:['IQF Paws','Whole Chicken','Halal'],moq:'1×40ft',ctry:'55',certs:['USDA','Halal Certified'],rate:'4.7',rev:28,stars:4},
+{i:'DC',n:'DubaiCold Facilities',c:'UAE',cat:'services',feat:false,tags:['Cold Storage','Halal Handling','Port'],moq:'MENA',ctry:'80,000 m³',certs:['Halal Handling','ISO 22000'],rate:'4.8',rev:22,stars:5},
+{i:'IF',n:'IndoFarm Poultry',c:'Indonesia',cat:'poultry',feat:false,tags:['Halal Chicken','Cuts','Processed'],moq:'3T',ctry:'22',certs:['MUI Halal','BRC'],rate:'4.6',rev:11,stars:4},
+{i:'IN',n:'IndiaBeef Exports Ltd',c:'India',cat:'beef',feat:false,tags:['Buffalo Meat','Halal','Frozen Cuts'],moq:'5T',ctry:'30',certs:['Halal Certified','APEDA'],rate:'4.6',rev:15,stars:4}
+];
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function stars(n){return '★★★★★☆☆☆☆☆'.slice(5-n,10-n);}
+function badges(s){var h='';if(s.feat)h+='<span class="bdg bdg-f"><i class="ti ti-star" style="font-size:9px" aria-hidden="true"></i>Featured</span>';h+='<span class="bdg bdg-v"><i class="ti ti-circle-check" style="font-size:9px" aria-hidden="true"></i>Verified</span>';return h;}
+function tagHtml(s){return s.tags.map(function(t){return '<span class="lc-tag">'+esc(t)+'</span>';}).join('');}
+function certHtml(s){return s.certs.map(function(c){return '<span class="lc-cert">'+esc(c)+'</span>';}).join('');}
+function logoStyle(m){return 'style="background:'+m.lb+';border-color:'+m.lbd+';color:'+m.lc+'"';}
+
+function gridCard(s,showCat){
+var m=CATS[s.cat];
+return '<div class="lc">'
++'<div class="lc-head"><div class="lc-logo" '+logoStyle(m)+'>'+s.i+'</div>'
++'<div class="lc-ng"><div class="lc-n" title="'+esc(s.n)+'">'+esc(s.n)+'</div><div class="lc-loc"><i class="ti ti-map-pin" aria-hidden="true"></i>'+esc(s.c)+'</div></div>'
++'<div class="lc-bdgs">'+badges(s)+'</div></div>'
++(showCat?'<div class="rc-cat '+m.cls+'"><i class="ti '+m.icon+'" aria-hidden="true"></i>'+m.label+'</div>':'')
++'<div class="lc-tags">'+tagHtml(s)+'</div>'
++'<div class="lc-stats"><div class="lc-stat"><span class="lc-sv">'+esc(s.moq)+'</span><span class="lc-sl">Min. Order</span></div><div class="lc-stat"><span class="lc-sv">'+esc(s.ctry)+'</span><span class="lc-sl">Countries</span></div><div class="lc-stat"><span class="lc-sv">'+s.rate+'★</span><span class="lc-sl">Rating</span></div></div>'
++'<div class="lc-certs">'+certHtml(s)+'</div>'
++'<div class="lc-foot"><div class="lc-rate">'+stars(s.stars)+' <span>'+s.rate+' · '+s.rev+' reviews</span></div><button class="rq-btn" data-quote>Request Quote</button></div>'
++'</div>';
+}
+function listRow(s,showCat){
+var m=CATS[s.cat];
+return '<div class="lrow">'
++'<div class="lc-logo" '+logoStyle(m)+'>'+s.i+'</div>'
++'<div class="lr-main"><div class="lr-top"><span class="lr-name">'+esc(s.n)+'</span><span class="lr-loc"><i class="ti ti-map-pin" aria-hidden="true"></i>'+esc(s.c)+'</span>'+(showCat?'<span class="rc-cat '+m.cls+'"><i class="ti '+m.icon+'" aria-hidden="true"></i>'+m.label+'</span>':'')+'</div><div class="lr-tags">'+tagHtml(s)+'</div></div>'
++'<div class="lr-stats"><div class="lr-stat"><span class="lc-sv">'+esc(s.moq)+'</span><span class="lc-sl">MOQ</span></div><div class="lr-stat"><span class="lc-sv">'+esc(s.ctry)+'</span><span class="lc-sl">Countries</span></div><div class="lr-stat"><span class="lc-sv">'+s.rate+'★</span><span class="lc-sl">Rating</span></div></div>'
++'<div class="lr-certs">'+certHtml(s)+'</div>'
++'<div class="lr-right"><span class="bdg bdg-v"><i class="ti ti-circle-check" style="font-size:9px" aria-hidden="true"></i>Verified</span><div class="lc-rate">'+stars(s.stars)+' <span>'+s.rate+'</span></div><button class="rq-btn" data-quote>Request Quote</button></div>'
++'</div>';
+}
+
+/* Render ungrouped grid + list */
+document.querySelector('#ungrouped-grid .lc-grid').innerHTML=RESULTS.map(function(s){return gridCard(s,true);}).join('');
+document.querySelector('#ungrouped-list .sr-list').innerHTML=RESULTS.map(function(s){return listRow(s,true);}).join('');
+
+/* Render grouped view */
+var GROUPS=[
+{key:'poultry',title:'Frozen Poultry',count:18,idx:[0,1,3]},
+{key:'beef',title:'Frozen Beef &amp; Meat',count:7,idx:[2,4,8]},
+{key:'services',title:'Cold Chain Services',count:2,idx:[6]}
+];
+var GHD={
+poultry:{bg:'rgba(74,159,224,.06)',bd:'#4A9FE0',icon:'ti-feather',ic:'#4A9FE0'},
+beef:{bg:'rgba(245,158,11,.06)',bd:'#F59E0B',icon:'ti-flame',ic:'#F59E0B'},
+services:{bg:'rgba(167,139,250,.06)',bd:'#A78BFA',icon:'ti-truck',ic:'#A78BFA'}
+};
+document.getElementById('grouped-grid').innerHTML=GROUPS.map(function(g){
+var h=GHD[g.key];
+return '<div class="cat-grp">'
++'<div class="cat-grp-hd" style="background:'+h.bg+';border-left-color:'+h.bd+'">'
++'<i class="ti '+h.icon+'" style="font-size:15px;color:'+h.ic+'" aria-hidden="true"></i>'
++'<span class="cat-grp-name">'+g.title+'</span>'
++'<span class="cat-grp-ct"><b>'+g.count+'</b> results</span></div>'
++'<div class="lc-grid">'+g.idx.map(function(i){return gridCard(RESULTS[i],false);}).join('')+'</div>'
++'</div>';
+}).join('');
+
+/* ── View state management ── */
+var isGrouped=false;
+var currentView='grid';
+function updateView(){
+  var ug=document.getElementById('ungrouped-grid');
+  var ul=document.getElementById('ungrouped-list');
+  var grp=document.getElementById('grouped-grid');
+  var lbl=document.querySelector('.sr-lbl');
+  ug.style.display='none';
+  ul.style.display='none';
+  grp.style.display='none';
+  if(isGrouped){
+    grp.style.display='block';
+    if(lbl)lbl.innerHTML='<i class="ti ti-layout-rows" style="font-size:11px"></i>27 results · Grouped by category';
+  }else if(currentView==='grid'){
+    ug.style.display='block';
+    if(lbl)lbl.innerHTML='<i class="ti ti-layout-grid" style="font-size:11px"></i>27 results · Sorted by relevance';
+  }else{
+    ul.style.display='block';
+    if(lbl)lbl.innerHTML='<i class="ti ti-list" style="font-size:11px"></i>27 results · List view';
+  }
+}
+
+/* ── Group toggle ── */
+var grpBtn=document.getElementById('grp-btn')||document.querySelector('.grp-btn');
+if(grpBtn){
+  grpBtn.addEventListener('click',function(){
+    isGrouped=!isGrouped;
+    this.classList.toggle('on',isGrouped);
+    updateView();
+  });
+}
+
+/* ── Grid/List toggle ── */
+var tg=document.getElementById('tog-grid'),tl=document.getElementById('tog-list');
+tg.addEventListener('click',function(){currentView='grid';tg.classList.add('on');tl.classList.remove('on');updateView();});
+tl.addEventListener('click',function(){currentView='list';tl.classList.add('on');tg.classList.remove('on');updateView();});
+
+/* ── Category chips ── */
+document.querySelectorAll('.sh-chip').forEach(function(chip){
+  chip.addEventListener('click',function(){
+    var wasActive=this.classList.contains('on');
+    document.querySelectorAll('.sh-chip').forEach(function(c){c.classList.remove('on');});
+    if(!wasActive){this.classList.add('on');}
+  });
+});
+
+/* ── Quote modal ── */
+var ov=document.getElementById('qm-overlay'),card=document.getElementById('qm-card');
+function openModal(){
+  ov.classList.add('open');ov.setAttribute('aria-hidden','false');
+  gsap.fromTo(ov,{opacity:0},{opacity:1,duration:.25,ease:'power2.out'});
+  gsap.fromTo(card,{scale:.94,opacity:0},{scale:1,opacity:1,duration:.35,ease:'back.out(1.4)'});
+}
+function closeModal(){
+  gsap.to(card,{scale:.94,opacity:0,duration:.2,ease:'power2.in'});
+  gsap.to(ov,{opacity:0,duration:.25,delay:.05,ease:'power2.in',onComplete:function(){ov.classList.remove('open');ov.setAttribute('aria-hidden','true');}});
+}
+document.addEventListener('click',function(e){
+  if(e.target.closest('[data-quote]')){openModal();return;}
+});
+document.getElementById('qm-x').addEventListener('click',closeModal);
+ov.addEventListener('click',function(e){if(e.target===ov)closeModal();});
+document.addEventListener('keydown',function(e){if(e.key==='Escape'&&ov.classList.contains('open'))closeModal();});
+
+/* ── Initial view ── */
+updateView();
+
+/* ── GSAP entrance ── */
+var htl=gsap.timeline({defaults:{ease:'power3.out'}});
+htl.fromTo('#sh-inner',{y:24,opacity:0},{y:0,opacity:1,duration:.7},0)
+   .fromTo('.fb',{y:14,opacity:0},{y:0,opacity:1,duration:.55},.2);
+
+/* ── Results entrance on scroll ── */
+var srObs=new IntersectionObserver(function(entries){
+  entries.forEach(function(e){
+    if(e.isIntersecting){
+      gsap.fromTo('.lc, .lrow',{opacity:0,y:28,scale:.97},{opacity:1,y:0,scale:1,duration:.62,stagger:.07,ease:'power3.out'});
+      srObs.unobserve(e.target);
+    }
+  });
+},{threshold:.05});
+srObs.observe(document.querySelector('.sr-section'));
+})();
+</script>
+</body>
+</html>
