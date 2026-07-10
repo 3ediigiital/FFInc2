@@ -1,0 +1,1156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>GlobalFresh Produce Ltd — Supplier Profile | FrozenFoodInc 2.0</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.11.0/dist/tabler-icons.min.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{overflow-x:hidden;max-width:100vw}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',system-ui,sans-serif;background:#050D18;color:#fff;overflow-x:hidden;min-height:100vh}
+
+/* ── Shared background layers (from index.html) ── */
+.pg-grid{position:fixed;inset:0;background-image:linear-gradient(rgba(74,159,224,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(74,159,224,.04) 1px,transparent 1px);background-size:52px 52px;pointer-events:none;z-index:0;mask-image:radial-gradient(ellipse 80% 60% at 50% 30%,black,transparent)}
+.pg-aura{position:fixed;border-radius:50%;filter:blur(90px);pointer-events:none;z-index:0;will-change:transform}
+#pg-canvas{position:fixed;inset:0;pointer-events:none;z-index:0}
+
+/* ── Nav (from index.html) ── */
+.pn{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(5,13,24,.72);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid rgba(74,159,224,.12);padding:0 48px;height:66px;display:flex;align-items:center;justify-content:space-between}
+.pn-logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.pn-icon{width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,#4A9FE0,#1E6BAB);display:flex;align-items:center;justify-content:center;box-shadow:0 0 20px rgba(74,159,224,.5);flex-shrink:0}
+.pn-wm{font-family:'Plus Jakarta Sans',system-ui;font-size:16px;font-weight:800;letter-spacing:-.3px;color:#fff}
+.pn-wm em{color:#4A9FE0;font-style:normal}
+.pn-links{display:flex;align-items:center;gap:28px}
+.pn-links a{font-size:13px;color:#9BBFD8;text-decoration:none;transition:color .2s}
+.pn-links a:hover{color:#fff}
+.pn-div{width:1px;height:18px;background:rgba(74,159,224,.2)}
+.pn-cta{background:linear-gradient(135deg,#4A9FE0,#2D7FC4);color:#fff;border:none;padding:10px 22px;border-radius:9px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',system-ui;box-shadow:0 4px 18px rgba(74,159,224,.4);transition:transform .15s,box-shadow .15s}
+.pn-cta:hover{transform:translateY(-1px);box-shadow:0 6px 26px rgba(74,159,224,.62)}
+#mode-toggle{width:34px;height:34px;border-radius:50%;border:1px solid rgba(74,159,224,0.28);background:rgba(74,159,224,0.08);color:#8DCAF2;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.2s;flex-shrink:0;padding:0}
+#mode-toggle:hover{background:rgba(74,159,224,0.18);border-color:rgba(74,159,224,0.5);color:#fff;transform:scale(1.08)}
+#mode-toggle i{font-size:15px}
+body.light-mode #mode-toggle{border-color:rgba(30,107,171,0.4);background:rgba(30,107,171,0.12);color:#1E6BAB}
+
+/* ── Category sub-nav (from category pages) ── */
+.csn{position:sticky;top:66px;z-index:90;background:rgba(6,15,26,.96);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid rgba(74,159,224,.1);display:flex;align-items:center;justify-content:center;padding:0 48px}
+.csn-inner{display:flex;align-items:center;max-width:1200px;width:100%}
+.csn-item{display:inline-flex;align-items:center;gap:7px;padding:12px 16px;font-size:12.5px;font-weight:500;color:#9BBFD8;text-decoration:none;border-bottom:2px solid transparent;transition:color .2s,border-color .2s;cursor:pointer;white-space:nowrap}
+.csn-item i{font-size:15px}
+.csn-item:hover{color:#fff;border-bottom-color:rgba(74,159,224,.3)}
+.csn-item.on{color:#2ECC9A;border-bottom-color:#2ECC9A}
+.csn-sep{width:1px;height:18px;background:rgba(74,159,224,.12);flex-shrink:0}
+
+/* ── Shared badges (from category pages) ── */
+.bdg{display:inline-flex;align-items:center;gap:3px;font-size:9px;font-weight:600;padding:2px 7px;border-radius:8px;white-space:nowrap}
+.bdg-f{background:rgba(245,158,11,.12);color:#F59E0B;border:1px solid rgba(245,158,11,.28)}
+.bdg-v{background:rgba(46,204,154,.1);color:#52DEB5;border:1px solid rgba(46,204,154,.25)}
+.lc-tag{background:rgba(26,48,72,.8);border:1px solid rgba(74,159,224,.12);color:#9BBFD8;font-size:9.5px;padding:2px 7px;border-radius:5px}
+
+/* ── SECTION 1 — Breadcrumb ── */
+.sbc{padding:14px 48px 0;position:relative;z-index:2;margin-top:66px}
+.ch-bc{display:flex;align-items:center;gap:6px;font-size:11px;color:#6B9DB7}
+.ch-bc a{color:#6B9DB7;text-decoration:none}
+.ch-bc i{font-size:10px;color:#3A5E75}
+.ch-bc .cur{color:#4A9FE0;font-weight:500}
+
+/* ── SECTION 2 — Supplier hero ── */
+.sp-hero{position:relative;overflow:hidden;background:linear-gradient(180deg,#050D18,#061428);padding:28px 48px 36px}
+.sp-inner{position:relative;z-index:2;max-width:1200px;margin:0 auto;display:flex;gap:28px;align-items:flex-start}
+.sp-logo{width:88px;height:88px;border-radius:20px;background:rgba(74,159,224,.12);border:2px solid rgba(74,159,224,.3);display:flex;align-items:center;justify-content:center;font-family:'Plus Jakarta Sans',system-ui;font-size:26px;font-weight:800;color:#4A9FE0;box-shadow:0 0 40px rgba(74,159,224,.15);flex-shrink:0}
+.sp-info{flex:1;min-width:0}
+.sp-badges{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.sp-cat-badge{background:rgba(74,159,224,.1);color:#4A9FE0;border:1px solid rgba(74,159,224,.25)}
+.sp-name{font-family:'Plus Jakarta Sans',system-ui;font-size:28px;font-weight:800;letter-spacing:-.7px;line-height:1.1;margin-bottom:8px}
+.sp-meta{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:14px}
+.sp-m{display:inline-flex;align-items:center;gap:5px;font-size:12px;color:#9BBFD8}
+.sp-m i{font-size:12px;color:#4A9FE0}
+.sp-rating{display:flex;align-items:center;gap:8px;margin-bottom:18px}
+.sp-stars{font-size:16px;color:#F59E0B;letter-spacing:2px}
+.sp-score{font-family:'Plus Jakarta Sans',system-ui;font-size:22px;font-weight:800;color:#fff}
+.sp-rct{font-size:12px;color:#9BBFD8}
+.ch-stats{display:inline-flex;background:rgba(18,34,52,.5);border:1px solid rgba(74,159,224,.18);border-radius:14px;overflow:hidden;width:fit-content;margin-bottom:20px;flex-wrap:wrap}
+.chs{padding:12px 20px;border-right:1px solid rgba(74,159,224,.12);text-align:left}
+.chs:last-child{border-right:none}
+.chs-n{font-family:'Plus Jakarta Sans',system-ui;font-size:20px;font-weight:800;color:#4A9FE0;line-height:1.1;display:block}
+.chs-l{font-size:10px;color:#9BBFD8;text-transform:uppercase;letter-spacing:.05em;margin-top:3px;display:block}
+.sp-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.chero-aura{position:absolute;border-radius:50%;filter:blur(70px);pointer-events:none;z-index:0}
+.ch-btn-p{display:inline-flex;align-items:center;gap:7px;background:linear-gradient(135deg,#4A9FE0,#2D7FC4);color:#fff;border:none;padding:12px 24px;border-radius:10px;font-family:'Inter',system-ui;font-size:13.5px;font-weight:700;cursor:pointer;box-shadow:0 6px 22px rgba(74,159,224,.38);transition:transform .15s,box-shadow .15s}
+.ch-btn-p:hover{transform:translateY(-2px);box-shadow:0 9px 28px rgba(74,159,224,.55)}
+.ch-btn-s{display:inline-flex;align-items:center;gap:7px;background:transparent;border:1px solid rgba(74,159,224,.28);color:#4A9FE0;padding:12px 22px;border-radius:10px;font-family:'Inter',system-ui;font-size:13.5px;font-weight:500;cursor:pointer;transition:background .2s,border-color .2s}
+.ch-btn-s:hover{background:rgba(74,159,224,.08);border-color:rgba(74,159,224,.5)}
+
+/* ── SECTION 3 — Tab navigation ── */
+.tab-nav{position:sticky;top:66px;z-index:85;background:rgba(6,15,26,.96);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid rgba(74,159,224,.1);padding:0 48px;display:flex;align-items:center}
+.sp-tab{display:inline-flex;align-items:center;gap:7px;padding:14px 20px;font-size:13px;font-weight:500;color:#9BBFD8;border-bottom:2px solid transparent;cursor:pointer;transition:all .2s;white-space:nowrap;background:transparent}
+.sp-tab i{font-size:14px}
+.sp-tab:hover:not(.on){color:#fff;border-bottom-color:rgba(74,159,224,.3)}
+.sp-tab.on{color:#4A9FE0;border-bottom-color:#4A9FE0;font-weight:600}
+.sp-tab-count{font-size:10px;padding:1px 6px;border-radius:8px;background:rgba(74,159,224,.12);color:#4A9FE0;border:1px solid rgba(74,159,224,.25);margin-left:4px}
+
+/* ── SECTION 4 — Tab panels ── */
+.sp-panel{background:#050D18;padding:32px 48px;display:none;position:relative;z-index:2}
+.sp-panel-inner{max-width:1200px;margin:0 auto}
+
+/* Shared glassmorphism card (from .lc) */
+.ov-box,.prod-card,.cert-card,.rev-card{position:relative;background:rgba(18,34,52,.48);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(74,159,224,.1);border-radius:16px;padding:22px;overflow:hidden}
+.ov-box::before,.prod-card::before,.cert-card::before,.rev-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(74,159,224,.4),transparent)}
+.ov-bt{display:flex;align-items:center;gap:8px;font-family:'Plus Jakarta Sans',system-ui;font-size:15px;font-weight:700;margin-bottom:14px}
+.ov-bt i{font-size:17px;color:#4A9FE0}
+
+/* Panel 1 — Overview */
+.ov-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.ov-text{font-size:13px;color:#9BBFD8;line-height:1.75}
+.ov-text + .ov-text{margin-top:12px}
+.ov-b{display:flex;gap:9px;margin-bottom:9px;line-height:1.55}
+.ov-b:last-child{margin-bottom:0}
+.ov-b::before{content:'';width:6px;height:6px;border-radius:50%;background:#4A9FE0;flex-shrink:0;margin-top:6px}
+.ov-btext{font-size:12.5px;color:#9BBFD8;line-height:1.55}
+.ov-mkts{display:flex;flex-wrap:wrap;gap:6px}
+.ov-tag{font-size:11px;padding:4px 10px;border-radius:8px;background:rgba(74,159,224,.08);border:1px solid rgba(74,159,224,.15);color:#8DCAF2}
+.ov-facts{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.ov-fact{background:rgba(10,22,40,.5);border:1px solid rgba(74,159,224,.1);border-radius:9px;padding:10px 12px}
+.ov-fv{font-family:'Plus Jakarta Sans',system-ui;font-size:15px;font-weight:700;color:#fff;display:block}
+.ov-fl{font-size:10px;color:#6B9DB7;text-transform:uppercase;letter-spacing:.05em;display:block;margin-top:2px}
+
+/* Panel 2 — Products */
+.prod-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.prod-icon{width:42px;height:42px;border-radius:11px;background:rgba(74,159,224,.1);border:1px solid rgba(74,159,224,.22);display:flex;align-items:center;justify-content:center;margin-bottom:12px}
+.prod-icon i{font-size:22px;color:#4A9FE0}
+.prod-name{font-family:'Plus Jakarta Sans',system-ui;font-size:15px;font-weight:700;margin-bottom:6px}
+.prod-desc{font-size:12px;color:#9BBFD8;line-height:1.6;margin-bottom:12px}
+.prod-specs{display:flex;flex-direction:column;gap:5px;margin-bottom:12px}
+.prod-spec{display:flex;justify-content:space-between;gap:8px;font-size:11.5px;border-bottom:1px solid rgba(74,159,224,.08);padding:5px 0}
+.prod-spec .lbl{color:#6B9DB7}
+.prod-spec .val{color:#fff;font-weight:500;text-align:right}
+.prod-tags{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:12px}
+.rq-btn{background:linear-gradient(135deg,#4A9FE0,#2D7FC4);color:#fff;border:none;padding:9px 12px;border-radius:7px;font-family:'Inter',system-ui;font-size:11px;font-weight:700;cursor:pointer;transition:transform .15s,box-shadow .15s}
+.rq-btn:hover{transform:translateY(-1px);box-shadow:0 4px 14px rgba(74,159,224,.4)}
+.rq-full{width:100%;display:flex;align-items:center;justify-content:center;gap:6px}
+
+/* Panel 3 — Certifications */
+.cert-tier-bar{display:flex;align-items:center;justify-content:space-between;gap:14px;background:rgba(74,159,224,.06);border:1px solid rgba(74,159,224,.2);border-radius:12px;padding:14px 18px;margin-bottom:22px}
+.cert-tb-l{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.cert-verified-badge{display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg,rgba(74,159,224,.18),rgba(30,107,171,.1));border:1px solid rgba(74,159,224,.4);color:#4A9FE0;border-radius:10px;padding:6px 14px;font-size:11.5px;font-weight:700;white-space:nowrap;flex-shrink:0}
+.cert-verified-badge i{font-size:13px}
+.cert-tb-desc{font-size:12px;color:#9BBFD8;line-height:1.5}
+.cert-premium{font-size:10px;font-weight:600;padding:3px 10px;border-radius:8px;background:rgba(245,158,11,.1);color:#F59E0B;border:1px solid rgba(245,158,11,.25);white-space:nowrap;flex-shrink:0}
+.cert-lbl{display:flex;align-items:center;gap:10px;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px}
+.cert-lbl::after{content:'';flex:1;height:1px}
+.cert-lbl.declared{color:#3A5E75}
+.cert-lbl.declared::after{background:linear-gradient(90deg,rgba(74,159,224,.1),transparent)}
+.cert-lbl.verified{color:#4A9FE0;margin-top:22px;margin-bottom:14px}
+.cert-lbl.verified::after{background:linear-gradient(90deg,rgba(74,159,224,.15),transparent)}
+.cert-lbl.standard{color:#3A5E75;margin-top:28px;margin-bottom:14px}
+.cert-lbl.standard::after{background:linear-gradient(90deg,rgba(74,159,224,.08),transparent)}
+.cert-pills{display:flex;flex-wrap:wrap;gap:8px}
+.cert-pill{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:10px;background:rgba(18,34,52,.6);border:1px solid rgba(74,159,224,.18);font-size:12px;font-weight:500;color:#9BBFD8}
+.cert-pill i{font-size:12px;color:#4A9FE0}
+.cert-t1-note{padding:10px 14px;background:rgba(10,22,40,.5);border-left:2px solid rgba(74,159,224,.25);border-radius:0 9px 9px 0;font-size:11.5px;color:#6B9DB7;line-height:1.6;margin-top:14px}
+.cert-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:13px}
+.cert-card{position:relative}
+.cert-stamp{position:absolute;top:12px;right:12px;font-size:9px;font-weight:600;color:#52DEB5;background:rgba(46,204,154,.1);border:1px solid rgba(46,204,154,.22);border-radius:7px;padding:2px 7px;display:inline-flex;align-items:center;gap:3px}
+.cert-stamp i{font-size:8px}
+.cert-ic{width:44px;height:44px;border-radius:11px;background:rgba(74,159,224,.1);border:1px solid rgba(74,159,224,.22);display:flex;align-items:center;justify-content:center;margin-bottom:11px}
+.cert-ic i{font-size:22px}
+.cert-name{font-family:'Plus Jakarta Sans',system-ui;font-size:14px;font-weight:700;margin-bottom:3px}
+.cert-body{font-size:10.5px;color:#4A9FE0;margin-bottom:8px}
+.cert-scope{font-size:11.5px;color:#9BBFD8;line-height:1.6;margin-bottom:11px}
+.cert-standard{background:rgba(18,34,52,.3);border:1px dashed rgba(74,159,224,.18);border-radius:14px;padding:24px;text-align:center}
+.cert-std-ic{width:48px;height:48px;border-radius:50%;background:rgba(74,159,224,.06);border:1px solid rgba(74,159,224,.14);display:flex;align-items:center;justify-content:center;margin:0 auto 12px}
+.cert-std-ic i{font-size:22px;color:#3A5E75}
+.cert-std-h{font-size:13px;font-weight:600;color:#9BBFD8;margin-bottom:6px}
+.cert-std-b{font-size:12px;color:#6B9DB7;line-height:1.6;max-width:320px;margin:0 auto 14px}
+.cert-std-btn{display:inline-flex;align-items:center;gap:6px;background:transparent;border:1px solid rgba(74,159,224,.28);color:#8DCAF2;padding:8px 18px;border-radius:9px;font-family:'Inter',system-ui;font-size:12px;font-weight:500;cursor:pointer;transition:background .2s,border-color .2s}
+.cert-std-btn:hover{background:rgba(74,159,224,.08);border-color:rgba(74,159,224,.5);color:#fff}
+
+/* Panel 4 — Reviews */
+.rev-agg{display:flex;align-items:center;gap:16px;background:rgba(18,34,52,.4);border:1px solid rgba(74,159,224,.1);border-radius:14px;padding:20px;margin-bottom:24px}
+.rev-agg-l{text-align:center;flex-shrink:0}
+.rev-big{font-family:'Plus Jakarta Sans',system-ui;font-size:48px;font-weight:800;line-height:1;color:#fff}
+.rev-big-stars{font-size:20px;color:#F59E0B;letter-spacing:3px;display:block;margin-top:4px}
+.rev-big-c{font-size:12px;color:#9BBFD8;margin-top:4px;display:block}
+.rev-div{width:1px;height:48px;background:rgba(74,159,224,.18);flex-shrink:0}
+.rev-bars{flex:1}
+.rev-bar-row{display:flex;align-items:center;gap:8px;margin-bottom:5px}
+.rev-bar-row:last-child{margin-bottom:0}
+.rev-bar-lbl{font-size:10.5px;color:#F59E0B;width:12px;flex-shrink:0}
+.rev-bar-track{flex:1;height:5px;background:rgba(74,159,224,.12);border-radius:3px;overflow:hidden}
+.rev-bar-fill{height:100%;background:linear-gradient(90deg,#F59E0B,#FCD34D);border-radius:3px}
+.rev-bar-c{font-size:10px;color:#6B9DB7;width:16px;text-align:right;flex-shrink:0}
+.rev-agg-r{text-align:center;flex-shrink:0}
+.rev-agg-r-t{font-size:12px;color:#9BBFD8;margin-bottom:8px}
+.rev-verified{display:flex;gap:5px;justify-content:center;align-items:center;color:#52DEB5;font-size:12px}
+.rev-verified i{font-size:13px}
+.rev-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.rev-card{padding:18px}
+.rev-stars{font-size:13px;color:#F59E0B;letter-spacing:2px;margin-bottom:10px}
+.rev-text{font-size:12.5px;color:#E8F4FD;line-height:1.7;margin-bottom:14px;font-style:italic}
+.rev-foot{display:flex;gap:10px;align-items:center;border-top:1px solid rgba(74,159,224,.08);padding-top:12px}
+.rev-av{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Plus Jakarta Sans',system-ui;font-size:12px;font-weight:700;color:#fff;flex-shrink:0}
+.rev-meta{flex:1;min-width:0}
+.rev-name{font-size:12px;font-weight:600;color:#fff}
+.rev-role{font-size:10.5px;color:#9BBFD8;margin-top:1px}
+.rev-tag{display:inline-flex;align-items:center;gap:4px;background:rgba(46,204,154,.08);border:1px solid rgba(46,204,154,.2);color:#52DEB5;font-size:9.5px;padding:2px 7px;border-radius:5px;white-space:nowrap;flex-shrink:0}
+
+/* ── SECTION 5 — Similar suppliers ── */
+.sim{background:linear-gradient(180deg,#050D18,#060F1A);border-top:1px solid rgba(74,159,224,.08);padding:28px 48px;position:relative;z-index:2}
+.sim-inner{max-width:1200px;margin:0 auto}
+.sim-h{font-family:'Plus Jakarta Sans',system-ui;font-size:18px;font-weight:700;margin-bottom:16px}
+.sim-h em{color:#4A9FE0;font-style:normal}
+.sim-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.sim-card{background:rgba(18,34,52,.48);border:1px solid rgba(74,159,224,.1);border-radius:12px;padding:14px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:border-color .25s,transform .25s}
+.sim-card:hover{border-color:rgba(74,159,224,.3);transform:translateY(-2px)}
+.sim-logo{width:36px;height:36px;border-radius:9px;background:rgba(74,159,224,.12);border:1px solid rgba(74,159,224,.22);display:flex;align-items:center;justify-content:center;color:#4A9FE0;font-family:'Plus Jakarta Sans',system-ui;font-size:10px;font-weight:700;flex-shrink:0}
+.sim-info{flex:1;min-width:0}
+.sim-name{font-size:12px;font-weight:600;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sim-loc{font-size:10px;color:#9BBFD8;display:flex;align-items:center;gap:4px;margin-top:2px}
+.sim-loc i{font-size:10px}
+.sim-rate{font-size:10px;color:#F59E0B;margin-top:3px}
+.sim-chev{color:#3A5E75;font-size:14px;flex-shrink:0}
+
+/* ── Footer (from index.html) ── */
+.pf{background:#040A12;position:relative;overflow:hidden}
+.pf-topglow{position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent 5%,rgba(74,159,224,.28) 35%,rgba(46,204,154,.2) 65%,transparent 95%);z-index:1}
+.pf-bgaura{position:absolute;top:-150px;left:50%;transform:translateX(-50%);width:800px;height:320px;background:radial-gradient(ellipse,rgba(74,159,224,.055),transparent 70%);pointer-events:none}
+.pf-gbg{position:absolute;inset:0;background-image:linear-gradient(rgba(74,159,224,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(74,159,224,.025) 1px,transparent 1px);background-size:52px 52px;pointer-events:none;mask-image:radial-gradient(ellipse 90% 60% at 50% 0%,black,transparent)}
+.pf-main{position:relative;z-index:2;padding:64px 32px 40px;max-width:100%;margin:0 auto}
+.pf-grid{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:32px;margin-bottom:48px}
+.pf-logo{display:flex;align-items:center;gap:10px;text-decoration:none;margin-bottom:14px}
+.pf-li{width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,#4A9FE0,#1E6BAB);display:flex;align-items:center;justify-content:center;box-shadow:0 0 18px rgba(74,159,224,.44)}
+.pf-lt{font-family:'Plus Jakarta Sans',system-ui;font-size:16px;font-weight:800;letter-spacing:-.3px;color:#fff}
+.pf-lt em{color:#4A9FE0;font-style:normal}
+.pf-desc{font-size:13px;color:#6B9DB7;line-height:1.7;margin-bottom:20px;max-width:240px}
+.pf-social{display:flex;gap:8px}
+.pf-si{width:34px;height:34px;border-radius:9px;border:1px solid rgba(74,159,224,.2);display:flex;align-items:center;justify-content:center;color:#6B9DB7;cursor:pointer;transition:all .2s;text-decoration:none}
+.pf-si:hover{color:#4A9FE0;border-color:rgba(74,159,224,.48);background:rgba(74,159,224,.08);transform:translateY(-2px)}
+.pf-ct{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#3A5E75;margin-bottom:18px;display:flex;align-items:center;gap:8px}
+.pf-ct::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,rgba(74,159,224,.15),transparent)}
+.pf-lk{display:flex;align-items:center;gap:7px;font-size:13px;color:#9BBFD8;margin-bottom:11px;cursor:pointer;transition:color .2s,transform .2s;text-decoration:none}
+.pf-lk i{font-size:11px;color:#3A5E75;transition:color .2s;flex-shrink:0}
+.pf-lk:hover{color:#8DCAF2;transform:translateX(5px)}
+.pf-lk:hover i{color:#4A9FE0}
+.pf-new{display:inline-flex;align-items:center;font-size:9.5px;font-weight:600;padding:2px 7px;border-radius:8px;background:rgba(46,204,154,.1);border:1px solid rgba(46,204,154,.22);color:#52DEB5;margin-left:5px}
+.pf-bot{border-top:1px solid rgba(74,159,224,.1);padding:18px 32px;display:flex;align-items:center;justify-content:space-between;gap:16px;position:relative;z-index:2;max-width:100%;margin:0 auto}
+.pf-copy{font-size:11px;color:#3A5E75}
+.pf-status{display:flex;align-items:center;gap:7px;font-size:11px;color:#52DEB5}
+.pf-sdot{width:7px;height:7px;border-radius:50%;background:#2ECC9A;box-shadow:0 0 9px #2ECC9A}
+.pf-legal{display:flex;gap:18px}
+.pf-legal a{font-size:11px;color:#3A5E75;text-decoration:none;transition:color .2s;cursor:pointer}
+.pf-legal a:hover{color:#6B9DB7}
+
+/* ── SECTION 6 — Quote modal (from category pages) ── */
+.qm-ov{display:none;position:fixed;inset:0;z-index:500;background:rgba(5,13,24,.85);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);align-items:center;justify-content:center;padding:20px}
+.qm-ov.open{display:flex}
+.qm{position:relative;background:rgba(10,22,40,.96);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(46,204,154,.28);border-radius:22px;padding:32px;width:100%;max-width:480px;box-shadow:0 28px 80px rgba(0,0,0,.65),0 0 60px -22px rgba(46,204,154,.22);max-height:92vh;overflow-y:auto}
+.qm::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,#2ECC9A,transparent)}
+.qm-x{position:absolute;top:18px;right:18px;width:28px;height:28px;border-radius:50%;background:rgba(18,34,52,.8);border:1px solid rgba(74,159,224,.18);color:#9BBFD8;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .2s}
+.qm-x:hover{border-color:rgba(74,159,224,.45);color:#fff}
+.qm-x i{font-size:15px}
+.qm-sup{display:flex;align-items:center;gap:12px;padding-bottom:18px;border-bottom:1px solid rgba(74,159,224,.1);margin-bottom:18px}
+.qm-logo{width:42px;height:42px;border-radius:11px;background:rgba(46,204,154,.12);border:1px solid rgba(46,204,154,.25);color:#2ECC9A;font-family:'Plus Jakarta Sans',system-ui;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.qm-sn{font-size:14px;font-weight:600;color:#fff}
+.qm-sl{font-size:11px;color:#9BBFD8;display:flex;align-items:center;gap:4px;margin-top:2px}
+.qm-sl i{font-size:10px}
+.qm-h{font-family:'Plus Jakarta Sans',system-ui;font-size:22px;font-weight:800;letter-spacing:-.4px;margin-bottom:4px}
+.qm-sub{font-size:12.5px;color:#9BBFD8;line-height:1.55;margin-bottom:22px}
+.qm-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.qm-f{display:flex;flex-direction:column}
+.qm-f.full{grid-column:1/-1}
+.qm-lb{font-size:11px;font-weight:500;color:#9BBFD8;letter-spacing:.03em;display:block;margin-bottom:5px}
+.qm-in,.qm-ta,.qm-se{background:rgba(18,34,52,.8);border:1px solid rgba(74,159,224,.18);border-radius:10px;padding:10px 14px;font-size:13px;color:#fff;font-family:'Inter',system-ui;outline:none;width:100%;transition:border-color .2s}
+.qm-in:focus,.qm-ta:focus,.qm-se:focus{border-color:rgba(46,204,154,.5)}
+.qm-in::placeholder,.qm-ta::placeholder{color:#3A5E75}
+.qm-ta{resize:vertical;min-height:92px;line-height:1.5}
+.qm-se{cursor:pointer}
+.qm-sub-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;background:linear-gradient(135deg,#2ECC9A,#1DB89A);color:#04342C;border:none;padding:15px;border-radius:12px;font-family:'Inter',system-ui;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 6px 24px rgba(46,204,154,.38);margin-top:8px;transition:transform .15s,box-shadow .15s}
+.qm-sub-btn:hover{transform:translateY(-1px);box-shadow:0 10px 32px rgba(46,204,154,.55)}
+.qm-priv{font-size:10.5px;color:#3A5E75;text-align:center;margin-top:10px;line-height:1.5}
+
+/* ── Light mode (shared components + page-specific, from category-fruits-veg.html) ── */
+body.light-mode{background:#EEF6FF !important}
+body.light-mode .pn{background:rgba(238,246,255,0.88) !important;border-bottom-color:rgba(74,159,224,0.2)}
+body.light-mode .pn-wm{color:#050D18}
+body.light-mode .pn-links a{color:#3A5E75}
+body.light-mode .pn-links a:hover{color:#050D18}
+body.light-mode .pg-aura{opacity:0.15}
+body.light-mode .pg-grid{opacity:0.25}
+body.light-mode .ls{background:#EEF6FF !important}
+body.light-mode .lm{background:#EEF6FF !important}
+body.light-mode .ls-lbl{color:#6B9DB7}
+body.light-mode .lm-cnt{color:#3A5E75}
+body.light-mode .csn-item{color:#3A5E75}
+body.light-mode .csn-item:hover{color:#050D18}
+body.light-mode .lc-n,body.light-mode .lr-name{color:#050D18 !important}
+body.light-mode .lc-loc,body.light-mode .lr-loc,body.light-mode .lc-sl{color:#6B9DB7}
+body.light-mode .lc-sv{color:#050D18}
+body.light-mode .mi-nl{color:#050D18 !important}
+body.light-mode .mi-cty{color:#050D18}
+body.light-mode .mi-bt{color:#050D18}
+body.light-mode .mi-sub,body.light-mode .mi-st,body.light-mode .mi-b{color:#3A5E75}
+body.light-mode .scta-h{color:#050D18}
+body.light-mode .scta-sub{color:#3A5E75}
+/* Footer light mode (from index.html) */
+body.light-mode .pf{background:#dce9ff !important}
+body.light-mode .pf-topglow{background:linear-gradient(90deg,transparent 5%,rgba(74,159,224,0.2) 35%,rgba(46,204,154,0.15) 65%,transparent 95%) !important}
+body.light-mode .pf-lt{color:#050D18 !important}
+body.light-mode .pf-desc{color:#3A5E75 !important}
+body.light-mode .pf-ct{color:#6B9DB7 !important}
+body.light-mode .pf-ct::after{background:linear-gradient(90deg,rgba(74,159,224,0.2),transparent) !important}
+body.light-mode .pf-lk{color:#3A5E75 !important}
+body.light-mode .pf-lk i{color:#9BBFD8 !important}
+body.light-mode .pf-lk:hover{color:#050D18 !important}
+body.light-mode .pf-lk:hover i{color:#4A9FE0 !important}
+body.light-mode .pf-copy{color:#6B9DB7 !important}
+body.light-mode .pf-status{color:#1DB89A !important}
+body.light-mode .pf-legal a{color:#6B9DB7 !important}
+body.light-mode .pf-si{border-color:rgba(74,159,224,0.25) !important;color:#6B9DB7 !important}
+body.light-mode .pf-si:hover{background:rgba(74,159,224,0.12) !important;color:#1E6BAB !important}
+/* Category sub-nav */
+body.light-mode .csn{background:rgba(238,246,255,.96) !important}
+body.light-mode .csn-item{color:#6B9DB7 !important}
+body.light-mode .csn-item.on{color:#0F9B72 !important;border-bottom-color:#0F9B72 !important}
+body.light-mode .csn-item:hover:not(.on){color:#050D18 !important}
+body.light-mode .csn-sep{background:rgba(74,159,224,.18) !important}
+/* Breadcrumb */
+body.light-mode .ch-bc{color:#6B9DB7 !important}
+body.light-mode .ch-bc a{color:#6B9DB7 !important}
+body.light-mode .lc-tag{background:rgba(74,159,224,.1) !important;border-color:rgba(74,159,224,.22) !important;color:#1E6BAB !important}
+
+/* ── Additional light mode rules (new page elements) ── */
+body.light-mode .sp-hero{background:linear-gradient(180deg,#EEF6FF,#E8F4FF) !important}
+body.light-mode .sp-name{color:#050D18 !important}
+body.light-mode .sp-m{color:#3A5E75 !important}
+body.light-mode .sp-rct{color:#6B9DB7 !important}
+body.light-mode .sp-cat-badge{background:rgba(74,159,224,.12) !important;color:#1E6BAB !important;border-color:rgba(74,159,224,.28) !important}
+body.light-mode .tab-nav,body.light-mode .sp-tab{background:rgba(238,246,255,.96) !important}
+body.light-mode .sp-tab{color:#6B9DB7 !important}
+body.light-mode .sp-tab.on{color:#1E6BAB !important;border-bottom-color:#1E6BAB !important}
+body.light-mode .sp-panel{background:#EEF6FF !important}
+body.light-mode .ov-box,body.light-mode .prod-card,body.light-mode .cert-card,body.light-mode .rev-card{background:rgba(255,255,255,.75) !important;border-color:rgba(74,159,224,.2) !important;box-shadow:0 4px 20px rgba(74,159,224,.08),inset 0 1px 0 rgba(255,255,255,.95) !important}
+body.light-mode .ov-text,body.light-mode .ov-btext,body.light-mode .prod-desc,body.light-mode .cert-scope,body.light-mode .rev-text{color:#3A5E75 !important}
+body.light-mode .ov-fv,body.light-mode .prod-name,body.light-mode .cert-name,body.light-mode .rev-name{color:#050D18 !important}
+body.light-mode .ov-fact{background:rgba(238,246,255,.8) !important;border-color:rgba(74,159,224,.18) !important}
+body.light-mode .ov-fl,body.light-mode .rev-role{color:#6B9DB7 !important}
+body.light-mode .cert-tier-bar{background:rgba(74,159,224,.06) !important;border-color:rgba(74,159,224,.2) !important}
+body.light-mode .cert-t1-note{background:rgba(238,246,255,.8) !important;border-left-color:rgba(74,159,224,.3) !important;color:#3A5E75 !important}
+body.light-mode .rev-agg{background:rgba(255,255,255,.75) !important;border-color:rgba(74,159,224,.2) !important}
+body.light-mode .sim-card{background:rgba(255,255,255,.65) !important;border-color:rgba(74,159,224,.2) !important}
+body.light-mode .sim-name{color:#050D18 !important}
+
+/* ── Change 1: light-mode text legibility fixes ── */
+/* Hero section */
+body.light-mode .sp-hero{background:linear-gradient(180deg,#EEF6FF,#E8F4FF) !important}
+body.light-mode .sp-name{color:#050D18 !important}
+body.light-mode .sp-m{color:#3A5E75 !important}
+body.light-mode .sp-m i{color:#1E6BAB !important}
+body.light-mode .sp-rct{color:#6B9DB7 !important}
+body.light-mode .sp-score{color:#050D18 !important;-webkit-text-fill-color:#050D18 !important}
+body.light-mode .sp-stars{color:#D97706 !important}
+/* Hero stats bar */
+body.light-mode .sp-stats,body.light-mode .ch-stats{background:rgba(255,255,255,.85) !important;border-color:rgba(74,159,224,.22) !important;box-shadow:0 4px 16px rgba(74,159,224,.1),inset 0 1px 0 rgba(255,255,255,.95) !important}
+body.light-mode .chs{border-right-color:rgba(74,159,224,.15) !important}
+body.light-mode .sps-v,body.light-mode .chs-n{color:#1E6BAB !important;background:none !important;-webkit-text-fill-color:#1E6BAB !important}
+body.light-mode .sps-l,body.light-mode .chs-l{color:#6B9DB7 !important}
+/* Action buttons */
+body.light-mode .ch-btn-s,body.light-mode .sp-btn-s{border-color:rgba(74,159,224,.3) !important;color:#1E6BAB !important;background:rgba(255,255,255,.6) !important}
+body.light-mode .ch-btn-s:hover,body.light-mode .sp-btn-s:hover{background:rgba(74,159,224,.1) !important}
+/* Category + verified badges */
+body.light-mode .sp-cat-badge{background:rgba(74,159,224,.1) !important;color:#1E6BAB !important;border-color:rgba(74,159,224,.28) !important}
+/* Tab navigation */
+body.light-mode .tab-nav{background:rgba(238,246,255,.97) !important;border-bottom-color:rgba(74,159,224,.18) !important}
+body.light-mode .sp-tab{color:#6B9DB7 !important;background:transparent !important}
+body.light-mode .sp-tab.on{color:#1E6BAB !important;border-bottom-color:#1E6BAB !important}
+body.light-mode .sp-tab:hover:not(.on){color:#050D18 !important}
+/* Tab panel backgrounds */
+body.light-mode .sp-panel{background:#EEF6FF !important}
+/* Overview boxes */
+body.light-mode .ov-box{background:rgba(255,255,255,.78) !important;border-color:rgba(74,159,224,.2) !important;box-shadow:0 4px 20px rgba(74,159,224,.08),inset 0 1px 0 rgba(255,255,255,.95) !important}
+body.light-mode .ov-bt{color:#050D18 !important}
+body.light-mode .ov-bt i{color:#1E6BAB !important}
+body.light-mode .ov-text{color:#3A5E75 !important}
+body.light-mode .ov-btext{color:#3A5E75 !important}
+body.light-mode .ov-btext strong{color:#050D18 !important}
+body.light-mode .ov-b::before{background:#1E6BAB !important}
+body.light-mode .ov-tag{background:rgba(74,159,224,.1) !important;border-color:rgba(74,159,224,.2) !important;color:#1E6BAB !important}
+body.light-mode .ov-fact{background:rgba(238,246,255,.85) !important;border-color:rgba(74,159,224,.18) !important}
+body.light-mode .ov-fv{color:#050D18 !important}
+body.light-mode .ov-fl{color:#6B9DB7 !important}
+/* Product cards */
+body.light-mode .prod-card{background:rgba(255,255,255,.78) !important;border-color:rgba(74,159,224,.2) !important;box-shadow:0 4px 20px rgba(74,159,224,.08),inset 0 1px 0 rgba(255,255,255,.95) !important}
+body.light-mode .prod-name{color:#050D18 !important}
+body.light-mode .prod-desc{color:#3A5E75 !important}
+body.light-mode .prod-spec span:first-child{color:#6B9DB7 !important}
+body.light-mode .prod-spec span:last-child{color:#050D18 !important}
+body.light-mode .prod-spec{border-bottom-color:rgba(74,159,224,.12) !important}
+body.light-mode .prod-icon{background:rgba(74,159,224,.1) !important;border-color:rgba(74,159,224,.22) !important}
+/* Certifications tab */
+body.light-mode .cert-tier-bar{background:rgba(74,159,224,.06) !important;border-color:rgba(74,159,224,.2) !important}
+body.light-mode .cert-tb-desc{color:#3A5E75 !important}
+body.light-mode .cert-tb-desc strong{color:#050D18 !important}
+body.light-mode .cert-pill{background:rgba(255,255,255,.75) !important;border-color:rgba(74,159,224,.2) !important;color:#3A5E75 !important}
+body.light-mode .cert-pill i{color:#1E6BAB !important}
+body.light-mode .cert-t1-note{background:rgba(238,246,255,.85) !important;border-left-color:rgba(74,159,224,.3) !important;color:#6B9DB7 !important}
+body.light-mode .cert-t1-note strong{color:#3A5E75 !important}
+body.light-mode .cert-card{background:rgba(255,255,255,.78) !important;border-color:rgba(74,159,224,.2) !important;box-shadow:0 4px 20px rgba(74,159,224,.08),inset 0 1px 0 rgba(255,255,255,.95) !important}
+body.light-mode .cert-name{color:#050D18 !important}
+body.light-mode .cert-body{color:#1E6BAB !important}
+body.light-mode .cert-scope{color:#3A5E75 !important}
+body.light-mode .cert-standard{background:rgba(238,246,255,.6) !important;border-color:rgba(74,159,224,.22) !important}
+body.light-mode .cert-std-h{color:#3A5E75 !important}
+body.light-mode .cert-std-b{color:#6B9DB7 !important}
+/* Reviews tab */
+body.light-mode .rev-agg{background:rgba(255,255,255,.78) !important;border-color:rgba(74,159,224,.2) !important}
+body.light-mode .rev-big{color:#050D18 !important;-webkit-text-fill-color:#050D18 !important}
+body.light-mode .rev-big-c{color:#6B9DB7 !important}
+body.light-mode .rev-bar-track{background:rgba(74,159,224,.15) !important}
+body.light-mode .rev-card{background:rgba(255,255,255,.78) !important;border-color:rgba(74,159,224,.2) !important;box-shadow:0 4px 20px rgba(74,159,224,.08),inset 0 1px 0 rgba(255,255,255,.95) !important}
+body.light-mode .rev-text{color:#3A5E75 !important}
+body.light-mode .rev-name{color:#050D18 !important}
+body.light-mode .rev-role{color:#6B9DB7 !important}
+body.light-mode .rev-foot{border-top-color:rgba(74,159,224,.15) !important}
+/* Breadcrumb */
+body.light-mode .ch-bc{color:#6B9DB7 !important}
+body.light-mode .ch-bc .cur{color:#1E6BAB !important}
+
+/* ── Change 2: similar-suppliers slider light mode ── */
+body.light-mode .sim{background:linear-gradient(180deg,#EEF6FF,#E8F5FF) !important}
+body.light-mode .sim-h{color:#050D18 !important}
+body.light-mode .sim-h em{color:#1E6BAB !important}
+body.light-mode .sim-card{background:rgba(255,255,255,.82) !important;border-color:rgba(74,159,224,.22) !important;box-shadow:0 4px 16px rgba(74,159,224,.1),inset 0 1px 0 rgba(255,255,255,.95) !important}
+body.light-mode .sim-loc{color:#6B9DB7 !important}
+body.light-mode .sim-arrow{background:rgba(255,255,255,.8) !important;border-color:rgba(74,159,224,.25) !important;color:#1E6BAB !important}
+body.light-mode .sim-dot{background:rgba(74,159,224,.2) !important}
+body.light-mode .sim-dot.on{background:#1E6BAB !important}
+
+/* ── Change 3: sourcing intelligence light mode ── */
+body.light-mode .si-section{background:linear-gradient(180deg,#E8F4FF,#EEF6FF) !important;border-top-color:rgba(74,159,224,.15) !important;border-bottom-color:rgba(74,159,224,.15) !important}
+body.light-mode .si-h{color:#050D18 !important}
+body.light-mode .si-sub{color:#3A5E75 !important}
+body.light-mode .si-card{background:rgba(255,255,255,.78) !important;border-color:rgba(74,159,224,.2) !important;box-shadow:0 4px 20px rgba(74,159,224,.08),inset 0 1px 0 rgba(255,255,255,.95) !important}
+body.light-mode .si-value{color:#050D18 !important}
+body.light-mode .si-detail{color:#3A5E75 !important}
+body.light-mode .si-label{color:#6B9DB7 !important}
+body.light-mode .si-icon{background:rgba(74,159,224,.1) !important;border-color:rgba(74,159,224,.22) !important}
+
+/* ── Responsive ── */
+@media (max-width:900px){
+.pn{padding:0 20px}
+.pn-links a{display:none}
+.pn-div{display:none}
+}
+@media (max-width: 768px) {
+  .sp-inner { flex-direction: column; gap: 16px; }
+  .sp-logo { width: 64px; height: 64px; font-size: 20px; }
+  .sp-name { font-size: 20px; }
+  .sp-meta { gap: 8px; }
+  .ch-stats { flex-wrap: wrap; }
+  .chs { flex: 1 1 45%; }
+  .sp-actions { flex-wrap: wrap; }
+  .ch-btn-p, .ch-btn-s {
+    flex: 1 1 auto;
+    justify-content: center;
+  }
+  .sp-panel { padding: 20px 16px; }
+  .ov-grid { grid-template-columns: 1fr; }
+  .prod-grid { grid-template-columns: 1fr; }
+  .cert-grid { grid-template-columns: 1fr 1fr; }
+  .rev-grid { grid-template-columns: 1fr; }
+  .sim-grid { grid-template-columns: 1fr; }
+  .cert-tier-bar { flex-direction: column;
+                   gap: 10px; }
+  .tab-nav { padding: 0 16px;
+             overflow-x: auto; }
+  .sp-tab { padding: 12px 14px;
+            font-size: 12px; }
+  .sbc { padding: 12px 16px 0; }
+}
+
+@media (max-width: 480px) {
+  .cert-grid { grid-template-columns: 1fr; }
+  .sp-name { font-size: 18px; }
+  .ov-facts { grid-template-columns: 1fr 1fr; }
+}
+
+/* ── SECTION 5 — Similar suppliers slider (Change 2) ── */
+.sim-slider-wrap{position:relative;display:flex;align-items:center;gap:12px}
+.sim-track-outer{overflow:hidden;flex:1;border-radius:14px}
+.sim-track{display:flex;gap:14px;transition:transform .5s cubic-bezier(.25,.46,.45,.94);will-change:transform}
+.sim-card{flex:0 0 calc(33.333% - 10px);min-width:0}
+.sim-arrow{width:38px;height:38px;border-radius:50%;border:1px solid rgba(74,159,224,.25);background:rgba(18,34,52,.6);color:#8DCAF2;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:all .2s;font-size:16px}
+.sim-arrow:hover{background:rgba(74,159,224,.18);border-color:rgba(74,159,224,.5);color:#fff;transform:scale(1.08)}
+.sim-dots{display:flex;justify-content:center;gap:6px;margin-top:14px}
+.sim-dot{width:6px;height:6px;border-radius:50%;background:rgba(74,159,224,.22);cursor:pointer;transition:all .2s}
+.sim-dot.on{background:#4A9FE0;width:18px;border-radius:3px}
+
+/* ── Sourcing Intelligence (Change 3) ── */
+.si-section{position:relative;background:linear-gradient(180deg,#060F1A,#0A1628);padding:48px 48px 56px;overflow:hidden;border-top:1px solid rgba(74,159,224,.1);border-bottom:1px solid rgba(74,159,224,.1)}
+.si-aura{position:absolute;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(74,159,224,.1),transparent 65%);top:-100px;right:-80px;filter:blur(60px);pointer-events:none}
+.si-inner{position:relative;z-index:2;max-width:1200px;margin:0 auto}
+.si-head{margin-bottom:28px}
+.si-pill{display:inline-flex;align-items:center;gap:6px;background:rgba(74,159,224,.08);border:1px solid rgba(74,159,224,.2);border-radius:20px;padding:4px 14px;font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#4A9FE0;margin-bottom:12px}
+.si-pill i{font-size:12px}
+.si-h{font-family:'Plus Jakarta Sans',system-ui;font-size:26px;font-weight:800;letter-spacing:-.6px;margin-bottom:8px;color:#fff}
+.si-h em{color:#4A9FE0;font-style:normal}
+.si-sub{font-size:14px;color:#9BBFD8;line-height:1.6;max-width:480px}
+.si-grid{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:14px}
+.si-card{background:rgba(18,34,52,.48);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(74,159,224,.12);border-radius:16px;padding:22px 18px;position:relative;overflow:hidden;transition:transform .25s cubic-bezier(.34,1.3,.64,1),border-color .22s,box-shadow .25s}
+.si-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(74,159,224,.45),transparent)}
+.si-card:hover{transform:translateY(-4px);border-color:rgba(74,159,224,.3);box-shadow:0 14px 40px rgba(0,0,0,.35),0 0 32px -16px #4A9FE0}
+.si-icon{width:42px;height:42px;border-radius:11px;background:rgba(74,159,224,.1);border:1px solid rgba(74,159,224,.22);display:flex;align-items:center;justify-content:center;margin-bottom:14px}
+.si-icon i{font-size:20px;color:#4A9FE0}
+.si-label{font-size:10.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#6B9DB7;margin-bottom:6px}
+.si-value{font-family:'Plus Jakarta Sans',system-ui;font-size:20px;font-weight:800;color:#fff;margin-bottom:8px;letter-spacing:-.3px}
+.si-detail{font-size:12px;color:#9BBFD8;line-height:1.65}
+
+/* ── Mobile — slider + Sourcing Intelligence (Change 2/3) ── */
+@media (max-width: 768px) {
+  .sim-card { flex: 0 0 100%; }
+  .sim-arrow { width: 32px; height: 32px; font-size: 14px; }
+  .si-section { padding: 36px 20px 44px; }
+  .si-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+  .si-h { font-size: 20px; }
+}
+@media (max-width: 480px) {
+  .si-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 768px) {
+
+  /* Footer grid — single column on mobile */
+  .pf-main {
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+  }
+
+  .pf-grid {
+    grid-template-columns: 1fr !important;
+    gap: 24px !important;
+  }
+
+  .pf-desc {
+    max-width: 100% !important;
+  }
+
+  .pf-bot {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 8px !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+  }
+
+  .pf-legal {
+    flex-wrap: wrap !important;
+    gap: 12px !important;
+  }
+
+  .pf-social {
+    flex-wrap: wrap !important;
+  }
+}
+
+@media (max-width: 480px) {
+
+  .pf-main {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+    padding-top: 32px !important;
+    padding-bottom: 20px !important;
+  }
+
+  .pf-grid {
+    gap: 20px !important;
+  }
+
+  .pf-bot {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+    gap: 6px !important;
+  }
+
+  .pf-copy {
+    font-size: 10px !important;
+  }
+
+  .pf-legal a,
+  .pf-legal span {
+    font-size: 10px !important;
+  }
+}
+</style>
+</head>
+<body>
+<div class="pg-grid"></div>
+<div class="pg-aura" id="pa1" style="width:700px;height:700px;background:radial-gradient(circle,rgba(74,159,224,.22),transparent 65%);top:-260px;left:-200px"></div>
+<div class="pg-aura" id="pa2" style="width:600px;height:600px;background:radial-gradient(circle,rgba(46,204,154,.14),transparent 65%);top:-120px;right:-180px"></div>
+<div class="pg-aura" id="pa3" style="width:500px;height:500px;background:radial-gradient(circle,rgba(74,159,224,.1),transparent 65%);bottom:-150px;left:35%"></div>
+<canvas id="pg-canvas" aria-hidden="true"></canvas>
+
+<nav class="pn" aria-label="Primary navigation">
+<a class="pn-logo" href="index.html"><div class="pn-icon"><i class="ti ti-snowflake" style="font-size:16px;color:#fff" aria-hidden="true"></i></div><span class="pn-wm">FrozenFood<em>Inc</em></span></a>
+<div class="pn-links"><a href="index.html">Database</a><a href="#">Services</a><a href="#">For Suppliers</a><div class="pn-div"></div><a href="#">Sign In</a><button id="mode-toggle" aria-label="Switch to light mode" title="Toggle light/dark mode"><i class="ti ti-sun" id="mode-icon"></i></button><button class="pn-cta">List Your Business</button></div>
+</nav>
+
+<!-- Category sub-nav -->
+<div class="csn" aria-label="Category navigation">
+<div class="csn-inner">
+<a class="csn-item on" href="category-fruits-veg.html"><i class="ti ti-leaf" aria-hidden="true"></i>Fruits &amp; Veg</a>
+<span class="csn-sep"></span>
+<a class="csn-item" href="category-poultry.html"><i class="ti ti-feather" aria-hidden="true"></i>Poultry</a>
+<span class="csn-sep"></span>
+<a class="csn-item" href="category-beef-meat.html"><i class="ti ti-flame" aria-hidden="true"></i>Beef &amp; Meat</a>
+<span class="csn-sep"></span>
+<a class="csn-item" href="category-seafood.html"><i class="ti ti-fish" aria-hidden="true"></i>Seafood</a>
+<span class="csn-sep"></span>
+<a class="csn-item" href="category-services.html"><i class="ti ti-truck" aria-hidden="true"></i>Services</a>
+</div>
+</div>
+
+<!-- SECTION 1 — Breadcrumb -->
+<div class="sbc" aria-label="Breadcrumb">
+<div class="ch-bc"><a href="index.html">Database</a><i class="ti ti-chevron-right" aria-hidden="true"></i><a href="category-fruits-veg.html">Frozen Fruits &amp; Veg</a><i class="ti ti-chevron-right" aria-hidden="true"></i><span class="cur">GlobalFresh Produce Ltd</span></div>
+</div>
+
+<!-- SECTION 2 — Supplier hero -->
+<section class="sp-hero" aria-label="Supplier hero">
+<div class="chero-aura" style="width:380px;height:380px;background:radial-gradient(circle,rgba(74,159,224,.14),transparent 70%);top:-100px;right:-60px"></div>
+<div class="chero-aura" style="width:280px;height:280px;background:radial-gradient(circle,rgba(74,159,224,.08),transparent 70%);bottom:-60px;left:-40px"></div>
+<div class="sp-inner">
+<div class="sp-logo" id="sp-logo">GF</div>
+<div class="sp-info">
+<div class="sp-badges" id="sp-badges">
+<span class="bdg sp-cat-badge"><i class="ti ti-leaf" style="font-size:9px" aria-hidden="true"></i>Frozen Fruits &amp; Veg</span>
+<span class="bdg bdg-f"><i class="ti ti-star" style="font-size:9px" aria-hidden="true"></i>Featured</span>
+<span class="bdg bdg-v"><i class="ti ti-circle-check" style="font-size:9px" aria-hidden="true"></i>Verified Supplier</span>
+</div>
+<h1 class="sp-name" id="sp-name">GlobalFresh Produce Ltd</h1>
+<div class="sp-meta" id="sp-meta">
+<span class="sp-m"><i class="ti ti-map-pin" aria-hidden="true"></i>Venlo, Netherlands</span>
+<span class="sp-m"><i class="ti ti-calendar" aria-hidden="true"></i>Est. 2008</span>
+<span class="sp-m"><i class="ti ti-users" aria-hidden="true"></i>120–250 employees</span>
+<span class="sp-m"><i class="ti ti-globe" aria-hidden="true"></i>globalfreshproduce.nl</span>
+</div>
+<div class="sp-rating" id="sp-rating">
+<span class="sp-stars" aria-hidden="true">★★★★★</span>
+<span class="sp-score">4.9</span>
+<span class="sp-rct">Based on 12 verified buyer reviews</span>
+</div>
+<div class="ch-stats" id="sp-stats">
+<div class="chs"><span class="chs-n">1 Pallet</span><span class="chs-l">Min. Order</span></div>
+<div class="chs"><span class="chs-n">38</span><span class="chs-l">Export Countries</span></div>
+<div class="chs"><span class="chs-n">45,000 MT</span><span class="chs-l">Annual Capacity</span></div>
+<div class="chs"><span class="chs-n">Est. 2008</span><span class="chs-l">In Business Since</span></div>
+</div>
+<div class="sp-actions" id="sp-actions">
+<button class="ch-btn-p" data-quote><i class="ti ti-message-circle" aria-hidden="true"></i>Request a Quote</button>
+<button class="ch-btn-s"><i class="ti ti-bookmark" aria-hidden="true"></i>Save Supplier</button>
+<button class="ch-btn-s"><i class="ti ti-share" aria-hidden="true"></i>Share</button>
+</div>
+</div>
+</div>
+</section>
+
+<!-- SECTION 3 — Tab navigation -->
+<div class="tab-nav" aria-label="Profile sections">
+<button class="sp-tab on" data-panel="panel-overview"><i class="ti ti-layout-list" aria-hidden="true"></i>Overview</button>
+<button class="sp-tab" data-panel="panel-products"><i class="ti ti-package" aria-hidden="true"></i>Products</button>
+<button class="sp-tab" data-panel="panel-certs"><i class="ti ti-shield-check" aria-hidden="true"></i>Certifications</button>
+<button class="sp-tab" data-panel="panel-reviews"><i class="ti ti-star" aria-hidden="true"></i>Reviews<span class="sp-tab-count">12</span></button>
+</div>
+
+<!-- SECTION 4 — Tab panels -->
+
+<!-- PANEL 1: OVERVIEW -->
+<section class="sp-panel" id="panel-overview" style="display:block" aria-label="Overview">
+<div class="sp-panel-inner">
+<div class="ov-grid">
+<div class="ov-box">
+<div class="ov-bt"><i class="ti ti-building" aria-hidden="true"></i>About GlobalFresh</div>
+<p class="ov-text">GlobalFresh Produce Ltd is a specialist IQF producer and exporter based in Venlo, Netherlands — Europe's largest fresh produce hub. Founded in 2008, we supply bulk frozen fruits and vegetables to food service operators, retail chains, and food manufacturing clients across 38 countries.</p>
+<p class="ov-text">Our 18,000 m² production facility processes over 45,000 MT annually, operating to the highest food safety standards with full cold chain traceability from farm to container.</p>
+</div>
+<div class="ov-box">
+<div class="ov-bt"><i class="ti ti-check" aria-hidden="true"></i>Why Choose GlobalFresh</div>
+<div class="ov-b"><span class="ov-btext">Low minimum orders — from 1 pallet, suitable for importers of all sizes</span></div>
+<div class="ov-b"><span class="ov-btext">Full organic range — EU and USDA certified organic across 18 product lines</span></div>
+<div class="ov-b"><span class="ov-btext">Custom packaging — private label and retail-ready pack formats available</span></div>
+<div class="ov-b"><span class="ov-btext">Year-round supply — multi-origin sourcing ensures consistent availability</span></div>
+<div class="ov-b"><span class="ov-btext">Dedicated export team — experienced staff covering all major import markets</span></div>
+</div>
+<div class="ov-box">
+<div class="ov-bt"><i class="ti ti-world" aria-hidden="true"></i>Export Markets</div>
+<div class="ov-mkts">
+<span class="ov-tag">🇩🇪 Germany</span><span class="ov-tag">🇫🇷 France</span><span class="ov-tag">🇬🇧 UK</span><span class="ov-tag">🇺🇸 USA</span><span class="ov-tag">🇦🇪 UAE</span><span class="ov-tag">🇸🇦 Saudi Arabia</span><span class="ov-tag">🇨🇳 China</span><span class="ov-tag">🇯🇵 Japan</span><span class="ov-tag">🇦🇺 Australia</span><span class="ov-tag">🇨🇦 Canada</span><span class="ov-tag">🇳🇬 Nigeria</span><span class="ov-tag">🇿🇦 South Africa</span><span class="ov-tag">+26 more</span>
+</div>
+</div>
+<div class="ov-box">
+<div class="ov-bt"><i class="ti ti-chart-bar" aria-hidden="true"></i>Company Facts</div>
+<div class="ov-facts">
+<div class="ov-fact"><span class="ov-fv">2008</span><span class="ov-fl">Founded</span></div>
+<div class="ov-fact"><span class="ov-fv">120–250</span><span class="ov-fl">Employees</span></div>
+<div class="ov-fact"><span class="ov-fv">45,000 MT</span><span class="ov-fl">Annual Capacity</span></div>
+<div class="ov-fact"><span class="ov-fv">18,000 m²</span><span class="ov-fl">Facility Size</span></div>
+<div class="ov-fact"><span class="ov-fv">38</span><span class="ov-fl">Export Countries</span></div>
+<div class="ov-fact"><span class="ov-fv">65+</span><span class="ov-fl">Product Lines</span></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- PANEL 2: PRODUCTS -->
+<section class="sp-panel" id="panel-products" aria-label="Products">
+<div class="sp-panel-inner">
+<div class="prod-grid">
+<div class="prod-card">
+<div class="prod-icon"><i class="ti ti-leaf" aria-hidden="true"></i></div>
+<div class="prod-name">IQF Mixed Berry Blend</div>
+<div class="prod-desc">Premium IQF blend of strawberries, blueberries and raspberries. Sourced from certified farms in Chile, Poland and Serbia.</div>
+<div class="prod-specs">
+<div class="prod-spec"><span class="lbl">MOQ</span><span class="val">1 Pallet (500kg)</span></div>
+<div class="prod-spec"><span class="lbl">Packaging</span><span class="val">10kg cartons / bulk IBC</span></div>
+<div class="prod-spec"><span class="lbl">Origin</span><span class="val">Chile / Poland / Serbia</span></div>
+<div class="prod-spec"><span class="lbl">Shelf Life</span><span class="val">24 months at -18°C</span></div>
+</div>
+<div class="prod-tags"><span class="lc-tag">IQF</span><span class="lc-tag">Organic Available</span><span class="lc-tag">GlobalGAP</span></div>
+<button class="rq-btn rq-full" data-quote><i class="ti ti-message-circle" aria-hidden="true"></i>Request Quote</button>
+</div>
+<div class="prod-card">
+<div class="prod-icon"><i class="ti ti-lemon" aria-hidden="true"></i></div>
+<div class="prod-name">Frozen Tropical Fruit Mix</div>
+<div class="prod-desc">IQF tropical blend featuring mango, pineapple, papaya and passion fruit. Available in custom ratios for food service and retail.</div>
+<div class="prod-specs">
+<div class="prod-spec"><span class="lbl">MOQ</span><span class="val">1 Pallet (500kg)</span></div>
+<div class="prod-spec"><span class="lbl">Packaging</span><span class="val">10kg / 20kg cartons</span></div>
+<div class="prod-spec"><span class="lbl">Origin</span><span class="val">Peru / Costa Rica / Ghana</span></div>
+<div class="prod-spec"><span class="lbl">Shelf Life</span><span class="val">24 months at -18°C</span></div>
+</div>
+<div class="prod-tags"><span class="lc-tag">IQF</span><span class="lc-tag">Custom Mix</span><span class="lc-tag">Rainforest Alliance</span></div>
+<button class="rq-btn rq-full" data-quote><i class="ti ti-message-circle" aria-hidden="true"></i>Request Quote</button>
+</div>
+<div class="prod-card">
+<div class="prod-icon"><i class="ti ti-plant" aria-hidden="true"></i></div>
+<div class="prod-name">IQF Organic Mixed Vegetables</div>
+<div class="prod-desc">Certified organic IQF vegetable blend — broccoli, cauliflower, carrots and green beans. USDA and EU organic certified.</div>
+<div class="prod-specs">
+<div class="prod-spec"><span class="lbl">MOQ</span><span class="val">2 Pallets (1,000kg)</span></div>
+<div class="prod-spec"><span class="lbl">Packaging</span><span class="val">10kg cartons</span></div>
+<div class="prod-spec"><span class="lbl">Origin</span><span class="val">Netherlands / Spain</span></div>
+<div class="prod-spec"><span class="lbl">Shelf Life</span><span class="val">24 months at -18°C</span></div>
+</div>
+<div class="prod-tags"><span class="lc-tag">Organic EU</span><span class="lc-tag">USDA Organic</span><span class="lc-tag">IQF</span></div>
+<button class="rq-btn rq-full" data-quote><i class="ti ti-message-circle" aria-hidden="true"></i>Request Quote</button>
+</div>
+<div class="prod-card">
+<div class="prod-icon"><i class="ti ti-snowflake" aria-hidden="true"></i></div>
+<div class="prod-name">IQF Whole Strawberries</div>
+<div class="prod-desc">Premium IQF whole strawberries from Spain and Morocco. Available in Camarosa and Fortuna varieties for retail and food service packs.</div>
+<div class="prod-specs">
+<div class="prod-spec"><span class="lbl">MOQ</span><span class="val">1 Pallet (500kg)</span></div>
+<div class="prod-spec"><span class="lbl">Packaging</span><span class="val">10kg / 25kg cartons</span></div>
+<div class="prod-spec"><span class="lbl">Origin</span><span class="val">Spain / Morocco</span></div>
+<div class="prod-spec"><span class="lbl">Shelf Life</span><span class="val">24 months at -18°C</span></div>
+</div>
+<div class="prod-tags"><span class="lc-tag">IQF</span><span class="lc-tag">GlobalGAP</span><span class="lc-tag">BRC Grade A</span></div>
+<button class="rq-btn rq-full" data-quote><i class="ti ti-message-circle" aria-hidden="true"></i>Request Quote</button>
+</div>
+</div>
+</div>
+</section>
+
+<!-- PANEL 3: CERTIFICATIONS -->
+<section class="sp-panel" id="panel-certs" aria-label="Certifications">
+<div class="sp-panel-inner">
+<!-- Premium verified bar -->
+<div class="cert-tier-bar">
+<div class="cert-tb-l">
+<span class="cert-verified-badge"><i class="ti ti-shield-check" aria-hidden="true"></i>Documents Verified</span>
+<span class="cert-tb-desc">GlobalFresh Produce Ltd has uploaded and verified all certification documents with FFInc. Documents available on request.</span>
+</div>
+<span class="cert-premium">★ Premium Listing</span>
+</div>
+
+<!-- Tier 1 — Declared -->
+<div class="cert-lbl declared">Declared Certifications</div>
+<div class="cert-pills">
+<span class="cert-pill"><i class="ti ti-circle-check" aria-hidden="true"></i>GlobalGAP</span>
+<span class="cert-pill"><i class="ti ti-circle-check" aria-hidden="true"></i>Organic EU</span>
+<span class="cert-pill"><i class="ti ti-circle-check" aria-hidden="true"></i>BRC Grade A</span>
+<span class="cert-pill"><i class="ti ti-circle-check" aria-hidden="true"></i>IFS Food</span>
+<span class="cert-pill"><i class="ti ti-circle-check" aria-hidden="true"></i>USDA Organic</span>
+<span class="cert-pill"><i class="ti ti-circle-check" aria-hidden="true"></i>HACCP</span>
+</div>
+<div class="cert-t1-note">Note: Certifications above are declared by the supplier at time of listing. For premium verified suppliers, full documentation is shown below. For standard listings, request documentation directly via the quote form.</div>
+
+<!-- Tier 2 — Verified documentation -->
+<div class="cert-lbl verified">Verified Documentation</div>
+<div class="cert-grid">
+<div class="cert-card">
+<span class="cert-stamp"><i class="ti ti-circle-check" aria-hidden="true"></i>Verified</span>
+<div class="cert-ic"><i class="ti ti-shield-check" style="color:#4A9FE0" aria-hidden="true"></i></div>
+<div class="cert-name">GlobalGAP</div>
+<div class="cert-body">GLOBALG.A.P. c/o FoodPLUS GmbH</div>
+<div class="cert-scope">Good Agricultural Practice covering all fresh produce lines sourced and processed at GlobalFresh Venlo facilities.</div>
+<span class="bdg bdg-v"><i class="ti ti-calendar" style="font-size:9px" aria-hidden="true"></i>Valid until Dec 2025</span>
+</div>
+<div class="cert-card">
+<span class="cert-stamp"><i class="ti ti-circle-check" aria-hidden="true"></i>Verified</span>
+<div class="cert-ic"><i class="ti ti-leaf" style="color:#2ECC9A" aria-hidden="true"></i></div>
+<div class="cert-name">Organic EU</div>
+<div class="cert-body">Skal Biocontrole, Netherlands</div>
+<div class="cert-scope">EU Organic covering import, processing, storage and export of organic frozen fruits and vegetables across all product lines.</div>
+<span class="bdg bdg-v"><i class="ti ti-calendar" style="font-size:9px" aria-hidden="true"></i>Valid until Mar 2026</span>
+</div>
+<div class="cert-card">
+<span class="cert-stamp"><i class="ti ti-circle-check" aria-hidden="true"></i>Verified</span>
+<div class="cert-ic"><i class="ti ti-award" style="color:#4A9FE0" aria-hidden="true"></i></div>
+<div class="cert-name">BRC Grade A</div>
+<div class="cert-body">British Retail Consortium</div>
+<div class="cert-scope">BRC Global Standard Food Safety Grade A covering all IQF processing, cold storage and packaging operations at Venlo.</div>
+<span class="bdg bdg-v"><i class="ti ti-calendar" style="font-size:9px" aria-hidden="true"></i>Valid until Aug 2025</span>
+</div>
+<div class="cert-card">
+<span class="cert-stamp"><i class="ti ti-circle-check" aria-hidden="true"></i>Verified</span>
+<div class="cert-ic"><i class="ti ti-certificate" style="color:#4A9FE0" aria-hidden="true"></i></div>
+<div class="cert-name">IFS Food</div>
+<div class="cert-body">International Featured Standards</div>
+<div class="cert-scope">IFS Food v8 Higher Level covering food safety, quality management and all production processes for retail and food service clients.</div>
+<span class="bdg bdg-v"><i class="ti ti-calendar" style="font-size:9px" aria-hidden="true"></i>Valid until Jun 2026</span>
+</div>
+<div class="cert-card">
+<span class="cert-stamp"><i class="ti ti-circle-check" aria-hidden="true"></i>Verified</span>
+<div class="cert-ic"><i class="ti ti-plant-2" style="color:#2ECC9A" aria-hidden="true"></i></div>
+<div class="cert-name">USDA Organic</div>
+<div class="cert-body">USDA National Organic Program</div>
+<div class="cert-scope">USDA NOP certification for export of organic frozen produce to the United States market across all organic product lines.</div>
+<span class="bdg bdg-v"><i class="ti ti-calendar" style="font-size:9px" aria-hidden="true"></i>Valid until Jan 2026</span>
+</div>
+<div class="cert-card">
+<span class="cert-stamp"><i class="ti ti-circle-check" aria-hidden="true"></i>Verified</span>
+<div class="cert-ic"><i class="ti ti-check" style="color:#F59E0B" aria-hidden="true"></i></div>
+<div class="cert-name">HACCP</div>
+<div class="cert-body">SGS Netherlands B.V.</div>
+<div class="cert-scope">Hazard Analysis Critical Control Points covering all production, processing and cold storage operations at the Venlo facility.</div>
+<span class="bdg bdg-v"><i class="ti ti-calendar" style="font-size:9px" aria-hidden="true"></i>Valid until Nov 2025</span>
+</div>
+</div>
+
+<!-- Standard listing state (reference/example) -->
+<div class="cert-lbl standard">Standard listing — how it appears without verified documents</div>
+<div class="cert-standard">
+<div class="cert-std-ic"><i class="ti ti-file-unknown" aria-hidden="true"></i></div>
+<div class="cert-std-h">Documentation Not Yet Uploaded</div>
+<div class="cert-std-b">This supplier has declared the certifications above. To verify their documentation, request it directly using the quote form — or ask about upgrading to a verified listing.</div>
+<button class="cert-std-btn" data-quote><i class="ti ti-message-circle" aria-hidden="true"></i>Request Certification Documents</button>
+</div>
+</div>
+</section>
+
+<!-- PANEL 4: REVIEWS -->
+<section class="sp-panel" id="panel-reviews" aria-label="Reviews">
+<div class="sp-panel-inner">
+<div class="rev-agg">
+<div class="rev-agg-l">
+<span class="rev-big">4.9</span>
+<span class="rev-big-stars" aria-hidden="true">★★★★★</span>
+<span class="rev-big-c">12 verified reviews</span>
+</div>
+<div class="rev-div"></div>
+<div class="rev-bars">
+<div class="rev-bar-row"><span class="rev-bar-lbl">5★</span><div class="rev-bar-track"><div class="rev-bar-fill" style="width:85%"></div></div><span class="rev-bar-c">10</span></div>
+<div class="rev-bar-row"><span class="rev-bar-lbl">4★</span><div class="rev-bar-track"><div class="rev-bar-fill" style="width:17%"></div></div><span class="rev-bar-c">2</span></div>
+<div class="rev-bar-row"><span class="rev-bar-lbl">3★</span><div class="rev-bar-track"><div class="rev-bar-fill" style="width:0%"></div></div><span class="rev-bar-c">0</span></div>
+<div class="rev-bar-row"><span class="rev-bar-lbl">2★</span><div class="rev-bar-track"><div class="rev-bar-fill" style="width:0%"></div></div><span class="rev-bar-c">0</span></div>
+<div class="rev-bar-row"><span class="rev-bar-lbl">1★</span><div class="rev-bar-track"><div class="rev-bar-fill" style="width:0%"></div></div><span class="rev-bar-c">0</span></div>
+</div>
+<div class="rev-div"></div>
+<div class="rev-agg-r">
+<div class="rev-agg-r-t">All reviews from verified buyers</div>
+<div class="rev-verified"><i class="ti ti-shield-check" aria-hidden="true"></i>FFInc Verified</div>
+</div>
+</div>
+<div class="rev-grid">
+<div class="rev-card">
+<div class="rev-stars" aria-hidden="true">★★★★★</div>
+<div class="rev-text">"Exceptional IQF quality and remarkably low minimum orders. We've been sourcing mixed berry blends from GlobalFresh for two years — consistent quality, zero cold chain issues."</div>
+<div class="rev-foot">
+<div class="rev-av" style="background:linear-gradient(135deg,#4A9FE0,#1E6BAB)">JM</div>
+<div class="rev-meta"><div class="rev-name">Javier M.</div><div class="rev-role">Head of Procurement · Restaurantes Unidos, Spain</div></div>
+<span class="rev-tag"><i class="ti ti-leaf" style="font-size:9px" aria-hidden="true"></i>IQF Berries</span>
+</div>
+</div>
+<div class="rev-card">
+<div class="rev-stars" aria-hidden="true">★★★★★</div>
+<div class="rev-text">"The organic certification coverage is outstanding. USDA and EU Organic on the same product lines made sourcing for our US and European retail clients seamless."</div>
+<div class="rev-foot">
+<div class="rev-av" style="background:linear-gradient(135deg,#2ECC9A,#0F9B72)">SL</div>
+<div class="rev-meta"><div class="rev-name">Sophie L.</div><div class="rev-role">Category Manager · NatureFoods GmbH, Germany</div></div>
+<span class="rev-tag"><i class="ti ti-leaf" style="font-size:9px" aria-hidden="true"></i>Organic Veg</span>
+</div>
+</div>
+<div class="rev-card">
+<div class="rev-stars" aria-hidden="true">★★★★★</div>
+<div class="rev-text">"Fast responses, clear documentation, and they offered private label packaging from our very first order. Three shipments in and everything has been exactly on spec."</div>
+<div class="rev-foot">
+<div class="rev-av" style="background:linear-gradient(135deg,#F59E0B,#D97706)">DC</div>
+<div class="rev-meta"><div class="rev-name">David C.</div><div class="rev-role">Supply Chain Manager · Pacific Foods, Australia</div></div>
+<span class="rev-tag"><i class="ti ti-leaf" style="font-size:9px" aria-hidden="true"></i>Tropical Fruits</span>
+</div>
+</div>
+<div class="rev-card">
+<div class="rev-stars" aria-hidden="true">★★★★☆</div>
+<div class="rev-text">"Very strong product range and excellent BRC certification. Lead times were slightly longer than quoted on our first order but they communicated proactively. Will reorder."</div>
+<div class="rev-foot">
+<div class="rev-av" style="background:linear-gradient(135deg,#A78BFA,#7C3AED)">AM</div>
+<div class="rev-meta"><div class="rev-name">Ahmed M.</div><div class="rev-role">Import Director · Gulf Fresh Trading, UAE</div></div>
+<span class="rev-tag"><i class="ti ti-leaf" style="font-size:9px" aria-hidden="true"></i>Mixed Vegetables</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- Sourcing Intelligence -->
+<section class="si-section" aria-label="Sourcing intelligence">
+<div class="si-aura"></div>
+<div class="si-inner">
+<div class="si-head">
+<div class="si-pill"><i class="ti ti-bulb" aria-hidden="true"></i>Sourcing Intelligence</div>
+<h2 class="si-h">Smart data for this <em>supplier</em></h2>
+<p class="si-sub">Key sourcing signals to help you decide when and how to engage GlobalFresh Produce Ltd.</p>
+</div>
+<div class="si-grid">
+<div class="si-card">
+<div class="si-icon"><i class="ti ti-calendar-event" aria-hidden="true"></i></div>
+<div class="si-label">Best Time to Order</div>
+<div class="si-value">Jan – Apr</div>
+<div class="si-detail">Southern Hemisphere berry season peak. Highest volume, most competitive FOB pricing from Chile and Peru.</div>
+</div>
+<div class="si-card">
+<div class="si-icon"><i class="ti ti-clock" aria-hidden="true"></i></div>
+<div class="si-label">Typical Lead Time</div>
+<div class="si-value">3–5 Weeks</div>
+<div class="si-detail">FOB Rotterdam to major import ports. Production to container loading typically 10–14 business days.</div>
+</div>
+<div class="si-card">
+<div class="si-icon"><i class="ti ti-ship" aria-hidden="true"></i></div>
+<div class="si-label">Container Availability</div>
+<div class="si-value">Year-Round</div>
+<div class="si-detail">20ft and 40ft reefer containers available year-round via Rotterdam port. Pre-booking recommended Jan–Apr.</div>
+</div>
+<div class="si-card">
+<div class="si-icon"><i class="ti ti-trending-up" aria-hidden="true"></i></div>
+<div class="si-label">Price Trend</div>
+<div class="si-value">Stable</div>
+<div class="si-detail">No major supply disruptions reported Q1 2026. IQF berry pricing stable across all major origins.</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- SECTION 5 — Similar suppliers -->
+<section class="sim" aria-label="Similar suppliers">
+<div class="sim-inner">
+<div class="sim-h">Similar <em>Fruits &amp; Veg</em> Suppliers</div>
+<div class="sim-slider-wrap">
+<button class="sim-arrow sim-prev" aria-label="Previous supplier"><i class="ti ti-chevron-left" aria-hidden="true"></i></button>
+<div class="sim-track-outer">
+<div class="sim-track" id="sim-track">
+<div class="sim-card">
+<div class="sim-logo">PC</div>
+<div class="sim-info"><div class="sim-name">Pacific Produce Co</div><div class="sim-loc"><i class="ti ti-map-pin" aria-hidden="true"></i>🇨🇱 Chile</div><div class="sim-rate">★★★★★ 4.9</div></div>
+<i class="ti ti-chevron-right sim-chev" aria-hidden="true"></i>
+</div>
+<div class="sim-card">
+<div class="sim-logo">AO</div>
+<div class="sim-info"><div class="sim-name">Andean Organic Farms</div><div class="sim-loc"><i class="ti ti-map-pin" aria-hidden="true"></i>🇵🇪 Peru</div><div class="sim-rate">★★★★☆ 4.7</div></div>
+<i class="ti ti-chevron-right sim-chev" aria-hidden="true"></i>
+</div>
+<div class="sim-card">
+<div class="sim-logo">NB</div>
+<div class="sim-info"><div class="sim-name">NordicBerry AB</div><div class="sim-loc"><i class="ti ti-map-pin" aria-hidden="true"></i>🇸🇪 Sweden</div><div class="sim-rate">★★★★★ 4.9</div></div>
+<i class="ti ti-chevron-right sim-chev" aria-hidden="true"></i>
+</div>
+</div>
+</div>
+<button class="sim-arrow sim-next" aria-label="Next supplier"><i class="ti ti-chevron-right" aria-hidden="true"></i></button>
+</div>
+</div>
+</section>
+
+<!-- Footer -->
+<footer class="pf" aria-label="Site footer">
+<div class="pf-topglow"></div><div class="pf-bgaura"></div><div class="pf-gbg"></div>
+<div class="pf-main"><div class="pf-grid">
+<div><a class="pf-logo" href="index.html"><div class="pf-li"><i class="ti ti-snowflake" style="font-size:15px;color:#fff" aria-hidden="true"></i></div><span class="pf-lt">FrozenFood<em>Inc</em></span></a><p class="pf-desc">The global B2B wholesale frozen food database — connecting buyers with verified suppliers worldwide.</p><div class="pf-social"><a class="pf-si" href="#" aria-label="LinkedIn"><i class="ti ti-brand-linkedin" style="font-size:15px" aria-hidden="true"></i></a><a class="pf-si" href="#" aria-label="X"><i class="ti ti-brand-x" style="font-size:14px" aria-hidden="true"></i></a><a class="pf-si" href="#" aria-label="Email"><i class="ti ti-mail" style="font-size:15px" aria-hidden="true"></i></a></div></div>
+<div><div class="pf-ct">Database</div><a class="pf-lk" href="category-fruits-veg.html"><i class="ti ti-chevron-right" aria-hidden="true"></i>Frozen Fruits &amp; Veg <span class="pf-new">New</span></a><a class="pf-lk" href="category-poultry.html"><i class="ti ti-chevron-right" aria-hidden="true"></i>Frozen Poultry</a><a class="pf-lk" href="category-beef-meat.html"><i class="ti ti-chevron-right" aria-hidden="true"></i>Frozen Beef &amp; Meat</a><a class="pf-lk" href="category-seafood.html"><i class="ti ti-chevron-right" aria-hidden="true"></i>Frozen Seafood</a></div>
+<div><div class="pf-ct">Services</div><a class="pf-lk" href="category-services.html"><i class="ti ti-chevron-right" aria-hidden="true"></i>Cold Storage</a><a class="pf-lk" href="category-services.html"><i class="ti ti-chevron-right" aria-hidden="true"></i>Refrigerated Transport</a><a class="pf-lk" href="category-services.html"><i class="ti ti-chevron-right" aria-hidden="true"></i>Packaging</a><a class="pf-lk" href="category-services.html"><i class="ti ti-chevron-right" aria-hidden="true"></i>Quality Testing</a></div>
+<div><div class="pf-ct">Company</div><a class="pf-lk" href="#"><i class="ti ti-chevron-right" aria-hidden="true"></i>About FFInc</a><a class="pf-lk" href="#" style="color:#2ECC9A"><i class="ti ti-plus" style="color:#2ECC9A" aria-hidden="true"></i>List Your Business</a><a class="pf-lk" href="#"><i class="ti ti-chevron-right" aria-hidden="true"></i>Contact Us</a><a class="pf-lk" href="#"><i class="ti ti-chevron-right" aria-hidden="true"></i>Privacy Policy</a></div>
+</div></div>
+<div class="pf-bot"><span class="pf-copy">© 2026 FrozenFood Incorporated. All rights reserved.</span><div class="pf-status"><div class="pf-sdot" id="pf-sdot"></div>All systems operational</div><div class="pf-legal"><a href="#">Terms</a><a href="#">Privacy</a><a href="#">Cookies</a></div></div>
+</footer>
+
+<!-- SECTION 6 — Quote request modal -->
+<div class="qm-ov" id="qm-overlay" aria-hidden="true">
+<div class="qm" id="qm-card" role="dialog" aria-modal="true" aria-label="Request a quote">
+<button class="qm-x" id="qm-x" aria-label="Close"><i class="ti ti-x" aria-hidden="true"></i></button>
+<div class="qm-sup">
+<div class="qm-logo" id="qm-logo">GF</div>
+<div><div class="qm-sn" id="qm-sn">GlobalFresh Produce Ltd</div><div class="qm-sl"><i class="ti ti-map-pin" aria-hidden="true"></i><span id="qm-sl">Netherlands · Verified Supplier</span></div></div>
+</div>
+<div class="qm-h">Request a Quote</div>
+<div class="qm-sub">Complete the form below — the supplier will respond directly to your email. FFInc charges zero commission.</div>
+<form id="qm-form" onsubmit="return false">
+<div class="qm-grid">
+<div class="qm-f"><label class="qm-lb">Your Name</label><input class="qm-in" type="text" placeholder="Jane Doe"></div>
+<div class="qm-f"><label class="qm-lb">Company Name</label><input class="qm-in" type="text" placeholder="Acme Foods Ltd"></div>
+<div class="qm-f"><label class="qm-lb">Email Address</label><input class="qm-in" type="email" placeholder="you@company.com"></div>
+<div class="qm-f"><label class="qm-lb">Country</label><input class="qm-in" type="text" placeholder="United Kingdom"></div>
+<div class="qm-f"><label class="qm-lb">Product Required</label><select class="qm-se"><option>IQF Berry Blend</option><option>Tropical Fruit Mix</option><option>Organic Mixed Veg</option><option>IQF Strawberries</option><option>Custom Product</option><option>Other</option></select></div>
+<div class="qm-f"><label class="qm-lb">Quantity / MOQ Required</label><input class="qm-in" type="text" placeholder="e.g. 5 Metric Tonnes"></div>
+<div class="qm-f"><label class="qm-lb">Delivery Terms</label><select class="qm-se"><option>FOB</option><option>CIF</option><option>DDP</option><option>EXW</option></select></div>
+<div class="qm-f"><label class="qm-lb">Target Price per MT</label><input class="qm-in" type="text" placeholder="e.g. $1,200/MT"></div>
+<div class="qm-f full"><label class="qm-lb">Additional Requirements</label><textarea class="qm-ta" rows="4" placeholder="Certifications needed, packaging specs, delivery timeline, labelling requirements..."></textarea></div>
+</div>
+<button class="qm-sub-btn" type="submit"><i class="ti ti-send" aria-hidden="true"></i>Send Quote Request</button>
+<div class="qm-priv">Your details are sent directly to the supplier. FrozenFoodInc does not store quote request data or charge any commission.</div>
+</form>
+</div>
+</div>
+
+<script>
+(function(){
+/* ── Particle canvas (from index.html) ── */
+var cv=document.getElementById('pg-canvas'),cx=cv.getContext('2d'),pts=[];
+function rsz(){cv.width=window.innerWidth;cv.height=window.innerHeight;}rsz();window.addEventListener('resize',rsz);
+function mkp(){return{x:Math.random()*cv.width,y:cv.height+10,sz:Math.random()*2.5+.8,sp:Math.random()*.5+.25,op:Math.random()*.55+.25,col:Math.random()>.5?'#4A9FE0':'#2ECC9A',dr:(Math.random()-.5)*.4};}
+for(var i=0;i<30;i++){var p=mkp();p.y=Math.random()*cv.height;pts.push(p);}
+(function loop(){cx.clearRect(0,0,cv.width,cv.height);pts.forEach(function(p,i){p.y-=p.sp;p.x+=p.dr;p.op-=.0007;cx.beginPath();cx.arc(p.x,p.y,p.sz,0,Math.PI*2);cx.fillStyle=p.col;cx.globalAlpha=Math.max(0,p.op);cx.fill();cx.globalAlpha=1;if(p.y<-10||p.op<=0)pts[i]=mkp();});requestAnimationFrame(loop);})();
+
+/* ── Aurora blobs (from index.html) ── */
+gsap.to('#pa1',{x:120,y:-80,scale:1.2,duration:10,repeat:-1,yoyo:true,ease:'sine.inOut'});
+gsap.to('#pa2',{x:-130,y:60,scale:1.15,duration:13,repeat:-1,yoyo:true,ease:'sine.inOut',delay:2});
+gsap.to('#pa3',{x:80,y:-50,scale:1.1,duration:11,repeat:-1,yoyo:true,ease:'sine.inOut',delay:4});
+gsap.to('#pf-sdot',{opacity:.28,scale:.6,duration:1.4,repeat:-1,yoyo:true,ease:'sine.inOut'});
+
+/* ── Dark/light toggle (from index.html) ── */
+var modeToggle=document.getElementById('mode-toggle'),modeIcon=document.getElementById('mode-icon'),isLight=false;
+modeToggle.addEventListener('click',function(){isLight=!isLight;document.body.classList.toggle('light-mode',isLight);modeIcon.className=isLight?'ti ti-moon':'ti ti-sun';modeToggle.setAttribute('aria-label',isLight?'Switch to dark mode':'Switch to light mode');});
+
+/* ── Quote modal ── */
+var ov=document.getElementById('qm-overlay'),card=document.getElementById('qm-card');
+function openModal(){
+  ov.classList.add('open');ov.setAttribute('aria-hidden','false');
+  gsap.fromTo(ov,{opacity:0},{opacity:1,duration:.25,ease:'power2.out'});
+  gsap.fromTo(card,{scale:.94,opacity:0},{scale:1,opacity:1,duration:.35,ease:'back.out(1.4)'});
+}
+function closeModal(){
+  gsap.to(card,{scale:.94,opacity:0,duration:.2,ease:'power2.in'});
+  gsap.to(ov,{opacity:0,duration:.25,delay:.05,ease:'power2.in',onComplete:function(){ov.classList.remove('open');ov.setAttribute('aria-hidden','true');}});
+}
+document.addEventListener('click',function(e){
+  if(e.target.closest('[data-quote]')){openModal();return;}
+});
+document.getElementById('qm-x').addEventListener('click',closeModal);
+ov.addEventListener('click',function(e){if(e.target===ov)closeModal();});
+document.addEventListener('keydown',function(e){if(e.key==='Escape'&&ov.classList.contains('open'))closeModal();});
+
+/* ── Tab switching ── */
+var tabs=document.querySelectorAll('.sp-tab'),panels=document.querySelectorAll('.sp-panel');
+function animatePanel(panel){
+  gsap.fromTo(panel.querySelectorAll('.ov-box,.prod-card,.cert-card,.rev-card'),
+    {opacity:0,y:24},{opacity:1,y:0,stagger:.08,duration:.6,ease:'power3.out'});
+}
+tabs.forEach(function(t){t.addEventListener('click',function(){
+  tabs.forEach(function(x){x.classList.remove('on');});
+  panels.forEach(function(p){p.style.display='none';});
+  t.classList.add('on');
+  var target=document.getElementById(t.getAttribute('data-panel'));
+  target.style.display='block';
+  animatePanel(target);
+});});
+
+/* ── Hero entrance timeline ── */
+var htl=gsap.timeline({defaults:{ease:'power3.out'}});
+htl.fromTo('#sp-logo',{scale:.8,opacity:0},{scale:1,opacity:1,duration:.6},0)
+   .fromTo('#sp-badges',{y:16,opacity:0},{y:0,opacity:1,duration:.55},.1)
+   .fromTo('#sp-name',{y:24,opacity:0},{y:0,opacity:1,duration:.65},.15)
+   .fromTo('#sp-meta',{y:18,opacity:0},{y:0,opacity:1,duration:.55},.25)
+   .fromTo('#sp-rating',{y:16,opacity:0},{y:0,opacity:1,duration:.5},.32)
+   .fromTo('#sp-stats',{y:16,opacity:0},{y:0,opacity:1,duration:.55},.4)
+   .fromTo('#sp-actions',{y:14,opacity:0},{y:0,opacity:1,duration:.5},.48);
+
+/* ── Animate the default (Overview) panel on load ── */
+animatePanel(document.getElementById('panel-overview'));
+
+/* ── Similar suppliers slider (Change 2) ── */
+var simTrack=document.getElementById('sim-track');
+var simCards=simTrack?simTrack.querySelectorAll('.sim-card'):[];
+var simTotal=simCards.length;
+var simCurrent=0;
+var simAutoplay;
+function simGoTo(index){
+  simCurrent=(index+simTotal)%simTotal;
+  var cardW=simCards[0]?simCards[0].offsetWidth+14:0;
+  gsap.to(simTrack,{x:-(simCurrent*cardW),duration:.55,ease:'power2.inOut'});
+  document.querySelectorAll('.sim-dot').forEach(function(d,i){
+    d.classList.toggle('on',i===simCurrent);
+  });
+}
+function simStartAutoplay(){
+  simAutoplay=setInterval(function(){simGoTo(simCurrent+1);},3000);
+}
+function simStopAutoplay(){
+  clearInterval(simAutoplay);
+}
+var simPrev=document.querySelector('.sim-prev');
+var simNext=document.querySelector('.sim-next');
+if(simPrev&&simNext&&simTotal>0){
+  simPrev.addEventListener('click',function(){
+    simStopAutoplay();simGoTo(simCurrent-1);simStartAutoplay();
+  });
+  simNext.addEventListener('click',function(){
+    simStopAutoplay();simGoTo(simCurrent+1);simStartAutoplay();
+  });
+  /* Build dots */
+  var dotsWrap=document.createElement('div');
+  dotsWrap.className='sim-dots';
+  simCards.forEach(function(_,i){
+    var d=document.createElement('div');
+    d.className='sim-dot'+(i===0?' on':'');
+    d.addEventListener('click',function(){
+      simStopAutoplay();simGoTo(i);simStartAutoplay();
+    });
+    dotsWrap.appendChild(d);
+  });
+  simTrack.parentNode.parentNode.parentNode.appendChild(dotsWrap);
+  /* Pause on hover */
+  simTrack.addEventListener('mouseenter',simStopAutoplay);
+  simTrack.addEventListener('mouseleave',simStartAutoplay);
+  /* Recalculate on resize */
+  window.addEventListener('resize',function(){simGoTo(simCurrent);});
+  simStartAutoplay();
+}
+
+/* ── Sourcing Intelligence entrance (Change 3) ── */
+var siSec=document.querySelector('.si-section');
+if(siSec){
+  var siObs=new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){
+        gsap.fromTo('.si-head',{opacity:0,y:20},{opacity:1,y:0,duration:.6,ease:'power3.out'});
+        gsap.fromTo('.si-card',{opacity:0,y:28,scale:.97},{opacity:1,y:0,scale:1,duration:.65,stagger:.1,ease:'power3.out'});
+        siObs.unobserve(e.target);
+      }
+    });
+  },{threshold:.15});
+  siObs.observe(siSec);
+}
+})();
+</script>
+</body>
+</html>
