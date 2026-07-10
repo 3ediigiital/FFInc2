@@ -595,6 +595,69 @@ body.light-mode .scta-sub { color: #3A5E75 !important; }
     font-size: 11.5px;
   }
 }
+@media (max-width: 768px) {
+
+  /* Footer grid — single column on mobile */
+  .pf-main {
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+  }
+
+  .pf-grid {
+    grid-template-columns: 1fr !important;
+    gap: 24px !important;
+  }
+
+  .pf-desc {
+    max-width: 100% !important;
+  }
+
+  .pf-bot {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 8px !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+  }
+
+  .pf-legal {
+    flex-wrap: wrap !important;
+    gap: 12px !important;
+  }
+
+  .pf-social {
+    flex-wrap: wrap !important;
+  }
+}
+
+@media (max-width: 480px) {
+
+  .pf-main {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+    padding-top: 32px !important;
+    padding-bottom: 20px !important;
+  }
+
+  .pf-grid {
+    gap: 20px !important;
+  }
+
+  .pf-bot {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+    gap: 6px !important;
+  }
+
+  .pf-copy {
+    font-size: 10px !important;
+  }
+
+  .pf-legal a,
+  .pf-legal span {
+    font-size: 10px !important;
+  }
+}
 </style>
 </head>
 <body>
