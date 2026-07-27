@@ -1,0 +1,37 @@
+<!--
+PASTE THIS ENTIRE BLOCK INTO A BREAKDANCE CODE ELEMENT
+IN THE GLOBAL HEADER BUILDER
+-->
+<style>
+/* ── Primary nav bar ── */
+.pn{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(5,13,24,.72);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid rgba(74,159,224,.12);padding:0 48px;height:66px;display:flex;align-items:center;justify-content:space-between}
+.pn-logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+
+/* ── Logo image (replaces snowflake icon box + wordmark) ── */
+.pn-logo-img{height:40px;width:auto;display:block;transition:filter 0.3s ease}
+/* Dark mode (default) — render as solid white silhouette */
+.pn-logo-img{filter:brightness(0) invert(1)}
+/* Light mode — show logo in its true original colors */
+body.light-mode .pn-logo-img{filter:none}
+
+/* ── Nav links ── */
+.pn-links{display:flex;align-items:center;gap:28px}
+.pn-links a{font-size:13px;color:#9BBFD8;text-decoration:none;transition:color .2s}
+.pn-links a:hover{color:#fff}
+.pn-div{width:1px;height:18px;background:rgba(74,159,224,.2)}
+
+/* ── "List Your Business" CTA ── */
+.pn-cta{background:linear-gradient(135deg,#4A9FE0,#2D7FC4);color:#fff;border:none;padding:10px 22px;border-radius:9px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',system-ui;box-shadow:0 4px 18px rgba(74,159,224,.4);transition:transform .15s,box-shadow .15s}
+.pn-cta:hover{transform:translateY(-1px);box-shadow:0 6px 26px rgba(74,159,224,.62)}
+
+/* ── Dark/light mode toggle button (JS logic loads site-wide via main.js) ── */
+#mode-toggle{width:34px;height:34px;border-radius:50%;border:1px solid rgba(74,159,224,0.28);background:rgba(74,159,224,0.08);color:#8DCAF2;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.2s;flex-shrink:0;padding:0}
+#mode-toggle:hover{background:rgba(74,159,224,0.18);border-color:rgba(74,159,224,0.5);color:#fff;transform:scale(1.08)}
+#mode-toggle i{font-size:15px}
+body.light-mode #mode-toggle{border-color:rgba(30,107,171,0.4);background:rgba(30,107,171,0.12);color:#1E6BAB}
+</style>
+
+<nav class="pn" aria-label="Primary navigation">
+<a class="pn-logo" href="/"><img src="https://frozenfoodinc.com/wp-content/uploads/2023/12/FFinc_cropped.png" alt="FrozenFoodInc" class="pn-logo-img"></a>
+<div class="pn-links"><a href="#">Database</a><a href="#">Services</a><a href="#">For Suppliers</a><div class="pn-div"></div><a href="#">Sign In</a><button id="mode-toggle" aria-label="Switch to light mode" title="Toggle light/dark mode"><i class="ti ti-sun" id="mode-icon"></i></button><button class="pn-cta">List Your Business</button></div>
+</nav>
