@@ -46,6 +46,11 @@ function ffinc2_enqueue_assets() {
 add_filter('theme_page_templates', 'ffinc2_register_templates');
 function ffinc2_register_templates($templates) {
     $templates['ffinc2-home.php'] = 'FFInc 2.0 — Homepage';
+    $templates['ffinc2-category-fruits-veg.php'] = 'FFInc 2.0 — Category: Fruits & Veg';
+    $templates['ffinc2-category-poultry.php']    = 'FFInc 2.0 — Category: Poultry';
+    $templates['ffinc2-category-beef-meat.php']  = 'FFInc 2.0 — Category: Beef & Meat';
+    $templates['ffinc2-category-seafood.php']    = 'FFInc 2.0 — Category: Seafood';
+    $templates['ffinc2-category-services.php']   = 'FFInc 2.0 — Category: Services';
     return $templates;
 }
 
