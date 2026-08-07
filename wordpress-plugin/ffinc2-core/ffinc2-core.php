@@ -53,6 +53,7 @@ function ffinc2_register_templates($templates) {
     $templates['ffinc2-category-services.php']   = 'FFInc 2.0 — Category: Services';
     $templates['ffinc2-gd-archive-suppliers.php'] = 'FFInc 2.0 — GD Archive: Suppliers';
     $templates['ffinc2-gd-archive-services.php']  = 'FFInc 2.0 — GD Archive: Services';
+    $templates['ffinc2-gd-details.php']           = 'FFInc 2.0 — GD Details';
     return $templates;
 }
 
@@ -83,6 +84,18 @@ function ffinc2_load_gd_archive_template($template) {
     }
     if (is_post_type_archive('gd_services') || is_tax('gd_servicescategory')) {
         $f = FFINC2_PATH . 'templates/ffinc2-gd-archive-services.php';
+        if (file_exists($f)) return $f;
+    }
+    return $template;
+}
+
+// Route GeoDirectory single listing (Details) views for both CPTs to our
+// custom Details template. Same priority-99 pattern as the archive router:
+// one template branches internally between Supplier and Service modes.
+add_filter('template_include', 'ffinc2_load_gd_details_template', 99);
+function ffinc2_load_gd_details_template($template) {
+    if (is_singular('gd_supplier') || is_singular('gd_services')) {
+        $f = FFINC2_PATH . 'templates/ffinc2-gd-details.php';
         if (file_exists($f)) return $f;
     }
     return $template;
