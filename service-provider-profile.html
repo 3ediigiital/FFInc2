@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>FrozenFoodInc — Service Provider Profile Template</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.11.0/dist/tabler-icons.min.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',system-ui,sans-serif;background:#050D18;color:#fff;width:100%}
+.pn{background:rgba(5,13,24,.92);backdrop-filter:blur(20px);border-bottom:1px solid rgba(74,159,224,.12);padding:0 48px;height:66px;display:flex;align-items:center;justify-content:space-between;position:fixed;top:0;left:0;right:0;z-index:100}
+.pn-logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.pn-icon{width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,#4A9FE0,#1E6BAB);display:flex;align-items:center;justify-content:center;box-shadow:0 0 20px rgba(74,159,224,.5)}
+.pn-wm{font-family:'Plus Jakarta Sans',system-ui;font-size:16px;font-weight:800;letter-spacing:-.3px;color:#fff}
+.pn-wm em{color:#4A9FE0;font-style:normal}
+.pn-links{display:flex;align-items:center;gap:28px}
+.pnl{font-size:13px;color:#9BBFD8;text-decoration:none;cursor:pointer}
+.pn-cta{background:linear-gradient(135deg,#4A9FE0,#2D7FC4);color:#fff;border:none;padding:10px 22px;border-radius:9px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',system-ui}
+
+.csn{background:rgba(6,15,26,.96);border-bottom:1px solid rgba(74,159,224,.1);padding:0 48px;display:flex;align-items:center;gap:2px;position:fixed;top:66px;left:0;right:0;z-index:99}
+.csn-item{display:inline-flex;align-items:center;gap:5px;padding:11px 13px;font-size:11.5px;font-weight:500;color:#9BBFD8;cursor:pointer;border-bottom:2px solid transparent;text-decoration:none}
+.csn-item.on{color:#A78BFA;border-bottom-color:#A78BFA;font-weight:600}
+.csn-d{width:1px;height:18px;background:rgba(74,159,224,.12);margin:0 3px}
+
+.page-body{padding-top:110px}
+
+.sbc{padding:14px 48px 0}
+.sbc-inner{display:flex;align-items:center;gap:6px;font-size:11px;color:#6B9DB7}
+.sbc-inner em{color:#A78BFA;font-style:normal;font-weight:500}
+
+.sp-hero{position:relative;background:linear-gradient(180deg,#050D18,#0D0818);padding:24px 48px 32px;overflow:hidden}
+.sp-aura{position:absolute;border-radius:50%;filter:blur(70px);pointer-events:none}
+.sp-inner{position:relative;z-index:2;display:flex;gap:24px;align-items:flex-start;max-width:1200px;margin:0 auto}
+.sp-logo{width:80px;height:80px;border-radius:20px;background:rgba(167,139,250,.12);border:2px solid rgba(167,139,250,.3);display:flex;align-items:center;justify-content:center;font-family:'Plus Jakarta Sans',system-ui;font-size:24px;font-weight:800;color:#A78BFA;flex-shrink:0;box-shadow:0 0 40px rgba(167,139,250,.15)}
+.sp-info{flex:1;min-width:0}
+.sp-badges{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap}
+.sp-badge{font-size:10px;font-weight:600;padding:3px 10px;border-radius:10px;display:inline-flex;align-items:center;gap:4px}
+.sp-badge.cat{background:rgba(167,139,250,.1);color:#A78BFA;border:1px solid rgba(167,139,250,.25)}
+.sp-badge.feat{background:rgba(245,158,11,.12);color:#F59E0B;border:1px solid rgba(245,158,11,.28)}
+.sp-badge.ver{background:rgba(46,204,154,.1);color:#52DEB5;border:1px solid rgba(46,204,154,.22)}
+.sp-name{font-family:'Plus Jakarta Sans',system-ui;font-size:26px;font-weight:800;letter-spacing:-.6px;margin-bottom:6px;line-height:1.1}
+.sp-meta{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:14px}
+.sp-m{font-size:12px;color:#9BBFD8;display:flex;align-items:center;gap:5px}
+.sp-m i{font-size:12px;color:#A78BFA}
+.sp-rating{display:flex;align-items:center;gap:8px;margin-bottom:18px}
+.sp-stars{font-size:16px;color:#F59E0B;letter-spacing:2px}
+.sp-score{font-family:'Plus Jakarta Sans',system-ui;font-size:22px;font-weight:800;color:#fff}
+.sp-rct{font-size:12px;color:#9BBFD8}
+.sp-stats{display:flex;gap:0;width:fit-content;background:rgba(18,34,52,.5);border:1px solid rgba(167,139,250,.18);border-radius:12px;overflow:hidden;margin-bottom:18px}
+.sps{padding:10px 18px;text-align:center;border-right:1px solid rgba(167,139,250,.12)}
+.sps:last-child{border-right:none}
+.sps-v{font-family:'Plus Jakarta Sans',system-ui;font-size:16px;font-weight:800;color:#A78BFA;display:block}
+.sps-l{font-size:9.5px;color:#9BBFD8;letter-spacing:.05em;text-transform:uppercase}
+.sp-actions{display:flex;gap:10px;align-items:center}
+.sp-btn-p{background:linear-gradient(135deg,#A78BFA,#8B5CF6);color:#fff;border:none;padding:11px 22px;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Inter',system-ui;display:inline-flex;align-items:center;gap:6px;box-shadow:0 6px 20px rgba(167,139,250,.35)}
+.sp-btn-s{background:transparent;border:1px solid rgba(167,139,250,.28);color:#A78BFA;padding:11px 18px;border-radius:10px;font-size:13px;font-weight:500;cursor:pointer;font-family:'Inter',system-ui;display:inline-flex;align-items:center;gap:6px}
+
+.tab-nav{background:rgba(6,15,26,.96);backdrop-filter:blur(14px);border-bottom:1px solid rgba(74,159,224,.1);padding:0 48px;display:flex;align-items:center}
+.tab-item{display:inline-flex;align-items:center;gap:6px;padding:13px 18px;font-size:12.5px;font-weight:500;color:#9BBFD8;cursor:pointer;border-bottom:2px solid transparent;transition:all .2s;white-space:nowrap}
+.tab-item.on{color:#A78BFA;border-bottom-color:#A78BFA;font-weight:600}
+.tab-item:hover:not(.on){color:#fff;border-bottom-color:rgba(74,159,224,.3)}
+.tab-badge{margin-left:4px;font-size:10px;background:rgba(167,139,250,.12);color:#A78BFA;border:1px solid rgba(167,139,250,.25);padding:1px 6px;border-radius:8px}
+
+.tab-content{display:none;padding:28px 48px;background:#050D18;max-width:1200px;margin:0 auto}
+.tab-content.on{display:block}
+
+.ov-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px}
+.ov-box{background:rgba(18,34,52,.48);backdrop-filter:blur(12px);border:1px solid rgba(74,159,224,.1);border-radius:14px;padding:20px;position:relative;overflow:hidden}
+.ov-box::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(167,139,250,.35),transparent)}
+.ov-bt{font-family:'Plus Jakarta Sans',system-ui;font-size:14px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:7px}
+.ov-bt i{font-size:14px;color:#A78BFA}
+.ov-text{font-size:13px;color:#9BBFD8;line-height:1.75}
+.ov-bullet{display:flex;align-items:flex-start;gap:8px;margin-bottom:8px}
+.ov-bullet:last-child{margin-bottom:0}
+.ov-dot{width:6px;height:6px;border-radius:50%;background:#A78BFA;flex-shrink:0;margin-top:6px}
+.ov-btext{font-size:12.5px;color:#9BBFD8;line-height:1.55}
+.ov-btext strong{color:#fff;font-weight:500}
+.ov-markets{display:flex;flex-wrap:wrap;gap:6px}
+.ov-mkt{font-size:11px;padding:4px 10px;border-radius:8px;background:rgba(167,139,250,.08);border:1px solid rgba(167,139,250,.15);color:#C4B5FD}
+.ov-facts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.ov-fact{background:rgba(10,22,40,.5);border:1px solid rgba(74,159,224,.1);border-radius:9px;padding:10px 12px}
+.ov-fv{font-family:'Plus Jakarta Sans',system-ui;font-size:15px;font-weight:700;color:#fff;display:block;margin-bottom:2px}
+.ov-fl{font-size:10px;color:#6B9DB7;text-transform:uppercase;letter-spacing:.05em}
+
+.prod-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+.prod-card{background:rgba(18,34,52,.48);backdrop-filter:blur(12px);border:1px solid rgba(74,159,224,.1);border-radius:14px;padding:18px;position:relative;overflow:hidden}
+.prod-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(167,139,250,.4),transparent)}
+.prod-icon{width:40px;height:40px;border-radius:10px;background:rgba(167,139,250,.1);border:1px solid rgba(167,139,250,.22);display:flex;align-items:center;justify-content:center;margin-bottom:12px}
+.prod-name{font-family:'Plus Jakarta Sans',system-ui;font-size:15px;font-weight:700;margin-bottom:6px}
+.prod-desc{font-size:12px;color:#9BBFD8;line-height:1.6;margin-bottom:12px}
+.prod-specs{display:flex;flex-direction:column;gap:5px;margin-bottom:12px}
+.prod-spec{display:flex;justify-content:space-between;font-size:11.5px;padding:5px 0;border-bottom:1px solid rgba(74,159,224,.08)}
+.prod-spec:last-child{border-bottom:none}
+.prod-spec span:first-child{color:#6B9DB7}
+.prod-spec span:last-child{color:#fff;font-weight:500}
+.prod-tags{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:12px}
+.prod-tag{font-size:9.5px;padding:2px 7px;border-radius:5px;background:rgba(74,159,224,.08);border:1px solid rgba(74,159,224,.14);color:#8DCAF2}
+.prod-rqbtn{width:100%;background:linear-gradient(135deg,#A78BFA,#8B5CF6);color:#fff;border:none;padding:8px;border-radius:8px;font-size:11.5px;font-weight:700;cursor:pointer;font-family:'Inter',system-ui;display:flex;align-items:center;justify-content:center;gap:5px}
+
+.cert-tier-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px;padding:14px 18px;background:rgba(167,139,250,.06);border:1px solid rgba(167,139,250,.2);border-radius:12px}
+.cert-tier-left{display:flex;align-items:center;gap:10px}
+.cert-verified-badge{display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg,rgba(167,139,250,.18),rgba(139,92,246,.1));border:1px solid rgba(167,139,250,.4);border-radius:10px;padding:6px 14px;font-size:11.5px;font-weight:700;color:#A78BFA}
+.cert-tier-desc{font-size:12px;color:#9BBFD8;line-height:1.5}
+.cert-tier-desc strong{color:#fff}
+.cert-premium-tag{font-size:10px;font-weight:600;padding:3px 10px;border-radius:8px;background:rgba(245,158,11,.1);color:#F59E0B;border:1px solid rgba(245,158,11,.25)}
+.cert-t1{margin-bottom:26px}
+.cert-t1-header{font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#3A5E75;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.cert-t1-header::after{content:'';flex:1;height:1px;background:rgba(74,159,224,.1)}
+.cert-declared-grid{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+.cert-pill{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:10px;background:rgba(18,34,52,.6);border:1px solid rgba(74,159,224,.18);font-size:12px;font-weight:500;color:#9BBFD8}
+.cert-pill i{font-size:12px;color:#A78BFA}
+.cert-t2-header{font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#A78BFA;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.cert-t2-header::after{content:'';flex:1;height:1px;background:rgba(167,139,250,.15)}
+.cert-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.cert-card{background:rgba(18,34,52,.48);backdrop-filter:blur(12px);border:1px solid rgba(74,159,224,.1);border-radius:14px;padding:18px;position:relative;overflow:hidden}
+.cert-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(167,139,250,.4),transparent)}
+.cert-verified-stamp{position:absolute;top:12px;right:12px;display:inline-flex;align-items:center;gap:3px;font-size:9px;font-weight:600;color:#52DEB5;background:rgba(46,204,154,.1);border:1px solid rgba(46,204,154,.22);border-radius:7px;padding:2px 7px}
+.cert-icon{width:44px;height:44px;border-radius:11px;background:rgba(167,139,250,.1);border:1px solid rgba(167,139,250,.22);display:flex;align-items:center;justify-content:center;margin-bottom:11px}
+.cert-name{font-family:'Plus Jakarta Sans',system-ui;font-size:14px;font-weight:700;margin-bottom:3px}
+.cert-body{font-size:10.5px;color:#A78BFA;margin-bottom:8px}
+.cert-scope{font-size:11.5px;color:#9BBFD8;line-height:1.6;margin-bottom:11px}
+.cert-valid{display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:600;padding:3px 10px;border-radius:9px;background:rgba(46,204,154,.1);color:#52DEB5;border:1px solid rgba(46,204,154,.22)}
+
+.rev-agg{display:flex;align-items:center;gap:16px;margin-bottom:24px;padding:18px 20px;background:rgba(18,34,52,.4);border:1px solid rgba(74,159,224,.1);border-radius:14px}
+.rev-score{font-family:'Plus Jakarta Sans',system-ui;font-size:48px;font-weight:800;color:#fff;line-height:1}
+.rev-stars-lg{font-size:20px;color:#F59E0B;letter-spacing:3px;display:block;margin-bottom:4px}
+.rev-ct{font-size:12px;color:#9BBFD8}
+.rev-div{width:1px;height:48px;background:rgba(74,159,224,.18)}
+.rev-bars{flex:1}
+.rev-bar-row{display:flex;align-items:center;gap:8px;margin-bottom:5px}
+.rev-bar-row:last-child{margin-bottom:0}
+.rev-bar-lbl{font-size:10.5px;color:#F59E0B;width:12px;flex-shrink:0}
+.rev-bar-track{flex:1;height:5px;background:rgba(74,159,224,.12);border-radius:3px;overflow:hidden}
+.rev-bar-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,#F59E0B,#FCD34D)}
+.rev-bar-ct{font-size:10px;color:#6B9DB7;width:16px;text-align:right}
+.rev-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.rev-card{background:rgba(18,34,52,.48);backdrop-filter:blur(12px);border:1px solid rgba(74,159,224,.1);border-radius:14px;padding:18px;position:relative;overflow:hidden}
+.rev-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(74,159,224,.3),transparent)}
+.rev-rstars{font-size:13px;color:#F59E0B;margin-bottom:10px;letter-spacing:2px}
+.rev-text{font-size:12.5px;color:#E8F4FD;line-height:1.7;margin-bottom:14px;font-style:italic}
+.rev-foot{display:flex;align-items:center;gap:10px;border-top:1px solid rgba(74,159,224,.08);padding-top:12px}
+.rev-av{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;flex-shrink:0;font-family:'Plus Jakarta Sans',system-ui}
+.rev-name{font-size:12px;font-weight:600;color:#fff;margin-bottom:2px}
+.rev-role{font-size:10.5px;color:#9BBFD8}
+.rev-tag{display:inline-flex;align-items:center;gap:3px;font-size:9.5px;color:#C4B5FD;background:rgba(167,139,250,.08);border:1px solid rgba(167,139,250,.2);border-radius:8px;padding:2px 8px;margin-top:4px}
+
+.sim{padding:24px 48px 48px;background:linear-gradient(180deg,#050D18,#0A0614);border-top:1px solid rgba(74,159,224,.08)}
+.sim-inner{max-width:1200px;margin:0 auto}
+.sim-h{font-family:'Plus Jakarta Sans',system-ui;font-size:17px;font-weight:700;margin-bottom:14px}
+.sim-h em{color:#A78BFA;font-style:normal}
+.sim-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.sim-card{background:rgba(18,34,52,.48);border:1px solid rgba(74,159,224,.1);border-radius:12px;padding:14px;display:flex;align-items:center;gap:12px}
+.sim-logo{width:36px;height:36px;border-radius:9px;background:rgba(167,139,250,.12);border:1px solid rgba(167,139,250,.22);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#A78BFA;flex-shrink:0;font-family:'Plus Jakarta Sans',system-ui}
+.sim-info{flex:1;min-width:0}
+.sim-name{font-size:12px;font-weight:600;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sim-loc{font-size:10px;color:#9BBFD8;margin-top:2px}
+.sim-rt{font-size:10px;color:#F59E0B;margin-top:3px}
+
+@media (max-width:900px){
+.pn,.csn{padding:0 20px}
+.sp-hero,.tab-content,.sim{padding-left:20px;padding-right:20px}
+.sp-inner{flex-direction:column}
+.ov-grid,.prod-grid,.cert-grid,.rev-grid,.sim-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<nav class="pn" aria-label="Primary navigation">
+<a class="pn-logo" href="#"><div class="pn-icon"><i class="ti ti-snowflake" style="font-size:16px;color:#fff"></i></div><span class="pn-wm">FrozenFood<em>Inc</em></span></a>
+<div class="pn-links"><a class="pnl" href="#">Database</a><a class="pnl" href="#">Services</a><a class="pnl" href="#">For Suppliers</a><a class="pnl" href="#">Sign In</a><button class="pn-cta">List Your Business</button></div>
+</nav>
+
+<div class="csn">
+<a class="csn-item" href="#"><i class="ti ti-leaf"></i>Fruits &amp; Veg</a>
+<div class="csn-d"></div>
+<a class="csn-item" href="#"><i class="ti ti-feather"></i>Poultry</a>
+<div class="csn-d"></div>
+<a class="csn-item" href="#"><i class="ti ti-flame"></i>Beef &amp; Meat</a>
+<div class="csn-d"></div>
+<a class="csn-item" href="#"><i class="ti ti-fish"></i>Seafood</a>
+<div class="csn-d"></div>
+<a class="csn-item on" href="#"><i class="ti ti-truck"></i>Services</a>
+</div>
+
+<div class="page-body">
+
+<div class="sbc">
+<div class="sbc-inner"><span>Database</span><i class="ti ti-chevron-right" style="font-size:10px"></i><span>Cold Chain Services</span><i class="ti ti-chevron-right" style="font-size:10px"></i><em>ColdFlow Logistics</em></div>
+</div>
+
+<div class="sp-hero">
+<div class="sp-aura" style="width:380px;height:380px;background:radial-gradient(circle,rgba(167,139,250,.16),transparent 65%);top:-100px;right:-60px"></div>
+<div class="sp-aura" style="width:280px;height:280px;background:radial-gradient(circle,rgba(74,159,224,.1),transparent 65%);bottom:-60px;left:-40px"></div>
+<div class="sp-inner">
+<div class="sp-logo">CF</div>
+<div class="sp-info">
+<div class="sp-badges">
+<span class="sp-badge cat"><i class="ti ti-truck" style="font-size:10px"></i>Cold Chain Services</span>
+<span class="sp-badge feat"><i class="ti ti-star" style="font-size:9px"></i>Featured</span>
+<span class="sp-badge ver"><i class="ti ti-circle-check" style="font-size:9px"></i>Verified Provider</span>
+</div>
+<div class="sp-name">ColdFlow Logistics</div>
+<div class="sp-meta">
+<span class="sp-m"><i class="ti ti-map-pin"></i>Rotterdam, Netherlands</span>
+<span class="sp-m"><i class="ti ti-calendar"></i>Est. 2001</span>
+<span class="sp-m"><i class="ti ti-users"></i>80–150 employees</span>
+<span class="sp-m"><i class="ti ti-globe"></i>coldflowlogistics.nl</span>
+</div>
+<div class="sp-rating">
+<span class="sp-stars">★★★★★</span>
+<span class="sp-score">4.9</span>
+<span class="sp-rct">Based on 28 verified reviews</span>
+</div>
+<div class="sp-stats">
+<div class="sps"><span class="sps-v">Europe-wide</span><span class="sps-l">Coverage Region</span></div>
+<div class="sps"><span class="sps-v">50,000 m³</span><span class="sps-l">Storage Capacity</span></div>
+<div class="sps"><span class="sps-v">48h</span><span class="sps-l">Typical Turnaround</span></div>
+<div class="sps"><span class="sps-v">Est. 2001</span><span class="sps-l">In Business Since</span></div>
+</div>
+<div class="sp-actions">
+<button class="sp-btn-p"><i class="ti ti-message-circle" style="font-size:14px"></i>Request a Quote</button>
+<button class="sp-btn-s"><i class="ti ti-bookmark" style="font-size:14px"></i>Save Provider</button>
+<button class="sp-btn-s"><i class="ti ti-share" style="font-size:14px"></i>Share</button>
+</div>
+</div>
+</div>
+</div>
+
+<div class="tab-nav">
+<div class="tab-item on" onclick="switchTab('overview',this)"><i class="ti ti-layout-list" style="font-size:13px"></i>Overview</div>
+<div class="tab-item" onclick="switchTab('services',this)"><i class="ti ti-truck" style="font-size:13px"></i>Services</div>
+<div class="tab-item" onclick="switchTab('certs',this)"><i class="ti ti-shield-check" style="font-size:13px"></i>Certifications</div>
+<div class="tab-item" onclick="switchTab('reviews',this)"><i class="ti ti-star" style="font-size:13px"></i>Reviews <span class="tab-badge">28</span></div>
+</div>
+
+<div class="tab-content on" id="tab-overview">
+<div class="ov-grid">
+<div class="ov-box">
+<div class="ov-bt"><i class="ti ti-building"></i>About ColdFlow Logistics</div>
+<p class="ov-text">ColdFlow Logistics operates one of Northern Europe's largest independent cold storage and distribution networks, headquartered in the Port of Rotterdam. Founded in 2001, we provide bonded cold storage, refrigerated transport and full 3PL distribution services for frozen food suppliers and buyers across the continent.</p>
+<p class="ov-text" style="margin-top:10px">Our 50,000 m³ facility operates at temperatures down to -25°C, with direct port access enabling fast container turnaround for import and export shipments.</p>
+</div>
+<div class="ov-box">
+<div class="ov-bt"><i class="ti ti-check"></i>Why Choose ColdFlow</div>
+<div class="ov-bullet"><div class="ov-dot"></div><div class="ov-btext"><strong>Port-side location</strong> — direct access to Rotterdam port, Europe's largest, cuts transit time significantly</div></div>
+<div class="ov-bullet"><div class="ov-dot"></div><div class="ov-btext"><strong>Full temperature range</strong> — chilled through deep-frozen (-25°C) in one facility</div></div>
+<div class="ov-bullet"><div class="ov-dot"></div><div class="ov-btext"><strong>Owned reefer fleet</strong> — no third-party subcontracting for core routes</div></div>
+<div class="ov-bullet"><div class="ov-dot"></div><div class="ov-btext"><strong>48-hour turnaround</strong> — among the fastest port-to-warehouse times in the region</div></div>
+<div class="ov-bullet"><div class="ov-dot"></div><div class="ov-btext"><strong>Dedicated account management</strong> — single point of contact for all shipments</div></div>
+</div>
+<div class="ov-box">
+<div class="ov-bt"><i class="ti ti-world"></i>Coverage Regions</div>
+<div class="ov-markets">
+<span class="ov-mkt">🇳🇱 Netherlands</span><span class="ov-mkt">🇩🇪 Germany</span><span class="ov-mkt">🇧🇪 Belgium</span><span class="ov-mkt">🇫🇷 France</span><span class="ov-mkt">🇬🇧 UK</span><span class="ov-mkt">🇵🇱 Poland</span><span class="ov-mkt">🇦🇹 Austria</span><span class="ov-mkt">🇨🇭 Switzerland</span><span class="ov-mkt">🇮🇹 Northern Italy</span><span class="ov-mkt">+6 more EU regions</span>
+</div>
+</div>
+<div class="ov-box">
+<div class="ov-bt"><i class="ti ti-chart-bar"></i>Company Facts</div>
+<div class="ov-facts">
+<div class="ov-fact"><span class="ov-fv">2001</span><span class="ov-fl">Founded</span></div>
+<div class="ov-fact"><span class="ov-fv">80–150</span><span class="ov-fl">Employees</span></div>
+<div class="ov-fact"><span class="ov-fv">50,000 m³</span><span class="ov-fl">Storage Capacity</span></div>
+<div class="ov-fact"><span class="ov-fv">35</span><span class="ov-fl">Reefer Fleet Size</span></div>
+<div class="ov-fact"><span class="ov-fv">15</span><span class="ov-fl">Regions Covered</span></div>
+<div class="ov-fact"><span class="ov-fv">3</span><span class="ov-fl">Service Lines</span></div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="tab-content" id="tab-services">
+<div class="prod-grid">
+<div class="prod-card">
+<div class="prod-icon"><i class="ti ti-building-warehouse" style="font-size:20px;color:#A78BFA"></i></div>
+<div class="prod-name">Bonded Cold Storage</div>
+<div class="prod-desc">Temperature-controlled warehousing from chilled to deep-frozen, with full customs bonding for import/export shipments moving through Rotterdam port.</div>
+<div class="prod-specs">
+<div class="prod-spec"><span>Capacity</span><span>50,000 m³</span></div>
+<div class="prod-spec"><span>Temp Range</span><span>+4°C to -25°C</span></div>
+<div class="prod-spec"><span>Min. Booking</span><span>1 Pallet</span></div>
+<div class="prod-spec"><span>Access</span><span>24/7 port-side</span></div>
+</div>
+<div class="prod-tags"><span class="prod-tag">Bonded</span><span class="prod-tag">Port Access</span><span class="prod-tag">BRC Storage</span></div>
+<button class="prod-rqbtn"><i class="ti ti-message-circle" style="font-size:12px"></i>Request Quote</button>
+</div>
+<div class="prod-card">
+<div class="prod-icon"><i class="ti ti-truck" style="font-size:20px;color:#A78BFA"></i></div>
+<div class="prod-name">Refrigerated Transport</div>
+<div class="prod-desc">Owned reefer fleet covering 15 European regions, with real-time temperature monitoring and GPS tracking on every shipment.</div>
+<div class="prod-specs">
+<div class="prod-spec"><span>Fleet Size</span><span>35 Reefer Trucks</span></div>
+<div class="prod-spec"><span>Coverage</span><span>15 EU Regions</span></div>
+<div class="prod-spec"><span>Booking Lead Time</span><span>24–48h</span></div>
+<div class="prod-spec"><span>Tracking</span><span>Real-time GPS</span></div>
+</div>
+<div class="prod-tags"><span class="prod-tag">GDP Certified</span><span class="prod-tag">Live Tracking</span></div>
+<button class="prod-rqbtn"><i class="ti ti-message-circle" style="font-size:12px"></i>Request Quote</button>
+</div>
+<div class="prod-card">
+<div class="prod-icon"><i class="ti ti-route" style="font-size:20px;color:#A78BFA"></i></div>
+<div class="prod-name">Distribution &amp; 3PL</div>
+<div class="prod-desc">Full third-party logistics management — receiving, storage, order fulfillment and last-mile delivery for frozen food brands entering the EU market.</div>
+<div class="prod-specs">
+<div class="prod-spec"><span>Order Turnaround</span><span>48h</span></div>
+<div class="prod-spec"><span>Min. Contract</span><span>3 months</span></div>
+<div class="prod-spec"><span>Integration</span><span>API / EDI available</span></div>
+<div class="prod-spec"><span>Reporting</span><span>Weekly dashboards</span></div>
+</div>
+<div class="prod-tags"><span class="prod-tag">3PL</span><span class="prod-tag">API Integration</span><span class="prod-tag">ISO 22000</span></div>
+<button class="prod-rqbtn"><i class="ti ti-message-circle" style="font-size:12px"></i>Request Quote</button>
+</div>
+</div>
+</div>
+
+<div class="tab-content" id="tab-certs">
+<div class="cert-tier-bar">
+<div class="cert-tier-left">
+<div class="cert-verified-badge"><i class="ti ti-shield-check" style="font-size:13px"></i>Documents Verified</div>
+<div class="cert-tier-desc"><strong>ColdFlow Logistics</strong> has uploaded and verified all certification documents with FFInc. Documents available on request.</div>
+</div>
+<span class="cert-premium-tag">★ Premium Listing</span>
+</div>
+<div class="cert-t1">
+<div class="cert-t1-header">Declared Certifications</div>
+<div class="cert-declared-grid">
+<span class="cert-pill"><i class="ti ti-circle-check"></i>BRC Storage</span>
+<span class="cert-pill"><i class="ti ti-circle-check"></i>ISO 22000</span>
+<span class="cert-pill"><i class="ti ti-circle-check"></i>HACCP</span>
+<span class="cert-pill"><i class="ti ti-circle-check"></i>GDP Certified</span>
+</div>
+</div>
+<div class="cert-t2-header"><i class="ti ti-shield-check" style="font-size:11px"></i>Verified Documentation</div>
+<div class="cert-grid">
+<div class="cert-card">
+<div class="cert-verified-stamp"><i class="ti ti-circle-check" style="font-size:8px"></i>Verified</div>
+<div class="cert-icon"><i class="ti ti-building-warehouse" style="font-size:22px;color:#A78BFA"></i></div>
+<div class="cert-name">BRC Storage</div>
+<div class="cert-body">British Retail Consortium</div>
+<div class="cert-scope">Global Standard for Storage &amp; Distribution, covering all bonded cold storage operations at the Rotterdam facility.</div>
+<div class="cert-valid"><i class="ti ti-calendar" style="font-size:10px"></i>Valid until Sep 2025</div>
+</div>
+<div class="cert-card">
+<div class="cert-verified-stamp"><i class="ti ti-circle-check" style="font-size:8px"></i>Verified</div>
+<div class="cert-icon"><i class="ti ti-shield-check" style="font-size:22px;color:#4A9FE0"></i></div>
+<div class="cert-name">ISO 22000</div>
+<div class="cert-body">International Organization for Standardization</div>
+<div class="cert-scope">Food safety management system covering storage, handling and distribution processes.</div>
+<div class="cert-valid"><i class="ti ti-calendar" style="font-size:10px"></i>Valid until Feb 2026</div>
+</div>
+<div class="cert-card">
+<div class="cert-verified-stamp"><i class="ti ti-circle-check" style="font-size:8px"></i>Verified</div>
+<div class="cert-icon"><i class="ti ti-truck" style="font-size:22px;color:#F59E0B"></i></div>
+<div class="cert-name">GDP Certified</div>
+<div class="cert-body">Good Distribution Practice</div>
+<div class="cert-scope">Covers temperature-controlled transport standards across the entire owned reefer fleet.</div>
+<div class="cert-valid"><i class="ti ti-calendar" style="font-size:10px"></i>Valid until Nov 2025</div>
+</div>
+</div>
+</div>
+
+<div class="tab-content" id="tab-reviews">
+<div class="rev-agg">
+<div style="text-align:center">
+<div class="rev-score">4.9</div>
+<div class="rev-stars-lg">★★★★★</div>
+<div class="rev-ct">28 verified reviews</div>
+</div>
+<div class="rev-div"></div>
+<div class="rev-bars">
+<div class="rev-bar-row"><span class="rev-bar-lbl">5</span><div class="rev-bar-track"><div class="rev-bar-fill" style="width:88%"></div></div><span class="rev-bar-ct">25</span></div>
+<div class="rev-bar-row"><span class="rev-bar-lbl">4</span><div class="rev-bar-track"><div class="rev-bar-fill" style="width:11%"></div></div><span class="rev-bar-ct">3</span></div>
+<div class="rev-bar-row"><span class="rev-bar-lbl">3</span><div class="rev-bar-track"><div class="rev-bar-fill" style="width:0%"></div></div><span class="rev-bar-ct">0</span></div>
+<div class="rev-bar-row"><span class="rev-bar-lbl">2</span><div class="rev-bar-track"><div class="rev-bar-fill" style="width:0%"></div></div><span class="rev-bar-ct">0</span></div>
+<div class="rev-bar-row"><span class="rev-bar-lbl">1</span><div class="rev-bar-track"><div class="rev-bar-fill" style="width:0%"></div></div><span class="rev-bar-ct">0</span></div>
+</div>
+<div class="rev-div"></div>
+<div style="text-align:center">
+<div style="font-size:12px;color:#9BBFD8;margin-bottom:8px">All reviews from<br>verified clients</div>
+<div style="display:flex;align-items:center;justify-content:center;gap:5px;font-size:12px;color:#52DEB5"><i class="ti ti-shield-check" style="font-size:13px"></i>FFInc Verified</div>
+</div>
+</div>
+<div class="rev-grid">
+<div class="rev-card">
+<div class="rev-rstars">★★★★★</div>
+<p class="rev-text">"We route all our frozen imports through ColdFlow's Rotterdam facility. Port-side access alone saves us nearly a full day versus our previous provider. Never had a temperature excursion in three years."</p>
+<div class="rev-foot"><div class="rev-av" style="background:linear-gradient(135deg,#4A9FE0,#1E6BAB)">TB</div><div><div class="rev-name">Thomas B.</div><div class="rev-role">Supply Chain Director · Nordfrost Imports, Denmark</div><div class="rev-tag"><i class="ti ti-building-warehouse" style="font-size:9px"></i>Cold Storage</div></div></div>
+</div>
+<div class="rev-card">
+<div class="rev-rstars">★★★★★</div>
+<p class="rev-text">"Their reefer fleet tracking is excellent — we get live temperature data on every shipment. Made it easy to prove compliance to our own retail customers during audits."</p>
+<div class="rev-foot"><div class="rev-av" style="background:linear-gradient(135deg,#2ECC9A,#0F9B72)">LR</div><div><div class="rev-name">Laura R.</div><div class="rev-role">Logistics Manager · Iberia Frozen Foods, Spain</div><div class="rev-tag"><i class="ti ti-truck" style="font-size:9px"></i>Transport</div></div></div>
+</div>
+<div class="rev-card">
+<div class="rev-rstars">★★★★★</div>
+<p class="rev-text">"We onboarded ColdFlow for full 3PL when we entered the EU market. Their API integration meant our systems talked to theirs within a week. Genuinely impressed by the operation."</p>
+<div class="rev-foot"><div class="rev-av" style="background:linear-gradient(135deg,#F59E0B,#D97706)">JK</div><div><div class="rev-name">James K.</div><div class="rev-role">Operations Lead · Pacific Frozen Exports, USA</div><div class="rev-tag"><i class="ti ti-route" style="font-size:9px"></i>3PL</div></div></div>
+</div>
+<div class="rev-card">
+<div class="rev-rstars">★★★★☆</div>
+<p class="rev-text">"Solid provider overall. Storage and transport have been flawless. Onboarding paperwork took a bit longer than expected but the account manager kept us updated throughout."</p>
+<div class="rev-foot"><div class="rev-av" style="background:linear-gradient(135deg,#A78BFA,#7C3AED)">MW</div><div><div class="rev-name">Marta W.</div><div class="rev-role">Import Manager · Baltic Cold Chain, Poland</div><div class="rev-tag"><i class="ti ti-building-warehouse" style="font-size:9px"></i>Cold Storage</div></div></div>
+</div>
+</div>
+</div>
+
+<div class="sim">
+<div class="sim-inner">
+<div class="sim-h">Similar <em>Cold Chain Services</em> Providers</div>
+<div class="sim-grid">
+<div class="sim-card"><div class="sim-logo">AF</div><div class="sim-info"><div class="sim-name">ArcticFreight USA</div><div class="sim-loc"><i class="ti ti-map-pin" style="font-size:10px"></i> USA</div><div class="sim-rt">★★★★★ 4.8</div></div></div>
+<div class="sim-card"><div class="sim-logo">DC</div><div class="sim-info"><div class="sim-name">DubaiCold Facilities</div><div class="sim-loc"><i class="ti ti-map-pin" style="font-size:10px"></i> UAE</div><div class="sim-rt">★★★★★ 4.8</div></div></div>
+<div class="sim-card"><div class="sim-logo">GC</div><div class="sim-info"><div class="sim-name">GlobalCold Network</div><div class="sim-loc"><i class="ti ti-map-pin" style="font-size:10px"></i> Switzerland</div><div class="sim-rt">★★★★★ 4.9</div></div></div>
+</div>
+</div>
+</div>
+
+</div>
+
+<script>
+function switchTab(id,el){
+  document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('on'));
+  document.querySelectorAll('.tab-item').forEach(t=>t.classList.remove('on'));
+  document.getElementById('tab-'+id).classList.add('on');
+  el.classList.add('on');
+}
+</script>
+</body>
+</html>
