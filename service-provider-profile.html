@@ -158,11 +158,217 @@ body{font-family:'Inter',system-ui,sans-serif;background:#050D18;color:#fff;widt
 .sim-loc{font-size:10px;color:#9BBFD8;margin-top:2px}
 .sim-rt{font-size:10px;color:#F59E0B;margin-top:3px}
 
+.pf{background:#040A12;position:relative;overflow:hidden}
+.pf-topglow{position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent 5%,rgba(74,159,224,.28) 35%,rgba(46,204,154,.2) 65%,transparent 95%);z-index:1}
+.pf-bgaura{position:absolute;top:-150px;left:50%;transform:translateX(-50%);width:800px;height:320px;background:radial-gradient(ellipse,rgba(74,159,224,.055),transparent 70%);pointer-events:none}
+.pf-gbg{position:absolute;inset:0;background-image:linear-gradient(rgba(74,159,224,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(74,159,224,.025) 1px,transparent 1px);background-size:52px 52px;pointer-events:none;mask-image:radial-gradient(ellipse 90% 60% at 50% 0%,black,transparent)}
+.pf-main{position:relative;z-index:2;padding:64px 32px 40px;max-width:100%;margin:0 auto}
+.pf-grid{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:32px;margin-bottom:48px}
+.pf-logo{display:flex;align-items:center;gap:10px;text-decoration:none;margin-bottom:14px}
+.pf-li{width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,#4A9FE0,#1E6BAB);display:flex;align-items:center;justify-content:center;box-shadow:0 0 18px rgba(74,159,224,.44)}
+.pf-lt{font-family:'Plus Jakarta Sans',system-ui;font-size:16px;font-weight:800;letter-spacing:-.3px;color:#fff}
+.pf-lt em{color:#4A9FE0;font-style:normal}
+.pf-desc{font-size:13px;color:#6B9DB7;line-height:1.7;margin-bottom:20px;max-width:240px}
+.pf-social{display:flex;gap:8px}
+.pf-si{width:34px;height:34px;border-radius:9px;border:1px solid rgba(74,159,224,.2);display:flex;align-items:center;justify-content:center;color:#6B9DB7;cursor:pointer;transition:all .2s;text-decoration:none}
+.pf-si:hover{color:#4A9FE0;border-color:rgba(74,159,224,.48);background:rgba(74,159,224,.08);transform:translateY(-2px)}
+.pf-ct{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#3A5E75;margin-bottom:18px;display:flex;align-items:center;gap:8px}
+.pf-ct::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,rgba(74,159,224,.15),transparent)}
+.pf-lk{display:flex;align-items:center;gap:7px;font-size:13px;color:#9BBFD8;margin-bottom:11px;cursor:pointer;transition:color .2s,transform .2s;text-decoration:none}
+.pf-lk i{font-size:11px;color:#3A5E75;transition:color .2s;flex-shrink:0}
+.pf-lk:hover{color:#8DCAF2;transform:translateX(5px)}
+.pf-lk:hover i{color:#4A9FE0}
+.pf-new{display:inline-flex;align-items:center;font-size:9.5px;font-weight:600;padding:2px 7px;border-radius:8px;background:rgba(46,204,154,.1);border:1px solid rgba(46,204,154,.22);color:#52DEB5;margin-left:5px}
+.pf-bot{border-top:1px solid rgba(74,159,224,.1);padding:18px 32px;display:flex;align-items:center;justify-content:space-between;gap:16px;position:relative;z-index:2;max-width:100%;margin:0 auto}
+.pf-copy{font-size:11px;color:#3A5E75}
+.pf-status{display:flex;align-items:center;gap:7px;font-size:11px;color:#52DEB5}
+.pf-sdot{width:7px;height:7px;border-radius:50%;background:#2ECC9A;box-shadow:0 0 9px #2ECC9A}
+.pf-legal{display:flex;gap:18px}
+.pf-legal a{font-size:11px;color:#3A5E75;text-decoration:none;transition:color .2s;cursor:pointer}
+.pf-legal a:hover{color:#6B9DB7}
+
+/* ============================================================
+   Light-mode parity (INERT).
+   This file has no mode-toggle button or JS and will never switch
+   modes at runtime. These rules exist purely for repo consistency
+   so a future session copying this pattern inherits correct
+   light-mode styling. Ported from supplier-profile.html's
+   body.light-mode block, mapped to this file's class names, keeping
+   the page's purple accent (#7C3AED = light-legible purple). The
+   shared .pf footer keeps its blue brand accent, as elsewhere.
+   ============================================================ */
+body.light-mode{background:#EEF6FF !important}
+/* Nav */
+body.light-mode .pn{background:rgba(238,246,255,.88) !important;border-bottom-color:rgba(74,159,224,.2) !important}
+body.light-mode .pn-wm{color:#050D18 !important}
+body.light-mode .pnl{color:#3A5E75 !important}
+body.light-mode .pnl:hover{color:#050D18 !important}
+/* Category sub-nav */
+body.light-mode .csn{background:rgba(238,246,255,.96) !important}
+body.light-mode .csn-item{color:#6B9DB7 !important}
+body.light-mode .csn-item.on{color:#7C3AED !important;border-bottom-color:#7C3AED !important}
+body.light-mode .csn-item:hover:not(.on){color:#050D18 !important}
+body.light-mode .csn-d{background:rgba(74,159,224,.18) !important}
+/* Breadcrumb */
+body.light-mode .sbc-inner{color:#6B9DB7 !important}
+body.light-mode .sbc-inner em{color:#7C3AED !important}
+/* Hero */
+body.light-mode .sp-hero{background:linear-gradient(180deg,#EEF6FF,#E8F4FF) !important}
+body.light-mode .sp-name{color:#050D18 !important}
+body.light-mode .sp-m{color:#3A5E75 !important}
+body.light-mode .sp-m i{color:#7C3AED !important}
+body.light-mode .sp-rct{color:#6B9DB7 !important}
+body.light-mode .sp-score{color:#050D18 !important;-webkit-text-fill-color:#050D18 !important}
+body.light-mode .sp-stars{color:#D97706 !important}
+body.light-mode .sp-badge.cat{background:rgba(167,139,250,.12) !important;color:#7C3AED !important;border-color:rgba(167,139,250,.35) !important}
+body.light-mode .sp-badge.feat{background:rgba(245,158,11,.14) !important;color:#B45309 !important;border-color:rgba(245,158,11,.35) !important}
+body.light-mode .sp-badge.ver{background:rgba(46,204,154,.12) !important;color:#0F9B72 !important;border-color:rgba(46,204,154,.3) !important}
+/* Hero stats bar */
+body.light-mode .sp-stats{background:rgba(255,255,255,.85) !important;border-color:rgba(167,139,250,.28) !important;box-shadow:0 4px 16px rgba(167,139,250,.12),inset 0 1px 0 rgba(255,255,255,.95) !important}
+body.light-mode .sps{border-right-color:rgba(167,139,250,.18) !important}
+body.light-mode .sps-v{color:#7C3AED !important;-webkit-text-fill-color:#7C3AED !important}
+body.light-mode .sps-l{color:#6B9DB7 !important}
+/* Action buttons (primary keeps its purple gradient; secondary needs contrast) */
+body.light-mode .sp-btn-s{border-color:rgba(167,139,250,.35) !important;color:#7C3AED !important;background:rgba(255,255,255,.6) !important}
+body.light-mode .sp-btn-s:hover{background:rgba(167,139,250,.1) !important}
+/* Tabs */
+body.light-mode .tab-nav{background:rgba(238,246,255,.97) !important;border-bottom-color:rgba(74,159,224,.18) !important}
+body.light-mode .tab-item{color:#6B9DB7 !important}
+body.light-mode .tab-item.on{color:#7C3AED !important;border-bottom-color:#7C3AED !important}
+body.light-mode .tab-item:hover:not(.on){color:#050D18 !important}
+body.light-mode .tab-badge{background:rgba(167,139,250,.14) !important;color:#7C3AED !important;border-color:rgba(167,139,250,.3) !important}
+/* Tab panels */
+body.light-mode .tab-content{background:#EEF6FF !important}
+/* Overview */
+body.light-mode .ov-box{background:rgba(255,255,255,.78) !important;border-color:rgba(74,159,224,.2) !important;box-shadow:0 4px 20px rgba(74,159,224,.08),inset 0 1px 0 rgba(255,255,255,.95) !important}
+body.light-mode .ov-bt{color:#050D18 !important}
+body.light-mode .ov-bt i{color:#7C3AED !important}
+body.light-mode .ov-text{color:#3A5E75 !important}
+body.light-mode .ov-btext{color:#3A5E75 !important}
+body.light-mode .ov-btext strong{color:#050D18 !important}
+body.light-mode .ov-dot{background:#7C3AED !important}
+body.light-mode .ov-mkt{background:rgba(167,139,250,.1) !important;border-color:rgba(167,139,250,.25) !important;color:#6D28D9 !important}
+body.light-mode .ov-fact{background:rgba(238,246,255,.85) !important;border-color:rgba(74,159,224,.18) !important}
+body.light-mode .ov-fv{color:#050D18 !important}
+body.light-mode .ov-fl{color:#6B9DB7 !important}
+/* Services (product) cards */
+body.light-mode .prod-card{background:rgba(255,255,255,.78) !important;border-color:rgba(74,159,224,.2) !important;box-shadow:0 4px 20px rgba(74,159,224,.08),inset 0 1px 0 rgba(255,255,255,.95) !important}
+body.light-mode .prod-name{color:#050D18 !important}
+body.light-mode .prod-desc{color:#3A5E75 !important}
+body.light-mode .prod-spec span:first-child{color:#6B9DB7 !important}
+body.light-mode .prod-spec span:last-child{color:#050D18 !important}
+body.light-mode .prod-spec{border-bottom-color:rgba(74,159,224,.12) !important}
+body.light-mode .prod-icon{background:rgba(167,139,250,.1) !important;border-color:rgba(167,139,250,.22) !important}
+body.light-mode .prod-tag{background:rgba(74,159,224,.08) !important;border-color:rgba(74,159,224,.2) !important;color:#1E6BAB !important}
+/* Certifications */
+body.light-mode .cert-tier-bar{background:rgba(167,139,250,.06) !important;border-color:rgba(167,139,250,.2) !important}
+body.light-mode .cert-verified-badge{color:#6D28D9 !important}
+body.light-mode .cert-tier-desc{color:#3A5E75 !important}
+body.light-mode .cert-tier-desc strong{color:#050D18 !important}
+body.light-mode .cert-premium-tag{background:rgba(245,158,11,.1) !important;color:#B45309 !important;border-color:rgba(245,158,11,.28) !important}
+body.light-mode .cert-t1-header{color:#6B9DB7 !important}
+body.light-mode .cert-pill{background:rgba(255,255,255,.75) !important;border-color:rgba(74,159,224,.2) !important;color:#3A5E75 !important}
+body.light-mode .cert-pill i{color:#7C3AED !important}
+body.light-mode .cert-t2-header{color:#7C3AED !important}
+body.light-mode .cert-card{background:rgba(255,255,255,.78) !important;border-color:rgba(74,159,224,.2) !important;box-shadow:0 4px 20px rgba(74,159,224,.08),inset 0 1px 0 rgba(255,255,255,.95) !important}
+body.light-mode .cert-name{color:#050D18 !important}
+body.light-mode .cert-body{color:#7C3AED !important}
+body.light-mode .cert-scope{color:#3A5E75 !important}
+body.light-mode .cert-icon{background:rgba(167,139,250,.1) !important;border-color:rgba(167,139,250,.22) !important}
+body.light-mode .cert-verified-stamp{color:#0F9B72 !important;background:rgba(46,204,154,.12) !important;border-color:rgba(46,204,154,.28) !important}
+body.light-mode .cert-valid{color:#0F9B72 !important;background:rgba(46,204,154,.12) !important;border-color:rgba(46,204,154,.28) !important}
+/* Reviews */
+body.light-mode .rev-agg{background:rgba(255,255,255,.78) !important;border-color:rgba(74,159,224,.2) !important}
+body.light-mode .rev-score{color:#050D18 !important;-webkit-text-fill-color:#050D18 !important}
+body.light-mode .rev-stars-lg{color:#D97706 !important}
+body.light-mode .rev-ct{color:#6B9DB7 !important}
+body.light-mode .rev-div{background:rgba(74,159,224,.18) !important}
+body.light-mode .rev-bar-lbl{color:#D97706 !important}
+body.light-mode .rev-bar-track{background:rgba(74,159,224,.15) !important}
+body.light-mode .rev-bar-ct{color:#6B9DB7 !important}
+body.light-mode .rev-card{background:rgba(255,255,255,.78) !important;border-color:rgba(74,159,224,.2) !important;box-shadow:0 4px 20px rgba(74,159,224,.08),inset 0 1px 0 rgba(255,255,255,.95) !important}
+body.light-mode .rev-rstars{color:#D97706 !important}
+body.light-mode .rev-text{color:#3A5E75 !important}
+body.light-mode .rev-name{color:#050D18 !important}
+body.light-mode .rev-role{color:#6B9DB7 !important}
+body.light-mode .rev-foot{border-top-color:rgba(74,159,224,.15) !important}
+body.light-mode .rev-tag{background:rgba(167,139,250,.08) !important;border-color:rgba(167,139,250,.2) !important;color:#6D28D9 !important}
+/* Similar providers */
+body.light-mode .sim{background:linear-gradient(180deg,#EEF6FF,#E8F5FF) !important}
+body.light-mode .sim-h{color:#050D18 !important}
+body.light-mode .sim-h em{color:#7C3AED !important}
+body.light-mode .sim-card{background:rgba(255,255,255,.82) !important;border-color:rgba(74,159,224,.22) !important;box-shadow:0 4px 16px rgba(74,159,224,.1),inset 0 1px 0 rgba(255,255,255,.95) !important}
+body.light-mode .sim-logo{background:rgba(167,139,250,.12) !important;border-color:rgba(167,139,250,.25) !important;color:#7C3AED !important}
+body.light-mode .sim-name{color:#050D18 !important}
+body.light-mode .sim-loc{color:#6B9DB7 !important}
+body.light-mode .sim-rt{color:#D97706 !important}
+/* Shared footer — keeps blue brand accent (ported verbatim) */
+body.light-mode .pf{background:#dce9ff !important}
+body.light-mode .pf-topglow{background:linear-gradient(90deg,transparent 5%,rgba(74,159,224,.2) 35%,rgba(46,204,154,.15) 65%,transparent 95%) !important}
+body.light-mode .pf-lt{color:#050D18 !important}
+body.light-mode .pf-desc{color:#3A5E75 !important}
+body.light-mode .pf-ct{color:#6B9DB7 !important}
+body.light-mode .pf-ct::after{background:linear-gradient(90deg,rgba(74,159,224,.2),transparent) !important}
+body.light-mode .pf-lk{color:#3A5E75 !important}
+body.light-mode .pf-lk i{color:#9BBFD8 !important}
+body.light-mode .pf-lk:hover{color:#050D18 !important}
+body.light-mode .pf-lk:hover i{color:#4A9FE0 !important}
+body.light-mode .pf-copy{color:#6B9DB7 !important}
+body.light-mode .pf-status{color:#1DB89A !important}
+body.light-mode .pf-legal a{color:#6B9DB7 !important}
+body.light-mode .pf-si{border-color:rgba(74,159,224,.25) !important;color:#6B9DB7 !important}
+body.light-mode .pf-si:hover{background:rgba(74,159,224,.12) !important;color:#1E6BAB !important}
+
 @media (max-width:900px){
-.pn,.csn{padding:0 20px}
+.pn{padding:0 20px}
+.pn-links .pnl{display:none}
+.csn{padding:0 20px}
 .sp-hero,.tab-content,.sim{padding-left:20px;padding-right:20px}
-.sp-inner{flex-direction:column}
 .ov-grid,.prod-grid,.cert-grid,.rev-grid,.sim-grid{grid-template-columns:1fr}
+}
+@media (max-width:768px){
+/* Layout padding */
+.sp-hero,.sim{padding-left:20px;padding-right:20px}
+.tab-content{padding:24px 20px}
+.tab-nav{padding:0 20px;overflow-x:auto}
+.csn{overflow-x:auto}
+.sbc{padding:12px 20px 0}
+/* Hero stacks */
+.sp-inner{flex-direction:column;gap:16px}
+.sp-logo{width:64px;height:64px;font-size:20px}
+.sp-name{font-size:20px}
+.sp-meta{gap:8px}
+/* Hero stats wrap 2-per-row */
+.sp-stats{flex-wrap:wrap;width:100%}
+.sps{flex:1 1 45%}
+/* Action buttons stack/wrap as full-width touch targets */
+.sp-actions{flex-wrap:wrap}
+.sp-btn-p,.sp-btn-s{flex:1 1 auto;justify-content:center}
+/* Tabs scroll horizontally */
+.tab-item{padding:12px 14px;font-size:12px}
+/* All grid sections collapse to single column */
+.ov-grid,.prod-grid,.cert-grid,.rev-grid,.sim-grid{grid-template-columns:1fr}
+.cert-tier-bar{flex-direction:column;align-items:flex-start;gap:10px}
+.rev-agg{flex-wrap:wrap;gap:16px}
+.rev-div{display:none}
+/* Footer — single column on mobile */
+.pf-main{padding-left:20px;padding-right:20px}
+.pf-grid{grid-template-columns:1fr;gap:24px}
+.pf-desc{max-width:100%}
+.pf-bot{flex-direction:column;align-items:flex-start;gap:8px;padding-left:20px;padding-right:20px}
+.pf-legal{flex-wrap:wrap;gap:12px}
+.pf-social{flex-wrap:wrap}
+}
+@media (max-width:480px){
+.sp-name{font-size:18px}
+.sp-logo{width:56px;height:56px;font-size:18px}
+.tab-content{padding:20px 16px}
+.ov-facts{grid-template-columns:1fr 1fr}
+.pf-main{padding-left:16px;padding-right:16px;padding-top:32px;padding-bottom:20px}
+.pf-grid{gap:20px}
+.pf-bot{padding-left:16px;padding-right:16px;gap:6px}
+.pf-copy{font-size:10px}
+.pf-legal a,.pf-legal span{font-size:10px}
 }
 </style>
 </head>
@@ -418,6 +624,17 @@ body{font-family:'Inter',system-ui,sans-serif;background:#050D18;color:#fff;widt
 </div>
 
 </div>
+
+<footer class="pf" aria-label="Site footer">
+<div class="pf-topglow"></div><div class="pf-bgaura"></div><div class="pf-gbg"></div>
+<div class="pf-main"><div class="pf-grid">
+<div><a class="pf-logo" href="index.html"><div class="pf-li"><i class="ti ti-snowflake" style="font-size:15px;color:#fff" aria-hidden="true"></i></div><span class="pf-lt">FrozenFood<em>Inc</em></span></a><p class="pf-desc">The global B2B wholesale frozen food database — connecting buyers with verified suppliers worldwide.</p><div class="pf-social"><a class="pf-si" href="#" aria-label="LinkedIn"><i class="ti ti-brand-linkedin" style="font-size:15px" aria-hidden="true"></i></a><a class="pf-si" href="#" aria-label="X"><i class="ti ti-brand-x" style="font-size:14px" aria-hidden="true"></i></a><a class="pf-si" href="#" aria-label="Email"><i class="ti ti-mail" style="font-size:15px" aria-hidden="true"></i></a></div></div>
+<div><div class="pf-ct">Database</div><a class="pf-lk" href="category-fruits-veg.html"><i class="ti ti-chevron-right" aria-hidden="true"></i>Frozen Fruits &amp; Veg <span class="pf-new">New</span></a><a class="pf-lk" href="category-poultry.html"><i class="ti ti-chevron-right" aria-hidden="true"></i>Frozen Poultry</a><a class="pf-lk" href="category-beef-meat.html"><i class="ti ti-chevron-right" aria-hidden="true"></i>Frozen Beef &amp; Meat</a><a class="pf-lk" href="category-seafood.html"><i class="ti ti-chevron-right" aria-hidden="true"></i>Frozen Seafood</a></div>
+<div><div class="pf-ct">Services</div><a class="pf-lk" href="category-services.html"><i class="ti ti-chevron-right" aria-hidden="true"></i>Cold Storage</a><a class="pf-lk" href="category-services.html"><i class="ti ti-chevron-right" aria-hidden="true"></i>Refrigerated Transport</a><a class="pf-lk" href="category-services.html"><i class="ti ti-chevron-right" aria-hidden="true"></i>Packaging</a><a class="pf-lk" href="category-services.html"><i class="ti ti-chevron-right" aria-hidden="true"></i>Quality Testing</a></div>
+<div><div class="pf-ct">Company</div><a class="pf-lk" href="#"><i class="ti ti-chevron-right" aria-hidden="true"></i>About FFInc</a><a class="pf-lk" href="#" style="color:#2ECC9A"><i class="ti ti-plus" style="color:#2ECC9A" aria-hidden="true"></i>List Your Business</a><a class="pf-lk" href="#"><i class="ti ti-chevron-right" aria-hidden="true"></i>Contact Us</a><a class="pf-lk" href="#"><i class="ti ti-chevron-right" aria-hidden="true"></i>Privacy Policy</a></div>
+</div></div>
+<div class="pf-bot"><span class="pf-copy">© 2026 FrozenFood Incorporated. All rights reserved.</span><div class="pf-status"><div class="pf-sdot" id="pf-sdot"></div>All systems operational</div><div class="pf-legal"><a href="#">Terms</a><a href="#">Privacy</a><a href="#">Cookies</a></div></div>
+</footer>
 
 <script>
 function switchTab(id,el){
