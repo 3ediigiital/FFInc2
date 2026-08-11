@@ -187,6 +187,138 @@ body{font-family:'Inter',system-ui,sans-serif;background:#050D18;color:#fff;widt
 .pf-legal a{font-size:11px;color:#3A5E75;text-decoration:none;transition:color .2s;cursor:pointer}
 .pf-legal a:hover{color:#6B9DB7}
 
+/* ============================================================
+   Light-mode parity (INERT).
+   This file has no mode-toggle button or JS and will never switch
+   modes at runtime. These rules exist purely for repo consistency
+   so a future session copying this pattern inherits correct
+   light-mode styling. Ported from supplier-profile.html's
+   body.light-mode block, mapped to this file's class names, keeping
+   the page's purple accent (#7C3AED = light-legible purple). The
+   shared .pf footer keeps its blue brand accent, as elsewhere.
+   ============================================================ */
+body.light-mode{background:#EEF6FF !important}
+/* Nav */
+body.light-mode .pn{background:rgba(238,246,255,.88) !important;border-bottom-color:rgba(74,159,224,.2) !important}
+body.light-mode .pn-wm{color:#050D18 !important}
+body.light-mode .pnl{color:#3A5E75 !important}
+body.light-mode .pnl:hover{color:#050D18 !important}
+/* Category sub-nav */
+body.light-mode .csn{background:rgba(238,246,255,.96) !important}
+body.light-mode .csn-item{color:#6B9DB7 !important}
+body.light-mode .csn-item.on{color:#7C3AED !important;border-bottom-color:#7C3AED !important}
+body.light-mode .csn-item:hover:not(.on){color:#050D18 !important}
+body.light-mode .csn-d{background:rgba(74,159,224,.18) !important}
+/* Breadcrumb */
+body.light-mode .sbc-inner{color:#6B9DB7 !important}
+body.light-mode .sbc-inner em{color:#7C3AED !important}
+/* Hero */
+body.light-mode .sp-hero{background:linear-gradient(180deg,#EEF6FF,#E8F4FF) !important}
+body.light-mode .sp-name{color:#050D18 !important}
+body.light-mode .sp-m{color:#3A5E75 !important}
+body.light-mode .sp-m i{color:#7C3AED !important}
+body.light-mode .sp-rct{color:#6B9DB7 !important}
+body.light-mode .sp-score{color:#050D18 !important;-webkit-text-fill-color:#050D18 !important}
+body.light-mode .sp-stars{color:#D97706 !important}
+body.light-mode .sp-badge.cat{background:rgba(167,139,250,.12) !important;color:#7C3AED !important;border-color:rgba(167,139,250,.35) !important}
+body.light-mode .sp-badge.feat{background:rgba(245,158,11,.14) !important;color:#B45309 !important;border-color:rgba(245,158,11,.35) !important}
+body.light-mode .sp-badge.ver{background:rgba(46,204,154,.12) !important;color:#0F9B72 !important;border-color:rgba(46,204,154,.3) !important}
+/* Hero stats bar */
+body.light-mode .sp-stats{background:rgba(255,255,255,.85) !important;border-color:rgba(167,139,250,.28) !important;box-shadow:0 4px 16px rgba(167,139,250,.12),inset 0 1px 0 rgba(255,255,255,.95) !important}
+body.light-mode .sps{border-right-color:rgba(167,139,250,.18) !important}
+body.light-mode .sps-v{color:#7C3AED !important;-webkit-text-fill-color:#7C3AED !important}
+body.light-mode .sps-l{color:#6B9DB7 !important}
+/* Action buttons (primary keeps its purple gradient; secondary needs contrast) */
+body.light-mode .sp-btn-s{border-color:rgba(167,139,250,.35) !important;color:#7C3AED !important;background:rgba(255,255,255,.6) !important}
+body.light-mode .sp-btn-s:hover{background:rgba(167,139,250,.1) !important}
+/* Tabs */
+body.light-mode .tab-nav{background:rgba(238,246,255,.97) !important;border-bottom-color:rgba(74,159,224,.18) !important}
+body.light-mode .tab-item{color:#6B9DB7 !important}
+body.light-mode .tab-item.on{color:#7C3AED !important;border-bottom-color:#7C3AED !important}
+body.light-mode .tab-item:hover:not(.on){color:#050D18 !important}
+body.light-mode .tab-badge{background:rgba(167,139,250,.14) !important;color:#7C3AED !important;border-color:rgba(167,139,250,.3) !important}
+/* Tab panels */
+body.light-mode .tab-content{background:#EEF6FF !important}
+/* Overview */
+body.light-mode .ov-box{background:rgba(255,255,255,.78) !important;border-color:rgba(74,159,224,.2) !important;box-shadow:0 4px 20px rgba(74,159,224,.08),inset 0 1px 0 rgba(255,255,255,.95) !important}
+body.light-mode .ov-bt{color:#050D18 !important}
+body.light-mode .ov-bt i{color:#7C3AED !important}
+body.light-mode .ov-text{color:#3A5E75 !important}
+body.light-mode .ov-btext{color:#3A5E75 !important}
+body.light-mode .ov-btext strong{color:#050D18 !important}
+body.light-mode .ov-dot{background:#7C3AED !important}
+body.light-mode .ov-mkt{background:rgba(167,139,250,.1) !important;border-color:rgba(167,139,250,.25) !important;color:#6D28D9 !important}
+body.light-mode .ov-fact{background:rgba(238,246,255,.85) !important;border-color:rgba(74,159,224,.18) !important}
+body.light-mode .ov-fv{color:#050D18 !important}
+body.light-mode .ov-fl{color:#6B9DB7 !important}
+/* Services (product) cards */
+body.light-mode .prod-card{background:rgba(255,255,255,.78) !important;border-color:rgba(74,159,224,.2) !important;box-shadow:0 4px 20px rgba(74,159,224,.08),inset 0 1px 0 rgba(255,255,255,.95) !important}
+body.light-mode .prod-name{color:#050D18 !important}
+body.light-mode .prod-desc{color:#3A5E75 !important}
+body.light-mode .prod-spec span:first-child{color:#6B9DB7 !important}
+body.light-mode .prod-spec span:last-child{color:#050D18 !important}
+body.light-mode .prod-spec{border-bottom-color:rgba(74,159,224,.12) !important}
+body.light-mode .prod-icon{background:rgba(167,139,250,.1) !important;border-color:rgba(167,139,250,.22) !important}
+body.light-mode .prod-tag{background:rgba(74,159,224,.08) !important;border-color:rgba(74,159,224,.2) !important;color:#1E6BAB !important}
+/* Certifications */
+body.light-mode .cert-tier-bar{background:rgba(167,139,250,.06) !important;border-color:rgba(167,139,250,.2) !important}
+body.light-mode .cert-verified-badge{color:#6D28D9 !important}
+body.light-mode .cert-tier-desc{color:#3A5E75 !important}
+body.light-mode .cert-tier-desc strong{color:#050D18 !important}
+body.light-mode .cert-premium-tag{background:rgba(245,158,11,.1) !important;color:#B45309 !important;border-color:rgba(245,158,11,.28) !important}
+body.light-mode .cert-t1-header{color:#6B9DB7 !important}
+body.light-mode .cert-pill{background:rgba(255,255,255,.75) !important;border-color:rgba(74,159,224,.2) !important;color:#3A5E75 !important}
+body.light-mode .cert-pill i{color:#7C3AED !important}
+body.light-mode .cert-t2-header{color:#7C3AED !important}
+body.light-mode .cert-card{background:rgba(255,255,255,.78) !important;border-color:rgba(74,159,224,.2) !important;box-shadow:0 4px 20px rgba(74,159,224,.08),inset 0 1px 0 rgba(255,255,255,.95) !important}
+body.light-mode .cert-name{color:#050D18 !important}
+body.light-mode .cert-body{color:#7C3AED !important}
+body.light-mode .cert-scope{color:#3A5E75 !important}
+body.light-mode .cert-icon{background:rgba(167,139,250,.1) !important;border-color:rgba(167,139,250,.22) !important}
+body.light-mode .cert-verified-stamp{color:#0F9B72 !important;background:rgba(46,204,154,.12) !important;border-color:rgba(46,204,154,.28) !important}
+body.light-mode .cert-valid{color:#0F9B72 !important;background:rgba(46,204,154,.12) !important;border-color:rgba(46,204,154,.28) !important}
+/* Reviews */
+body.light-mode .rev-agg{background:rgba(255,255,255,.78) !important;border-color:rgba(74,159,224,.2) !important}
+body.light-mode .rev-score{color:#050D18 !important;-webkit-text-fill-color:#050D18 !important}
+body.light-mode .rev-stars-lg{color:#D97706 !important}
+body.light-mode .rev-ct{color:#6B9DB7 !important}
+body.light-mode .rev-div{background:rgba(74,159,224,.18) !important}
+body.light-mode .rev-bar-lbl{color:#D97706 !important}
+body.light-mode .rev-bar-track{background:rgba(74,159,224,.15) !important}
+body.light-mode .rev-bar-ct{color:#6B9DB7 !important}
+body.light-mode .rev-card{background:rgba(255,255,255,.78) !important;border-color:rgba(74,159,224,.2) !important;box-shadow:0 4px 20px rgba(74,159,224,.08),inset 0 1px 0 rgba(255,255,255,.95) !important}
+body.light-mode .rev-rstars{color:#D97706 !important}
+body.light-mode .rev-text{color:#3A5E75 !important}
+body.light-mode .rev-name{color:#050D18 !important}
+body.light-mode .rev-role{color:#6B9DB7 !important}
+body.light-mode .rev-foot{border-top-color:rgba(74,159,224,.15) !important}
+body.light-mode .rev-tag{background:rgba(167,139,250,.08) !important;border-color:rgba(167,139,250,.2) !important;color:#6D28D9 !important}
+/* Similar providers */
+body.light-mode .sim{background:linear-gradient(180deg,#EEF6FF,#E8F5FF) !important}
+body.light-mode .sim-h{color:#050D18 !important}
+body.light-mode .sim-h em{color:#7C3AED !important}
+body.light-mode .sim-card{background:rgba(255,255,255,.82) !important;border-color:rgba(74,159,224,.22) !important;box-shadow:0 4px 16px rgba(74,159,224,.1),inset 0 1px 0 rgba(255,255,255,.95) !important}
+body.light-mode .sim-logo{background:rgba(167,139,250,.12) !important;border-color:rgba(167,139,250,.25) !important;color:#7C3AED !important}
+body.light-mode .sim-name{color:#050D18 !important}
+body.light-mode .sim-loc{color:#6B9DB7 !important}
+body.light-mode .sim-rt{color:#D97706 !important}
+/* Shared footer — keeps blue brand accent (ported verbatim) */
+body.light-mode .pf{background:#dce9ff !important}
+body.light-mode .pf-topglow{background:linear-gradient(90deg,transparent 5%,rgba(74,159,224,.2) 35%,rgba(46,204,154,.15) 65%,transparent 95%) !important}
+body.light-mode .pf-lt{color:#050D18 !important}
+body.light-mode .pf-desc{color:#3A5E75 !important}
+body.light-mode .pf-ct{color:#6B9DB7 !important}
+body.light-mode .pf-ct::after{background:linear-gradient(90deg,rgba(74,159,224,.2),transparent) !important}
+body.light-mode .pf-lk{color:#3A5E75 !important}
+body.light-mode .pf-lk i{color:#9BBFD8 !important}
+body.light-mode .pf-lk:hover{color:#050D18 !important}
+body.light-mode .pf-lk:hover i{color:#4A9FE0 !important}
+body.light-mode .pf-copy{color:#6B9DB7 !important}
+body.light-mode .pf-status{color:#1DB89A !important}
+body.light-mode .pf-legal a{color:#6B9DB7 !important}
+body.light-mode .pf-si{border-color:rgba(74,159,224,.25) !important;color:#6B9DB7 !important}
+body.light-mode .pf-si:hover{background:rgba(74,159,224,.12) !important;color:#1E6BAB !important}
+
 @media (max-width:900px){
 .pn{padding:0 20px}
 .pn-links .pnl{display:none}
