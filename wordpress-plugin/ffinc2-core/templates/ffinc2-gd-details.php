@@ -422,10 +422,17 @@ body.light-mode .ffdt .dt-hstats{background:rgba(255,255,255,.72)}
 /* Hero actions (ref .ch-btn-p white text; .ch-btn-s pad 12px 22px, border .28) */
 .ffdt-sup .dt-btn-p{color:#fff}
 .ffdt-sup .dt-btn-s{padding:12px 22px;border-color:color-mix(in srgb,var(--ac) 28%,transparent)}
-/* Tabs — stick just below the live header, ref .sp-tab pad 14px 20px + on fw600 */
+/* Tabs — full parity with reference .tab-nav / .sp-tab / .sp-tab-count.
+   Sticks just below the live header (top:108px). Tabs are butted together
+   (no gap), 14px 20px pad, 14px icon; non-active hover gets the accent
+   underline; the review count badge mirrors .sp-tab-count exactly. */
 .ffdt-sup .dt-tabs{top:108px}
+.ffdt-sup .dt-tabs-in{gap:0}
 .ffdt-sup .dt-tab{padding:14px 20px}
+.ffdt-sup .dt-tab i{font-size:14px}
+.ffdt-sup .dt-tab:hover:not(.on){color:#fff;border-bottom-color:color-mix(in srgb,var(--ac) 30%,transparent)}
 .ffdt-sup .dt-tab.on{font-weight:600}
+.ffdt-sup .dt-tab-badge{font-weight:500;padding:1px 6px;border-radius:8px;background:color-mix(in srgb,var(--ac) 12%,transparent);border:1px solid color-mix(in srgb,var(--ac) 25%,transparent);margin-left:4px}
 /* Panels + cards (ref .sp-panel pad-top 32; .ov-box r16/22 + ::before accent line) */
 .ffdt-sup .dt-body{padding-top:32px}
 .ffdt-sup .dt-box{border-radius:16px;padding:22px;position:relative;overflow:hidden}
@@ -521,7 +528,7 @@ body.light-mode .ffdt .dt-hstats{background:rgba(255,255,255,.72)}
 <div class="dt-tabs-in" role="tablist">
 <button class="dt-tab on" data-tab="overview" role="tab"><i class="ti ti-layout-list" aria-hidden="true"></i>Overview</button>
 <button class="dt-tab" data-tab="range" role="tab"><i class="ti ti-package" aria-hidden="true"></i><?php echo esc_html($tab_label); ?></button>
-<button class="dt-tab" data-tab="certs" role="tab"><i class="ti ti-certificate" aria-hidden="true"></i>Certifications</button>
+<button class="dt-tab" data-tab="certs" role="tab"><i class="<?php echo $is_service ? 'ti ti-certificate' : 'ti ti-shield-check'; ?>" aria-hidden="true"></i>Certifications</button>
 <button class="dt-tab" data-tab="reviews" role="tab"><i class="ti ti-star" aria-hidden="true"></i>Reviews<?php if ($rcount > 0) { ?><span class="dt-tab-badge"><?php echo esc_html($rcount); ?></span><?php } ?></button>
 </div>
 </div>
