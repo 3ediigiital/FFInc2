@@ -391,6 +391,59 @@ body.light-mode .ffdt .dt-tabs{background:rgba(238,246,255,.96)}
 body.light-mode .ffdt .dt-tab{color:#3A5E75}
 body.light-mode .ffdt .dt-pill{color:#1E6BAB}
 body.light-mode .ffdt .dt-hstats{background:rgba(255,255,255,.72)}
+/* ============================================================
+   SUPPLIER-BRANCH LITERAL PARITY with supplier-profile.html.
+   Scoped to .ffdt-sup so the Service branch (.ffdt only, out of
+   scope for this pass) renders byte-for-byte unchanged. Accent-
+   tinted values stay on --ac/color-mix so every supplier category
+   (poultry blue, veg green, beef amber, seafood teal) keeps its
+   own colour; only structural values + fixed, non-accent colours
+   (hero base gradient, star-amber review bars) are pinned to the
+   reference. Placed BEFORE the media queries so the mobile
+   overrides below still win at ≤768px.
+   ============================================================ */
+/* Content width + gutter (ref .sp-inner/.sp-panel-inner max 1200, 48px pad) */
+.ffdt-sup .dt-wrap,.ffdt-sup .dt-tabs-in{max-width:1200px;padding-left:48px;padding-right:48px}
+/* Top clearance: the live global header (Breakdance "FFInc Header" #1603)
+   is position:sticky + overlay (floats over content, z-index 100) and is
+   ~109px tall (container 3+25 pad, inner pill 15+15 pad, 50px logo row,
+   1px border). 109 + 11px comfortable buffer = 120px. */
+.ffdt-sup .dt-hero{background:linear-gradient(180deg,#050D18,#061428);border-bottom:none;padding:120px 0 36px}
+.ffdt-sup .dt-bc{padding-top:0}
+/* Hero grid + logo (ref .sp-inner gap 28; .sp-logo 88/r20/2px/26px/shadow) */
+.ffdt-sup .dt-hgrid{gap:28px}
+.ffdt-sup .dt-logo{width:88px;height:88px;border-radius:20px;font-size:26px;border-width:2px;border-color:color-mix(in srgb,var(--ac) 30%,transparent);background:color-mix(in srgb,var(--ac) 12%,transparent);box-shadow:0 0 40px color-mix(in srgb,var(--ac) 15%,transparent)}
+.ffdt-sup .dt-catbdg{background:color-mix(in srgb,var(--ac) 10%,transparent);border-color:color-mix(in srgb,var(--ac) 25%,transparent)}
+.ffdt-sup .dt-h1{font-size:28px;letter-spacing:-.7px;line-height:1.1;margin:2px 0 8px}
+/* Hero stat bar (ref .ch-stats border .18; .chs pad 12px 20px; .chs-n 20px) */
+.ffdt-sup .dt-hstats{border-color:color-mix(in srgb,var(--ac) 18%,transparent)}
+.ffdt-sup .dt-hstat{padding:12px 20px}
+.ffdt-sup .dt-hsv{font-size:20px}
+/* Hero actions (ref .ch-btn-p white text; .ch-btn-s pad 12px 22px, border .28) */
+.ffdt-sup .dt-btn-p{color:#fff}
+.ffdt-sup .dt-btn-s{padding:12px 22px;border-color:color-mix(in srgb,var(--ac) 28%,transparent)}
+/* Tabs — stick just below the live header, ref .sp-tab pad 14px 20px + on fw600 */
+.ffdt-sup .dt-tabs{top:108px}
+.ffdt-sup .dt-tab{padding:14px 20px}
+.ffdt-sup .dt-tab.on{font-weight:600}
+/* Panels + cards (ref .sp-panel pad-top 32; .ov-box r16/22 + ::before accent line) */
+.ffdt-sup .dt-body{padding-top:32px}
+.ffdt-sup .dt-box{border-radius:16px;padding:22px;position:relative;overflow:hidden}
+.ffdt-sup .dt-box::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,color-mix(in srgb,var(--ac) 40%,transparent),transparent)}
+.ffdt-sup .dt-box-h{font-size:15px}
+.ffdt-sup .dt-box-h i{font-size:17px}
+/* Facts (ref .ov-facts 3-col gap 8; .ov-fact r9/10px 12px; .ov-fv 15px) */
+.ffdt-sup .dt-facts{grid-template-columns:1fr 1fr 1fr;gap:8px}
+.ffdt-sup .dt-fact{border-radius:9px;padding:10px 12px}
+.ffdt-sup .dt-fact-v{font-size:15px}
+/* Reviews (ref .rev-big 48px; star-amber bars + labels, track 5px/r3) */
+.ffdt-sup .dt-rev-big{font-size:48px}
+.ffdt-sup .dt-rev-bl{color:#F59E0B}
+.ffdt-sup .dt-rev-track{height:5px;border-radius:3px}
+.ffdt-sup .dt-rev-fill{border-radius:3px;background:linear-gradient(90deg,#F59E0B,#FCD34D)}
+/* Similar (ref .sim gradient bg + border-top; .sim-h 18px) */
+.ffdt-sup .dt-similar{background:linear-gradient(180deg,#050D18,#060F1A);border-top:1px solid rgba(74,159,224,.08);padding:28px 0 48px}
+.ffdt-sup .dt-sim-h{font-size:18px}
 /* Responsive */
 @media (max-width:900px){
 .ffdt .dt-cols{grid-template-columns:1fr}
@@ -405,7 +458,7 @@ body.light-mode .ffdt .dt-hstats{background:rgba(255,255,255,.72)}
 }
 </style>
 
-<div class="ffdt">
+<div class="ffdt <?php echo $is_service ? 'ffdt-svc' : 'ffdt-sup'; ?>">
 
 <!-- Page background layers (animated by main.js) -->
 <div class="pg-grid"></div>
