@@ -205,6 +205,12 @@ if ($is_service) {
         array('ti ti-box',               'Min. Order',       ffinc2_gd_meta($pid, 'minimum_order_quantity')),
     );
 }
+/* Facts that actually have a value (shared by both modes). */
+$facts_out = array();
+foreach ($facts as $f) { if ($f[2] !== '' && $f[2] !== null && $f[2] !== '0') $facts_out[] = $f; }
+/* The reference Overview "Why Choose" box has no backing GeoDirectory field;
+   left empty so the box gracefully omits (per spec: never invent data). */
+$why_points = array();
 
 /* Products / Services tab — real "range" from the type multiselects. There is
    no structured catalog field yet, so we surface the declared range + a direct
@@ -451,10 +457,49 @@ body.light-mode .ffdt .dt-hstats{background:rgba(255,255,255,.72)}
 /* Similar (ref .sim gradient bg + border-top; .sim-h 18px) */
 .ffdt-sup .dt-similar{background:linear-gradient(180deg,#050D18,#060F1A);border-top:1px solid rgba(74,159,224,.08);padding:28px 0 48px}
 .ffdt-sup .dt-sim-h{font-size:18px}
+/* Overview — reference .ov-grid (2-col boxes). Boxes with no backing data
+   omit gracefully; a lone box on an odd row spans full width. */
+.ffdt-sup .dt-ov-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:start}
+.ffdt-sup .dt-ov-grid > .dt-box{margin-bottom:0}
+.ffdt-sup .dt-ov-grid > .dt-box:last-child:nth-child(odd){grid-column:1 / -1}
+.ffdt-sup .dt-prose{font-size:13px}
+.ffdt-sup .dt-why{display:flex;flex-direction:column;gap:9px}
+.ffdt-sup .dt-why-i{display:flex;gap:9px;font-size:12.5px;color:#9BBFD8;line-height:1.55}
+.ffdt-sup .dt-why-i::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--ac);flex-shrink:0;margin-top:6px}
+.ffdt-sup .dt-mkts{display:flex;flex-wrap:wrap;gap:6px}
+.ffdt-sup .dt-mkt{font-size:11px;padding:4px 10px;border-radius:8px;background:color-mix(in srgb,var(--ac) 8%,transparent);border:1px solid color-mix(in srgb,var(--ac) 15%,transparent);color:#8DCAF2}
+/* Certifications — reference two-tier layout (.cert-tier-bar / .cert-lbl / note) */
+.ffdt-sup .dt-cert-bar{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;background:color-mix(in srgb,var(--ac) 6%,transparent);border:1px solid color-mix(in srgb,var(--ac) 20%,transparent);border-radius:12px;padding:14px 18px;margin-bottom:22px}
+.ffdt-sup .dt-cert-bar-l{display:flex;align-items:center;gap:10px;flex-wrap:wrap;flex:1;min-width:0}
+.ffdt-sup .dt-cert-vbadge{display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg,color-mix(in srgb,var(--ac) 18%,transparent),color-mix(in srgb,var(--ac) 10%,#000));border:1px solid color-mix(in srgb,var(--ac) 40%,transparent);color:var(--ac);border-radius:10px;padding:6px 14px;font-size:11.5px;font-weight:700;white-space:nowrap;flex-shrink:0}
+.ffdt-sup .dt-cert-vbadge i{font-size:13px}
+.ffdt-sup .dt-cert-bar-desc{font-size:12px;color:#9BBFD8;line-height:1.5}
+.ffdt-sup .dt-cert-premium{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:600;padding:3px 10px;border-radius:8px;background:rgba(245,158,11,.1);color:#F59E0B;border:1px solid rgba(245,158,11,.25);white-space:nowrap;flex-shrink:0}
+.ffdt-sup .dt-cert-lbl{display:flex;align-items:center;gap:10px;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:#3A5E75;margin-bottom:12px}
+.ffdt-sup .dt-cert-lbl::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,color-mix(in srgb,var(--ac) 10%,transparent),transparent)}
+.ffdt-sup .dt-cert-lbl-v{color:var(--ac);margin-top:22px}
+.ffdt-sup .dt-cert-lbl-v::after{background:linear-gradient(90deg,color-mix(in srgb,var(--ac) 15%,transparent),transparent)}
+.ffdt-sup .dt-cert-note{padding:10px 14px;background:rgba(10,22,40,.5);border-left:2px solid color-mix(in srgb,var(--ac) 25%,transparent);border-radius:0 9px 9px 0;font-size:11.5px;color:#6B9DB7;line-height:1.6;margin:14px 0}
+/* Reviews — reference .rev-agg 3-part card + .rev-grid cards with avatars */
+.ffdt-sup .dt-rev-agg{background:rgba(18,34,52,.4);border:1px solid rgba(74,159,224,.1);border-radius:14px;padding:20px;gap:16px}
+.ffdt-sup .dt-rev-vdiv{width:1px;height:48px;background:color-mix(in srgb,var(--ac) 18%,transparent);flex-shrink:0}
+.ffdt-sup .dt-rev-side{text-align:center;flex-shrink:0}
+.ffdt-sup .dt-rev-side-t{font-size:12px;color:#9BBFD8;margin-bottom:8px}
+.ffdt-sup .dt-rev-verified{display:flex;gap:5px;justify-content:center;align-items:center;color:#52DEB5;font-size:12px}
+.ffdt-sup .dt-rev-verified i{font-size:13px}
+.ffdt-sup .dt-rev-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+.ffdt-sup .dt-rev-card{position:relative;overflow:hidden;background:rgba(18,34,52,.48);border:1px solid rgba(74,159,224,.1);border-radius:14px;padding:18px}
+.ffdt-sup .dt-rev-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,color-mix(in srgb,var(--ac) 30%,transparent),transparent)}
+.ffdt-sup .dt-rev-card .dt-rev-tx{font-style:italic;color:#E8F4FD;line-height:1.7;margin-bottom:14px}
+.ffdt-sup .dt-rev-foot{display:flex;gap:10px;align-items:center;border-top:1px solid rgba(74,159,224,.08);padding-top:12px}
+.ffdt-sup .dt-rev-av{width:36px;height:36px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:'Plus Jakarta Sans',system-ui;font-size:12px;font-weight:700;color:#fff;background:linear-gradient(135deg,var(--ac),color-mix(in srgb,var(--ac) 55%,#000))}
+.ffdt-sup .dt-rev-meta{flex:1;min-width:0}
 /* Responsive */
 @media (max-width:900px){
 .ffdt .dt-cols{grid-template-columns:1fr}
 .ffdt .dt-sim-grid{grid-template-columns:1fr}
+.ffdt-sup .dt-ov-grid,.ffdt-sup .dt-rev-grid{grid-template-columns:1fr}
+.ffdt-sup .dt-ov-grid > .dt-box:last-child:nth-child(odd){grid-column:auto}
 }
 @media (max-width:768px){
 .ffdt .dt-wrap,.ffdt .dt-tabs-in{padding-left:20px;padding-right:20px}
@@ -538,6 +583,7 @@ body.light-mode .ffdt .dt-hstats{background:rgba(255,255,255,.72)}
 
 <!-- Overview -->
 <div class="dt-panel on" id="tab-overview" role="tabpanel">
+<?php if ($is_service) { /* Service branch — unchanged (out of scope). */ ?>
 <div class="dt-cols">
 <div class="dt-main">
 <div class="dt-box">
@@ -550,10 +596,7 @@ body.light-mode .ffdt .dt-hstats{background:rgba(255,255,255,.72)}
 <div class="dt-pills"><?php foreach ($markets as $m) { echo '<span class="dt-pill">' . esc_html($m) . '</span>'; } ?></div>
 </div>
 <?php } ?>
-<?php
-$facts_out = array();
-foreach ($facts as $f) { if ($f[2] !== '' && $f[2] !== null && $f[2] !== '0') $facts_out[] = $f; }
-if ($facts_out) { ?>
+<?php if ($facts_out) { ?>
 <div class="dt-box">
 <div class="dt-box-h"><i class="ti ti-building-warehouse" aria-hidden="true"></i>Company Facts</div>
 <div class="dt-facts">
@@ -572,6 +615,38 @@ if ($facts_out) { ?>
 </div>
 </aside>
 </div>
+<?php } else { /* Supplier — reference .ov-grid (2-col). No sidebar. Data-less
+   boxes (Why Choose, Export Markets) omit gracefully; a lone box on an odd
+   row spans full width via CSS. */ ?>
+<div class="dt-ov-grid">
+<div class="dt-box">
+<div class="dt-box-h"><i class="ti ti-info-circle" aria-hidden="true"></i>About <?php echo esc_html($name); ?></div>
+<div class="dt-prose"><?php echo $about ? wp_kses_post($about) : '<p>No description provided yet.</p>'; ?></div>
+</div>
+<?php if (!empty($why_points)) { ?>
+<div class="dt-box">
+<div class="dt-box-h"><i class="ti ti-checks" aria-hidden="true"></i>Why Choose <?php echo esc_html($name); ?></div>
+<div class="dt-why"><?php foreach ($why_points as $w) { echo '<div class="dt-why-i">' . esc_html($w) . '</div>'; } ?></div>
+</div>
+<?php } ?>
+<?php if (!empty($markets)) { ?>
+<div class="dt-box">
+<div class="dt-box-h"><i class="ti ti-world" aria-hidden="true"></i>Export Markets</div>
+<div class="dt-mkts"><?php foreach ($markets as $m) { echo '<span class="dt-mkt">' . esc_html($m) . '</span>'; } ?></div>
+</div>
+<?php } ?>
+<?php if ($facts_out) { ?>
+<div class="dt-box">
+<div class="dt-box-h"><i class="ti ti-building-warehouse" aria-hidden="true"></i>Company Facts</div>
+<div class="dt-facts">
+<?php foreach ($facts_out as $f) { ?>
+<div class="dt-fact"><div class="dt-fact-l"><i class="<?php echo esc_attr($f[0]); ?>" aria-hidden="true"></i><?php echo esc_html($f[1]); ?></div><div class="dt-fact-v"><?php echo esc_html($f[2]); ?></div></div>
+<?php } ?>
+</div>
+</div>
+<?php } ?>
+</div>
+<?php } ?>
 </div>
 
 <!-- Products / Services -->
@@ -592,6 +667,7 @@ if ($facts_out) { ?>
 
 <!-- Certifications -->
 <div class="dt-panel" id="tab-certs" role="tabpanel">
+<?php if ($is_service) { /* Service branch — unchanged (out of scope). */ ?>
 <div class="dt-box">
 <div class="dt-box-h"><i class="ti ti-list-check" aria-hidden="true"></i>Declared Certifications</div>
 <?php if ($certs) { ?>
@@ -616,10 +692,47 @@ if ($facts_out) { ?>
 </div>
 <?php } ?>
 </div>
+<?php } else { /* Supplier — reference two-tier structure (.cert-tier-bar +
+   .cert-lbl sections). Premium bar and verified cards are wired to the
+   verified_supplier flag ($verified); non-verified falls back to the
+   "Documentation Not Yet Uploaded" standard state. */ ?>
+<?php if ($verified) { ?>
+<div class="dt-cert-bar">
+<div class="dt-cert-bar-l">
+<span class="dt-cert-vbadge"><i class="ti ti-shield-check" aria-hidden="true"></i>Documents Verified</span>
+<span class="dt-cert-bar-desc"><?php echo esc_html($name); ?> has uploaded and verified certification documents with FFInc. Documents available on request.</span>
+</div>
+<span class="dt-cert-premium"><i class="ti ti-star" style="font-size:9px" aria-hidden="true"></i>Premium Listing</span>
+</div>
+<?php } ?>
+<div class="dt-cert-lbl">Declared Certifications</div>
+<?php if ($certs) { ?>
+<div class="dt-pills"><?php foreach ($certs as $c) { echo '<span class="dt-pill">' . esc_html($c) . '</span>'; } ?></div>
+<?php } else { ?>
+<p class="dt-prose">No certifications declared yet.</p>
+<?php } ?>
+<div class="dt-cert-note">Certifications above are declared by the <?php echo esc_html($noun_lc); ?> at time of listing. For verified listings, uploaded documents are confirmed below; for standard listings, request documentation directly via the quote form.</div>
+<?php if ($verified && $certs) { ?>
+<div class="dt-cert-lbl dt-cert-lbl-v">Verified Documentation</div>
+<div class="dt-cert-cards">
+<?php foreach ($certs as $c) { ?>
+<div class="dt-cert-card"><div class="dt-cert-ic"><i class="ti ti-certificate" aria-hidden="true"></i></div><div><div class="dt-cert-nm"><?php echo esc_html($c); ?></div><div class="dt-cert-vf"><i class="ti ti-circle-check" style="font-size:11px" aria-hidden="true"></i>Verified by FFInc</div></div></div>
+<?php } ?>
+</div>
+<?php } else { ?>
+<div class="dt-cert-lbl">Verified Documentation</div>
+<div class="dt-empty">
+<i class="ti ti-file-upload" aria-hidden="true"></i>
+<h4>Documentation Not Yet Uploaded</h4>
+<p>This <?php echo esc_html($noun_lc); ?> has not yet uploaded verified certification documents. Declared certifications above are self-reported. Request documentation directly via a quote request.</p>
+</div>
+<?php } ?>
+<?php } ?>
 </div>
 
 <!-- Reviews -->
 <div class="dt-panel" id="tab-reviews" role="tabpanel">
+<?php if ($is_service) { /* Service branch — unchanged (out of scope). */ ?>
 <div class="dt-box">
 <div class="dt-box-h"><i class="ti ti-star" aria-hidden="true"></i>Reviews</div>
 <?php if ($has_reviews && $review_total > 0) { ?>
@@ -660,6 +773,57 @@ if ($facts_out) { ?>
 </div>
 <?php } ?>
 </div>
+<?php } else { /* Supplier — reference .rev-agg 3-part card + .rev-grid cards
+   with avatar initials. Reviewer role/product tags from the mockup have no
+   backing field and are omitted (no invented data). */ ?>
+<?php if ($has_reviews && $review_total > 0) { ?>
+<div class="dt-rev-agg">
+<div class="dt-rev-score">
+<div class="dt-rev-big"><?php echo esc_html(number_format($avg, 1)); ?></div>
+<span class="dt-stars"><?php echo ffinc2_dt_stars($avg); ?></span>
+<div class="dt-rev-of"><?php echo esc_html($rcount); ?> review<?php echo ($rcount == 1 ? '' : 's'); ?></div>
+</div>
+<div class="dt-rev-vdiv"></div>
+<div class="dt-rev-bars">
+<?php for ($s = 5; $s >= 1; $s--) { $n = $breakdown[$s]; $pct = $review_total ? round($n / $review_total * 100) : 0; ?>
+<div class="dt-rev-bar">
+<span class="dt-rev-bl"><?php echo $s; ?><i class="ti ti-star-filled" style="font-size:10px;color:#F5B301" aria-hidden="true"></i></span>
+<span class="dt-rev-track"><span class="dt-rev-fill" style="width:<?php echo (int) $pct; ?>%"></span></span>
+<span class="dt-rev-bc"><?php echo (int) $n; ?></span>
+</div>
+<?php } ?>
+</div>
+<div class="dt-rev-vdiv"></div>
+<div class="dt-rev-side">
+<div class="dt-rev-side-t">All reviews from verified buyers</div>
+<div class="dt-rev-verified"><i class="ti ti-shield-check" aria-hidden="true"></i>FFInc Verified</div>
+</div>
+</div>
+<?php if ($reviews) { ?>
+<div class="dt-rev-grid">
+<?php foreach ($reviews as $rv) {
+    $rdate = $rv->comment_date ? date_i18n(get_option('date_format'), strtotime($rv->comment_date)) : '';
+    $rau = $rv->comment_author ?: 'Verified buyer';
+    ?>
+<div class="dt-rev-card">
+<span class="dt-rev-st"><?php echo ffinc2_dt_stars($rv->rating); ?></span>
+<div class="dt-rev-tx"><?php echo wp_kses_post(wpautop($rv->comment_content)); ?></div>
+<div class="dt-rev-foot">
+<div class="dt-rev-av"><?php echo esc_html(ffinc2_gd_initials($rau)); ?></div>
+<div class="dt-rev-meta"><div class="dt-rev-au"><?php echo esc_html($rau); ?></div><div class="dt-rev-dt"><?php echo esc_html($rdate); ?></div></div>
+</div>
+</div>
+<?php } ?>
+</div>
+<?php } ?>
+<?php } else { ?>
+<div class="dt-empty">
+<i class="ti ti-message-star" aria-hidden="true"></i>
+<h4>No reviews yet</h4>
+<p>Be the first to work with this <?php echo esc_html($noun_lc); ?> and leave a review to help other buyers source with confidence.</p>
+</div>
+<?php } ?>
+<?php } ?>
 </div>
 
 </div><!-- /.dt-wrap -->
