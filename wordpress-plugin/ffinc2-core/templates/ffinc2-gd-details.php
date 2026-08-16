@@ -393,8 +393,14 @@ body.light-mode .ffdt .dt-meta,body.light-mode .ffdt .dt-prose,body.light-mode .
 body.light-mode .ffdt .dt-body,body.light-mode .ffdt .dt-similar{background:#EEF6FF}
 body.light-mode .ffdt .dt-box,body.light-mode .ffdt .dt-sim-card{background:rgba(255,255,255,.7);border-color:rgba(74,159,224,.2)}
 body.light-mode .ffdt .dt-fact,body.light-mode .ffdt .dt-cert-card,body.light-mode .ffdt .dt-contact,body.light-mode .ffdt .dt-empty{background:rgba(255,255,255,.6)}
-body.light-mode .ffdt .dt-tabs{background:rgba(238,246,255,.96)}
-body.light-mode .ffdt .dt-tab{color:#3A5E75}
+/* Tabs in light mode — mirror reference .tab-nav/.sp-tab exactly, with
+   !important so the live theme cascade can't wash the text out. */
+body.light-mode .ffdt .dt-tabs{background:rgba(238,246,255,.97) !important;border-bottom-color:rgba(74,159,224,.18) !important}
+body.light-mode .ffdt .dt-tab{color:#6B9DB7 !important}
+body.light-mode .ffdt .dt-tab:hover:not(.on){color:#050D18 !important}
+body.light-mode .ffdt .dt-tab.on{color:color-mix(in srgb,var(--ac) 74%,#001a30) !important;border-bottom-color:color-mix(in srgb,var(--ac) 74%,#001a30) !important}
+body.light-mode .ffdt-sup .dt-tab.on{color:#1E6BAB !important;border-bottom-color:#1E6BAB !important}
+body.light-mode .ffdt .dt-tab-badge{background:rgba(74,159,224,.12) !important;color:#1E6BAB !important}
 body.light-mode .ffdt .dt-pill{color:#1E6BAB}
 body.light-mode .ffdt .dt-hstats{background:rgba(255,255,255,.72)}
 /* ============================================================
@@ -409,7 +415,7 @@ body.light-mode .ffdt .dt-hstats{background:rgba(255,255,255,.72)}
    overrides below still win at ≤768px.
    ============================================================ */
 /* Content width + gutter (ref .sp-inner/.sp-panel-inner max 1200, 48px pad) */
-.ffdt-sup .dt-wrap,.ffdt-sup .dt-tabs-in{max-width:1200px;padding-left:48px;padding-right:48px}
+.ffdt-sup .dt-wrap{max-width:1200px;padding-left:48px;padding-right:48px}
 /* Top clearance: the live global header (Breakdance "FFInc Header" #1603)
    is position:sticky + overlay (floats over content, z-index 100) and is
    ~109px tall (container 3+25 pad, inner pill 15+15 pad, 50px logo row,
@@ -433,7 +439,9 @@ body.light-mode .ffdt .dt-hstats{background:rgba(255,255,255,.72)}
    (no gap), 14px 20px pad, 14px icon; non-active hover gets the accent
    underline; the review count badge mirrors .sp-tab-count exactly. */
 .ffdt-sup .dt-tabs{top:108px}
-.ffdt-sup .dt-tabs-in{gap:0}
+/* Tab strip is full-bleed like reference .tab-nav (no centered max-width);
+   tabs hug the left gutter (48px) rather than the centered content column. */
+.ffdt-sup .dt-tabs-in{gap:0;max-width:none;margin:0;padding-left:48px;padding-right:48px}
 .ffdt-sup .dt-tab{padding:14px 20px}
 .ffdt-sup .dt-tab i{font-size:14px}
 .ffdt-sup .dt-tab:hover:not(.on){color:#fff;border-bottom-color:color-mix(in srgb,var(--ac) 30%,transparent)}
