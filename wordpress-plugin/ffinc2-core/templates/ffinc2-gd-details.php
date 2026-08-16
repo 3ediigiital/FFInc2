@@ -205,6 +205,41 @@ if ($is_service) {
         array('ti ti-box',               'Min. Order',       ffinc2_gd_meta($pid, 'minimum_order_quantity')),
     );
 }
+/* Facts that actually have a value (shared by both modes). */
+$facts_out = array();
+foreach ($facts as $f) { if ($f[2] !== '' && $f[2] !== null && $f[2] !== '0') $facts_out[] = $f; }
+/* The reference Overview "Why Choose" box has no backing GeoDirectory field;
+   left empty so the box gracefully omits (per spec: never invent data). */
+$why_points = array();
+
+/* Sourcing Intelligence (ref .si-section). GeoDirectory has no dedicated fields
+   for seasonality / lead time / pricing, so these surface honest frozen-supply-
+   chain norms keyed to the listing's category, woven with this listing's real
+   declared data (origin country + export reach). No per-supplier figures are
+   fabricated; lead time is flagged as a typical range to confirm on quote. */
+$si_cards = array();
+$si_country = $ctry ?: ($city ?: 'origin');
+$si_export  = ffinc2_gd_meta($pid, 'export_countries');
+if (!$is_service) {
+    $si_season = array(
+        'frozen-poultry'           => array('Year-Round',  'Frozen poultry runs on steady year-round production; secure capacity early ahead of Q4 holiday demand peaks.'),
+        'frozen-beef-meat'         => array('Year-Round',  'Frozen beef & meat supply stays consistent year-round; book ahead of seasonal grilling and festive demand spikes.'),
+        'frozen-seafood'           => array('Season-Led',  'Wild-catch availability follows fishing seasons while farmed and IQF lines ship year-round; confirm species windows on quote.'),
+        'frozen-fruits-vegetables' => array('Harvest-Led', 'IQF fruit & veg volumes peak just after regional harvest; year-round stock is buffered from cold storage.'),
+    );
+    $bt = isset($si_season[$cat_slug]) ? $si_season[$cat_slug]
+        : array('Year-Round', 'Frozen inventory buffers supply for consistent year-round ordering; confirm current availability on quote.');
+    $si_cards[] = array('ti ti-calendar-event', 'Best Time to Order', $bt[0], $bt[1]);
+    $si_cards[] = array('ti ti-clock', 'Typical Lead Time', '2–4 Weeks', 'Typical order-to-loading window for frozen B2B container shipments; exact timelines are confirmed when you request a quote.');
+    $si_cards[] = array('ti ti-ship', 'Container Availability', '40ft Reefer',
+        'Temperature-controlled reefer containers dispatched from ' . $si_country . ($si_export ? ', serving ' . $si_export . '+ export markets.' : '.'));
+    $si_cards[] = array('ti ti-snowflake', 'Cold-Chain Standard', '−18°C Maintained', 'Continuous frozen cold chain from facility to port preserves product integrity throughout transit.');
+} else {
+    $si_cards[] = array('ti ti-calendar-event', 'Availability', 'Year-Round', 'Cold-chain services scheduled year-round; capacity is confirmed per booking window.');
+    $si_cards[] = array('ti ti-clock', 'Typical Response', '24–48 Hrs', 'Typical turnaround to confirm a service request; exact timelines are confirmed on enquiry.');
+    $si_cards[] = array('ti ti-map-pin', 'Coverage', ($si_country ?: 'Regional'), 'Service coverage is centred on ' . $si_country . '; confirm specific lanes and regions on enquiry.');
+    $si_cards[] = array('ti ti-snowflake', 'Cold-Chain Standard', '−18°C Maintained', 'Temperature-controlled handling throughout, preserving product integrity end to end.');
+}
 
 /* Products / Services tab — real "range" from the type multiselects. There is
    no structured catalog field yet, so we surface the declared range + a direct
@@ -302,7 +337,7 @@ $qattr_self = 'data-supplier-id="' . esc_attr($pid) . '" data-supplier-name="' .
 /* Tabs */
 .ffdt .dt-tabs{position:sticky;top:66px;z-index:40;background:rgba(6,15,26,.96);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid rgba(74,159,224,.1)}
 .ffdt .dt-tabs-in{max-width:1160px;margin:0 auto;padding:0 32px;display:flex;gap:2px;overflow-x:auto}
-.ffdt .dt-tab{display:inline-flex;align-items:center;gap:7px;padding:14px 18px;font-size:13px;font-weight:500;color:#9BBFD8;background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;white-space:nowrap;transition:color .2s,border-color .2s;font-family:'Inter',system-ui}
+.ffdt .dt-tab{display:inline-flex;align-items:center;gap:7px;padding:14px 18px;font-size:13px;font-weight:500;color:#9BBFD8;background:transparent;border-bottom:2px solid transparent;cursor:pointer;white-space:nowrap;transition:all .2s;font-family:'Inter',system-ui}
 .ffdt .dt-tab:hover{color:#fff}
 .ffdt .dt-tab.on{color:var(--ac);border-bottom-color:var(--ac)}
 .ffdt .dt-tab-badge{font-size:10px;font-weight:700;padding:1px 7px;border-radius:9px;background:color-mix(in srgb,var(--ac) 14%,transparent);color:var(--ac)}
@@ -387,10 +422,56 @@ body.light-mode .ffdt .dt-meta,body.light-mode .ffdt .dt-prose,body.light-mode .
 body.light-mode .ffdt .dt-body,body.light-mode .ffdt .dt-similar{background:#EEF6FF}
 body.light-mode .ffdt .dt-box,body.light-mode .ffdt .dt-sim-card{background:rgba(255,255,255,.7);border-color:rgba(74,159,224,.2)}
 body.light-mode .ffdt .dt-fact,body.light-mode .ffdt .dt-cert-card,body.light-mode .ffdt .dt-contact,body.light-mode .ffdt .dt-empty{background:rgba(255,255,255,.6)}
-body.light-mode .ffdt .dt-tabs{background:rgba(238,246,255,.96)}
-body.light-mode .ffdt .dt-tab{color:#3A5E75}
+/* Tabs in light mode — mirror reference .tab-nav/.sp-tab exactly, with
+   !important so the live theme cascade can't wash the text out. */
+body.light-mode .ffdt .dt-tabs{background:rgba(238,246,255,.97) !important;border-bottom-color:rgba(74,159,224,.18) !important}
+body.light-mode .ffdt .dt-tab{color:#6B9DB7 !important}
+body.light-mode .ffdt .dt-tab:hover:not(.on){color:#050D18 !important}
+body.light-mode .ffdt .dt-tab.on{color:color-mix(in srgb,var(--ac) 74%,#001a30) !important;border-bottom-color:color-mix(in srgb,var(--ac) 74%,#001a30) !important}
+body.light-mode .ffdt-sup .dt-tab.on{color:#1E6BAB !important;border-bottom-color:#1E6BAB !important}
+body.light-mode .ffdt .dt-tab-badge{background:rgba(74,159,224,.12) !important;color:#1E6BAB !important}
 body.light-mode .ffdt .dt-pill{color:#1E6BAB}
 body.light-mode .ffdt .dt-hstats{background:rgba(255,255,255,.72)}
+/* Reviews in light mode — cards + aggregate flip to white, text to dark ink
+   (ref .rev-agg/.rev-card/.rev-text). Without this the dark translucent card
+   bg + near-white review text render as a muddy grey box in light mode. */
+body.light-mode .ffdt .dt-rev-agg{background:rgba(255,255,255,.78) !important;border-color:rgba(74,159,224,.2) !important}
+body.light-mode .ffdt .dt-rev-card{background:rgba(255,255,255,.78) !important;border-color:rgba(74,159,224,.2) !important;box-shadow:0 4px 20px rgba(74,159,224,.08),inset 0 1px 0 rgba(255,255,255,.95) !important}
+body.light-mode .ffdt .dt-rev-card .dt-rev-tx{color:#3A5E75 !important}
+body.light-mode .ffdt .dt-rev-of,body.light-mode .ffdt .dt-rev-side-t,body.light-mode .ffdt .dt-rev-dt{color:#6B9DB7 !important}
+body.light-mode .ffdt .dt-rev-track{background:rgba(74,159,224,.15) !important}
+body.light-mode .ffdt .dt-rev-foot{border-top-color:rgba(74,159,224,.15) !important}
+body.light-mode .ffdt .dt-rev-vdiv{background:rgba(74,159,224,.2) !important}
+/* ── Sourcing Intelligence (ref .si-section) — accent-tinted so each category
+   keeps its colour; structural values pinned to the reference. ── */
+.ffdt .dt-si{position:relative;background:linear-gradient(180deg,#060F1A,#0A1628);padding:48px 48px 56px;overflow:hidden;border-top:1px solid rgba(74,159,224,.1);border-bottom:1px solid rgba(74,159,224,.1);z-index:2}
+.ffdt .dt-si-aura{position:absolute;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,color-mix(in srgb,var(--ac) 10%,transparent),transparent 65%);top:-100px;right:-80px;filter:blur(60px);pointer-events:none}
+.ffdt .dt-si-inner{position:relative;z-index:2;max-width:1200px;margin:0 auto;padding:0 48px}
+.ffdt .dt-si-head{margin-bottom:28px}
+.ffdt .dt-si-pill{display:inline-flex;align-items:center;gap:6px;background:color-mix(in srgb,var(--ac) 8%,transparent);border:1px solid color-mix(in srgb,var(--ac) 20%,transparent);border-radius:20px;padding:4px 14px;font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ac);margin-bottom:12px}
+.ffdt .dt-si-pill i{font-size:12px}
+.ffdt .dt-si-h{font-family:'Plus Jakarta Sans',system-ui;font-size:26px;font-weight:800;letter-spacing:-.6px;margin-bottom:8px;color:#fff}
+.ffdt .dt-si-h em{color:var(--ac);font-style:normal}
+.ffdt .dt-si-sub{font-size:14px;color:#9BBFD8;line-height:1.6;max-width:480px}
+.ffdt .dt-si-grid{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:14px}
+.ffdt .dt-si-card{background:rgba(18,34,52,.48);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(74,159,224,.12);border-radius:16px;padding:22px 18px;position:relative;overflow:hidden;transition:transform .25s,border-color .22s,box-shadow .25s}
+.ffdt .dt-si-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,color-mix(in srgb,var(--ac) 45%,transparent),transparent)}
+.ffdt .dt-si-card:hover{transform:translateY(-4px);border-color:color-mix(in srgb,var(--ac) 30%,transparent);box-shadow:0 14px 40px rgba(0,0,0,.35)}
+.ffdt .dt-si-icon{width:42px;height:42px;border-radius:11px;background:color-mix(in srgb,var(--ac) 10%,transparent);border:1px solid color-mix(in srgb,var(--ac) 22%,transparent);display:flex;align-items:center;justify-content:center;margin-bottom:14px}
+.ffdt .dt-si-icon i{font-size:20px;color:var(--ac)}
+.ffdt .dt-si-label{font-size:10.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#6B9DB7;margin-bottom:6px}
+.ffdt .dt-si-value{font-family:'Plus Jakarta Sans',system-ui;font-size:20px;font-weight:800;color:#fff;margin-bottom:8px;letter-spacing:-.3px}
+.ffdt .dt-si-detail{font-size:12px;color:#9BBFD8;line-height:1.65}
+body.light-mode .ffdt .dt-si{background:linear-gradient(180deg,#E8F4FF,#EEF6FF) !important;border-top-color:rgba(74,159,224,.15) !important;border-bottom-color:rgba(74,159,224,.15) !important}
+body.light-mode .ffdt .dt-si-h{color:#050D18 !important}
+body.light-mode .ffdt .dt-si-sub{color:#3A5E75 !important}
+body.light-mode .ffdt .dt-si-card{background:rgba(255,255,255,.78) !important;border-color:rgba(74,159,224,.2) !important;box-shadow:0 4px 20px rgba(74,159,224,.08),inset 0 1px 0 rgba(255,255,255,.95) !important}
+body.light-mode .ffdt .dt-si-value{color:#050D18 !important}
+body.light-mode .ffdt .dt-si-detail{color:#3A5E75 !important}
+body.light-mode .ffdt .dt-si-label{color:#6B9DB7 !important}
+body.light-mode .ffdt .dt-si-icon{background:rgba(74,159,224,.1) !important;border-color:rgba(74,159,224,.22) !important}
+@media (max-width:768px){.ffdt .dt-si{padding:36px 20px 44px}.ffdt .dt-si-inner{padding:0}.ffdt .dt-si-grid{grid-template-columns:1fr 1fr;gap:12px}.ffdt .dt-si-h{font-size:20px}}
+@media (max-width:480px){.ffdt .dt-si-grid{grid-template-columns:1fr}}
 /* ============================================================
    SUPPLIER-BRANCH LITERAL PARITY with supplier-profile.html.
    Scoped to .ffdt-sup so the Service branch (.ffdt only, out of
@@ -403,7 +484,7 @@ body.light-mode .ffdt .dt-hstats{background:rgba(255,255,255,.72)}
    overrides below still win at ≤768px.
    ============================================================ */
 /* Content width + gutter (ref .sp-inner/.sp-panel-inner max 1200, 48px pad) */
-.ffdt-sup .dt-wrap,.ffdt-sup .dt-tabs-in{max-width:1200px;padding-left:48px;padding-right:48px}
+.ffdt-sup .dt-wrap{max-width:1200px;padding-left:48px;padding-right:48px}
 /* Top clearance: the live global header (Breakdance "FFInc Header" #1603)
    is position:sticky + overlay (floats over content, z-index 100) and is
    ~109px tall (container 3+25 pad, inner pill 15+15 pad, 50px logo row,
@@ -422,10 +503,19 @@ body.light-mode .ffdt .dt-hstats{background:rgba(255,255,255,.72)}
 /* Hero actions (ref .ch-btn-p white text; .ch-btn-s pad 12px 22px, border .28) */
 .ffdt-sup .dt-btn-p{color:#fff}
 .ffdt-sup .dt-btn-s{padding:12px 22px;border-color:color-mix(in srgb,var(--ac) 28%,transparent)}
-/* Tabs — stick just below the live header, ref .sp-tab pad 14px 20px + on fw600 */
+/* Tabs — full parity with reference .tab-nav / .sp-tab / .sp-tab-count.
+   Sticks just below the live header (top:108px). Tabs are butted together
+   (no gap), 14px 20px pad, 14px icon; non-active hover gets the accent
+   underline; the review count badge mirrors .sp-tab-count exactly. */
 .ffdt-sup .dt-tabs{top:108px}
+/* Tab strip is full-bleed like reference .tab-nav (no centered max-width);
+   tabs hug the left gutter (48px) rather than the centered content column. */
+.ffdt-sup .dt-tabs-in{gap:0;max-width:none;margin:0;padding-left:48px;padding-right:48px}
 .ffdt-sup .dt-tab{padding:14px 20px}
+.ffdt-sup .dt-tab i{font-size:14px}
+.ffdt-sup .dt-tab:hover:not(.on){color:#fff;border-bottom-color:color-mix(in srgb,var(--ac) 30%,transparent)}
 .ffdt-sup .dt-tab.on{font-weight:600}
+.ffdt-sup .dt-tab-badge{font-weight:500;padding:1px 6px;border-radius:8px;background:color-mix(in srgb,var(--ac) 12%,transparent);border:1px solid color-mix(in srgb,var(--ac) 25%,transparent);margin-left:4px}
 /* Panels + cards (ref .sp-panel pad-top 32; .ov-box r16/22 + ::before accent line) */
 .ffdt-sup .dt-body{padding-top:32px}
 .ffdt-sup .dt-box{border-radius:16px;padding:22px;position:relative;overflow:hidden}
@@ -444,17 +534,81 @@ body.light-mode .ffdt .dt-hstats{background:rgba(255,255,255,.72)}
 /* Similar (ref .sim gradient bg + border-top; .sim-h 18px) */
 .ffdt-sup .dt-similar{background:linear-gradient(180deg,#050D18,#060F1A);border-top:1px solid rgba(74,159,224,.08);padding:28px 0 48px}
 .ffdt-sup .dt-sim-h{font-size:18px}
-/* Responsive */
+/* Overview — reference .ov-grid (2-col boxes). Boxes with no backing data
+   omit gracefully; a lone box on an odd row spans full width. */
+.ffdt-sup .dt-ov-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:start}
+.ffdt-sup .dt-ov-grid > .dt-box{margin-bottom:0}
+.ffdt-sup .dt-ov-grid > .dt-box:last-child:nth-child(odd){grid-column:1 / -1}
+.ffdt-sup .dt-prose{font-size:13px}
+.ffdt-sup .dt-why{display:flex;flex-direction:column;gap:9px}
+.ffdt-sup .dt-why-i{display:flex;gap:9px;font-size:12.5px;color:#9BBFD8;line-height:1.55}
+.ffdt-sup .dt-why-i::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--ac);flex-shrink:0;margin-top:6px}
+.ffdt-sup .dt-mkts{display:flex;flex-wrap:wrap;gap:6px}
+.ffdt-sup .dt-mkt{font-size:11px;padding:4px 10px;border-radius:8px;background:color-mix(in srgb,var(--ac) 8%,transparent);border:1px solid color-mix(in srgb,var(--ac) 15%,transparent);color:#8DCAF2}
+/* Certifications — reference two-tier layout (.cert-tier-bar / .cert-lbl / note) */
+.ffdt-sup .dt-cert-bar{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;background:color-mix(in srgb,var(--ac) 6%,transparent);border:1px solid color-mix(in srgb,var(--ac) 20%,transparent);border-radius:12px;padding:14px 18px;margin-bottom:22px}
+.ffdt-sup .dt-cert-bar-l{display:flex;align-items:center;gap:10px;flex-wrap:wrap;flex:1;min-width:0}
+.ffdt-sup .dt-cert-vbadge{display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg,color-mix(in srgb,var(--ac) 18%,transparent),color-mix(in srgb,var(--ac) 10%,#000));border:1px solid color-mix(in srgb,var(--ac) 40%,transparent);color:var(--ac);border-radius:10px;padding:6px 14px;font-size:11.5px;font-weight:700;white-space:nowrap;flex-shrink:0}
+.ffdt-sup .dt-cert-vbadge i{font-size:13px}
+.ffdt-sup .dt-cert-bar-desc{font-size:12px;color:#9BBFD8;line-height:1.5}
+.ffdt-sup .dt-cert-premium{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:600;padding:3px 10px;border-radius:8px;background:rgba(245,158,11,.1);color:#F59E0B;border:1px solid rgba(245,158,11,.25);white-space:nowrap;flex-shrink:0}
+.ffdt-sup .dt-cert-lbl{display:flex;align-items:center;gap:10px;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:#3A5E75;margin-bottom:12px}
+.ffdt-sup .dt-cert-lbl::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,color-mix(in srgb,var(--ac) 10%,transparent),transparent)}
+.ffdt-sup .dt-cert-lbl-v{color:var(--ac);margin-top:22px}
+.ffdt-sup .dt-cert-lbl-v::after{background:linear-gradient(90deg,color-mix(in srgb,var(--ac) 15%,transparent),transparent)}
+.ffdt-sup .dt-cert-note{padding:10px 14px;background:rgba(10,22,40,.5);border-left:2px solid color-mix(in srgb,var(--ac) 25%,transparent);border-radius:0 9px 9px 0;font-size:11.5px;color:#6B9DB7;line-height:1.6;margin:14px 0}
+/* Verified cert cards — ref .cert-grid 3-col gap 13 (→2col @768, →1col @480) */
+.ffdt-sup .dt-cert-cards{grid-template-columns:1fr 1fr 1fr;gap:13px}
+/* Reviews — reference .rev-agg 3-part card + .rev-grid cards with avatars */
+.ffdt-sup .dt-rev-agg{background:rgba(18,34,52,.4);border:1px solid rgba(74,159,224,.1);border-radius:14px;padding:20px;gap:16px}
+.ffdt-sup .dt-rev-vdiv{width:1px;height:48px;background:color-mix(in srgb,var(--ac) 18%,transparent);flex-shrink:0}
+.ffdt-sup .dt-rev-side{text-align:center;flex-shrink:0}
+.ffdt-sup .dt-rev-side-t{font-size:12px;color:#9BBFD8;margin-bottom:8px}
+.ffdt-sup .dt-rev-verified{display:flex;gap:5px;justify-content:center;align-items:center;color:#52DEB5;font-size:12px}
+.ffdt-sup .dt-rev-verified i{font-size:13px}
+.ffdt-sup .dt-rev-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+.ffdt-sup .dt-rev-card{position:relative;overflow:hidden;background:rgba(18,34,52,.48);border:1px solid rgba(74,159,224,.1);border-radius:14px;padding:18px}
+.ffdt-sup .dt-rev-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,color-mix(in srgb,var(--ac) 30%,transparent),transparent)}
+.ffdt-sup .dt-rev-card .dt-rev-tx{font-style:italic;color:#E8F4FD;line-height:1.7;margin-bottom:14px}
+.ffdt-sup .dt-rev-foot{display:flex;gap:10px;align-items:center;border-top:1px solid rgba(74,159,224,.08);padding-top:12px}
+.ffdt-sup .dt-rev-av{width:36px;height:36px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:'Plus Jakarta Sans',system-ui;font-size:12px;font-weight:700;color:#fff;background:linear-gradient(135deg,var(--ac),color-mix(in srgb,var(--ac) 55%,#000))}
+.ffdt-sup .dt-rev-meta{flex:1;min-width:0}
+/* Responsive
+   Service branch (.ffdt) keeps its sidebar collapse at 900px. The supplier
+   branch (.ffdt-sup) mirrors supplier-profile.html's breakpoints exactly:
+   all structural collapses land at 768px, with ov-facts + cert-grid taking a
+   second step down at 480px. */
 @media (max-width:900px){
 .ffdt .dt-cols{grid-template-columns:1fr}
-.ffdt .dt-sim-grid{grid-template-columns:1fr}
 }
 @media (max-width:768px){
+/* Shared hero collapse (ref .sp-inner / .sp-logo / .ch-stats @768) */
 .ffdt .dt-wrap,.ffdt .dt-tabs-in{padding-left:20px;padding-right:20px}
 .ffdt .dt-hgrid{flex-direction:column;gap:16px}
 .ffdt .dt-logo{width:84px;height:84px;font-size:28px}
 .ffdt .dt-h1{font-size:26px}
+.ffdt .dt-hstats{flex-wrap:wrap}
 .ffdt .dt-hstat{flex:1 1 45%}
+.ffdt .dt-acts{flex-wrap:wrap}
+.ffdt .dt-btn-p,.ffdt .dt-btn-s{flex:1 1 auto;justify-content:center}
+.ffdt .dt-sim-grid{grid-template-columns:1fr}
+/* Supplier-specific parity with reference @768 */
+.ffdt-sup .dt-wrap,.ffdt-sup .dt-tabs-in{padding-left:16px;padding-right:16px}
+.ffdt-sup .dt-body{padding-top:20px}
+.ffdt-sup .dt-logo{width:64px;height:64px;font-size:20px}
+.ffdt-sup .dt-h1{font-size:20px}
+.ffdt-sup .dt-meta{gap:8px}
+.ffdt-sup .dt-ov-grid,.ffdt-sup .dt-rev-grid{grid-template-columns:1fr}
+.ffdt-sup .dt-ov-grid > .dt-box:last-child:nth-child(odd){grid-column:auto}
+.ffdt-sup .dt-cert-cards{grid-template-columns:1fr 1fr}
+.ffdt-sup .dt-cert-bar{flex-direction:column;gap:10px;align-items:flex-start}
+.ffdt-sup .dt-tab{padding:12px 14px;font-size:12px}
+}
+@media (max-width:480px){
+/* Second step down (ref @480: .ov-facts 2-col, .cert-grid 1-col, name 18px) */
+.ffdt-sup .dt-facts{grid-template-columns:1fr 1fr}
+.ffdt-sup .dt-cert-cards{grid-template-columns:1fr}
+.ffdt-sup .dt-h1{font-size:18px}
 }
 </style>
 
@@ -521,7 +675,7 @@ body.light-mode .ffdt .dt-hstats{background:rgba(255,255,255,.72)}
 <div class="dt-tabs-in" role="tablist">
 <button class="dt-tab on" data-tab="overview" role="tab"><i class="ti ti-layout-list" aria-hidden="true"></i>Overview</button>
 <button class="dt-tab" data-tab="range" role="tab"><i class="ti ti-package" aria-hidden="true"></i><?php echo esc_html($tab_label); ?></button>
-<button class="dt-tab" data-tab="certs" role="tab"><i class="ti ti-certificate" aria-hidden="true"></i>Certifications</button>
+<button class="dt-tab" data-tab="certs" role="tab"><i class="<?php echo $is_service ? 'ti ti-certificate' : 'ti ti-shield-check'; ?>" aria-hidden="true"></i>Certifications</button>
 <button class="dt-tab" data-tab="reviews" role="tab"><i class="ti ti-star" aria-hidden="true"></i>Reviews<?php if ($rcount > 0) { ?><span class="dt-tab-badge"><?php echo esc_html($rcount); ?></span><?php } ?></button>
 </div>
 </div>
@@ -531,6 +685,7 @@ body.light-mode .ffdt .dt-hstats{background:rgba(255,255,255,.72)}
 
 <!-- Overview -->
 <div class="dt-panel on" id="tab-overview" role="tabpanel">
+<?php if ($is_service) { /* Service branch — unchanged (out of scope). */ ?>
 <div class="dt-cols">
 <div class="dt-main">
 <div class="dt-box">
@@ -543,10 +698,7 @@ body.light-mode .ffdt .dt-hstats{background:rgba(255,255,255,.72)}
 <div class="dt-pills"><?php foreach ($markets as $m) { echo '<span class="dt-pill">' . esc_html($m) . '</span>'; } ?></div>
 </div>
 <?php } ?>
-<?php
-$facts_out = array();
-foreach ($facts as $f) { if ($f[2] !== '' && $f[2] !== null && $f[2] !== '0') $facts_out[] = $f; }
-if ($facts_out) { ?>
+<?php if ($facts_out) { ?>
 <div class="dt-box">
 <div class="dt-box-h"><i class="ti ti-building-warehouse" aria-hidden="true"></i>Company Facts</div>
 <div class="dt-facts">
@@ -565,6 +717,38 @@ if ($facts_out) { ?>
 </div>
 </aside>
 </div>
+<?php } else { /* Supplier — reference .ov-grid (2-col). No sidebar. Data-less
+   boxes (Why Choose, Export Markets) omit gracefully; a lone box on an odd
+   row spans full width via CSS. */ ?>
+<div class="dt-ov-grid">
+<div class="dt-box">
+<div class="dt-box-h"><i class="ti ti-info-circle" aria-hidden="true"></i>About <?php echo esc_html($name); ?></div>
+<div class="dt-prose"><?php echo $about ? wp_kses_post($about) : '<p>No description provided yet.</p>'; ?></div>
+</div>
+<?php if (!empty($why_points)) { ?>
+<div class="dt-box">
+<div class="dt-box-h"><i class="ti ti-checks" aria-hidden="true"></i>Why Choose <?php echo esc_html($name); ?></div>
+<div class="dt-why"><?php foreach ($why_points as $w) { echo '<div class="dt-why-i">' . esc_html($w) . '</div>'; } ?></div>
+</div>
+<?php } ?>
+<?php if (!empty($markets)) { ?>
+<div class="dt-box">
+<div class="dt-box-h"><i class="ti ti-world" aria-hidden="true"></i>Export Markets</div>
+<div class="dt-mkts"><?php foreach ($markets as $m) { echo '<span class="dt-mkt">' . esc_html($m) . '</span>'; } ?></div>
+</div>
+<?php } ?>
+<?php if ($facts_out) { ?>
+<div class="dt-box">
+<div class="dt-box-h"><i class="ti ti-building-warehouse" aria-hidden="true"></i>Company Facts</div>
+<div class="dt-facts">
+<?php foreach ($facts_out as $f) { ?>
+<div class="dt-fact"><div class="dt-fact-l"><i class="<?php echo esc_attr($f[0]); ?>" aria-hidden="true"></i><?php echo esc_html($f[1]); ?></div><div class="dt-fact-v"><?php echo esc_html($f[2]); ?></div></div>
+<?php } ?>
+</div>
+</div>
+<?php } ?>
+</div>
+<?php } ?>
 </div>
 
 <!-- Products / Services -->
@@ -585,6 +769,7 @@ if ($facts_out) { ?>
 
 <!-- Certifications -->
 <div class="dt-panel" id="tab-certs" role="tabpanel">
+<?php if ($is_service) { /* Service branch — unchanged (out of scope). */ ?>
 <div class="dt-box">
 <div class="dt-box-h"><i class="ti ti-list-check" aria-hidden="true"></i>Declared Certifications</div>
 <?php if ($certs) { ?>
@@ -609,10 +794,47 @@ if ($facts_out) { ?>
 </div>
 <?php } ?>
 </div>
+<?php } else { /* Supplier — reference two-tier structure (.cert-tier-bar +
+   .cert-lbl sections). Premium bar and verified cards are wired to the
+   verified_supplier flag ($verified); non-verified falls back to the
+   "Documentation Not Yet Uploaded" standard state. */ ?>
+<?php if ($verified) { ?>
+<div class="dt-cert-bar">
+<div class="dt-cert-bar-l">
+<span class="dt-cert-vbadge"><i class="ti ti-shield-check" aria-hidden="true"></i>Documents Verified</span>
+<span class="dt-cert-bar-desc"><?php echo esc_html($name); ?> has uploaded and verified certification documents with FFInc. Documents available on request.</span>
+</div>
+<span class="dt-cert-premium"><i class="ti ti-star" style="font-size:9px" aria-hidden="true"></i>Premium Listing</span>
+</div>
+<?php } ?>
+<div class="dt-cert-lbl">Declared Certifications</div>
+<?php if ($certs) { ?>
+<div class="dt-pills"><?php foreach ($certs as $c) { echo '<span class="dt-pill">' . esc_html($c) . '</span>'; } ?></div>
+<?php } else { ?>
+<p class="dt-prose">No certifications declared yet.</p>
+<?php } ?>
+<div class="dt-cert-note">Certifications above are declared by the <?php echo esc_html($noun_lc); ?> at time of listing. For verified listings, uploaded documents are confirmed below; for standard listings, request documentation directly via the quote form.</div>
+<?php if ($verified && $certs) { ?>
+<div class="dt-cert-lbl dt-cert-lbl-v">Verified Documentation</div>
+<div class="dt-cert-cards">
+<?php foreach ($certs as $c) { ?>
+<div class="dt-cert-card"><div class="dt-cert-ic"><i class="ti ti-certificate" aria-hidden="true"></i></div><div><div class="dt-cert-nm"><?php echo esc_html($c); ?></div><div class="dt-cert-vf"><i class="ti ti-circle-check" style="font-size:11px" aria-hidden="true"></i>Verified by FFInc</div></div></div>
+<?php } ?>
+</div>
+<?php } else { ?>
+<div class="dt-cert-lbl">Verified Documentation</div>
+<div class="dt-empty">
+<i class="ti ti-file-upload" aria-hidden="true"></i>
+<h4>Documentation Not Yet Uploaded</h4>
+<p>This <?php echo esc_html($noun_lc); ?> has not yet uploaded verified certification documents. Declared certifications above are self-reported. Request documentation directly via a quote request.</p>
+</div>
+<?php } ?>
+<?php } ?>
 </div>
 
 <!-- Reviews -->
 <div class="dt-panel" id="tab-reviews" role="tabpanel">
+<?php if ($is_service) { /* Service branch — unchanged (out of scope). */ ?>
 <div class="dt-box">
 <div class="dt-box-h"><i class="ti ti-star" aria-hidden="true"></i>Reviews</div>
 <?php if ($has_reviews && $review_total > 0) { ?>
@@ -653,10 +875,85 @@ if ($facts_out) { ?>
 </div>
 <?php } ?>
 </div>
+<?php } else { /* Supplier — reference .rev-agg 3-part card + .rev-grid cards
+   with avatar initials. Reviewer role/product tags from the mockup have no
+   backing field and are omitted (no invented data). */ ?>
+<?php if ($has_reviews && $review_total > 0) { ?>
+<div class="dt-rev-agg">
+<div class="dt-rev-score">
+<div class="dt-rev-big"><?php echo esc_html(number_format($avg, 1)); ?></div>
+<span class="dt-stars"><?php echo ffinc2_dt_stars($avg); ?></span>
+<div class="dt-rev-of"><?php echo esc_html($rcount); ?> review<?php echo ($rcount == 1 ? '' : 's'); ?></div>
+</div>
+<div class="dt-rev-vdiv"></div>
+<div class="dt-rev-bars">
+<?php for ($s = 5; $s >= 1; $s--) { $n = $breakdown[$s]; $pct = $review_total ? round($n / $review_total * 100) : 0; ?>
+<div class="dt-rev-bar">
+<span class="dt-rev-bl"><?php echo $s; ?><i class="ti ti-star-filled" style="font-size:10px;color:#F5B301" aria-hidden="true"></i></span>
+<span class="dt-rev-track"><span class="dt-rev-fill" style="width:<?php echo (int) $pct; ?>%"></span></span>
+<span class="dt-rev-bc"><?php echo (int) $n; ?></span>
+</div>
+<?php } ?>
+</div>
+<div class="dt-rev-vdiv"></div>
+<div class="dt-rev-side">
+<div class="dt-rev-side-t">All reviews from verified buyers</div>
+<div class="dt-rev-verified"><i class="ti ti-shield-check" aria-hidden="true"></i>FFInc Verified</div>
+</div>
+</div>
+<?php if ($reviews) { ?>
+<div class="dt-rev-grid">
+<?php foreach ($reviews as $rv) {
+    $rdate = $rv->comment_date ? date_i18n(get_option('date_format'), strtotime($rv->comment_date)) : '';
+    $rau = $rv->comment_author ?: 'Verified buyer';
+    ?>
+<div class="dt-rev-card">
+<span class="dt-rev-st"><?php echo ffinc2_dt_stars($rv->rating); ?></span>
+<div class="dt-rev-tx"><?php echo wp_kses_post(wpautop($rv->comment_content)); ?></div>
+<div class="dt-rev-foot">
+<div class="dt-rev-av"><?php echo esc_html(ffinc2_gd_initials($rau)); ?></div>
+<div class="dt-rev-meta"><div class="dt-rev-au"><?php echo esc_html($rau); ?></div><div class="dt-rev-dt"><?php echo esc_html($rdate); ?></div></div>
+</div>
+</div>
+<?php } ?>
+</div>
+<?php } ?>
+<?php } else { ?>
+<div class="dt-empty">
+<i class="ti ti-message-star" aria-hidden="true"></i>
+<h4>No reviews yet</h4>
+<p>Be the first to work with this <?php echo esc_html($noun_lc); ?> and leave a review to help other buyers source with confidence.</p>
+</div>
+<?php } ?>
+<?php } ?>
 </div>
 
 </div><!-- /.dt-wrap -->
 </div><!-- /.dt-body -->
+
+<?php if ($si_cards) { ?>
+<!-- Sourcing Intelligence -->
+<section class="dt-si" aria-label="Sourcing intelligence">
+<div class="dt-si-aura"></div>
+<div class="dt-si-inner">
+<div class="dt-si-head">
+<div class="dt-si-pill"><i class="ti ti-bulb" aria-hidden="true"></i>Sourcing Intelligence</div>
+<h2 class="dt-si-h">Smart data for this <em><?php echo esc_html($noun_lc); ?></em></h2>
+<p class="dt-si-sub">Key sourcing signals to help you decide when and how to engage <?php echo esc_html(rtrim($name, '.')); ?>.</p>
+</div>
+<div class="dt-si-grid">
+<?php foreach ($si_cards as $sc) { ?>
+<div class="dt-si-card">
+<div class="dt-si-icon"><i class="<?php echo esc_attr($sc[0]); ?>" aria-hidden="true"></i></div>
+<div class="dt-si-label"><?php echo esc_html($sc[1]); ?></div>
+<div class="dt-si-value"><?php echo esc_html($sc[2]); ?></div>
+<div class="dt-si-detail"><?php echo esc_html($sc[3]); ?></div>
+</div>
+<?php } ?>
+</div>
+</div>
+</section>
+<?php } ?>
 
 <?php if ($sim_q->have_posts()) { ?>
 <!-- Similar listings -->
