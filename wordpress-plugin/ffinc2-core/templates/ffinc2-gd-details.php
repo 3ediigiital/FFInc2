@@ -480,6 +480,8 @@ body.light-mode .ffdt .dt-hstats{background:rgba(255,255,255,.72)}
 .ffdt-sup .dt-cert-lbl-v{color:var(--ac);margin-top:22px}
 .ffdt-sup .dt-cert-lbl-v::after{background:linear-gradient(90deg,color-mix(in srgb,var(--ac) 15%,transparent),transparent)}
 .ffdt-sup .dt-cert-note{padding:10px 14px;background:rgba(10,22,40,.5);border-left:2px solid color-mix(in srgb,var(--ac) 25%,transparent);border-radius:0 9px 9px 0;font-size:11.5px;color:#6B9DB7;line-height:1.6;margin:14px 0}
+/* Verified cert cards — ref .cert-grid 3-col gap 13 (→2col @768, →1col @480) */
+.ffdt-sup .dt-cert-cards{grid-template-columns:1fr 1fr 1fr;gap:13px}
 /* Reviews — reference .rev-agg 3-part card + .rev-grid cards with avatars */
 .ffdt-sup .dt-rev-agg{background:rgba(18,34,52,.4);border:1px solid rgba(74,159,224,.1);border-radius:14px;padding:20px;gap:16px}
 .ffdt-sup .dt-rev-vdiv{width:1px;height:48px;background:color-mix(in srgb,var(--ac) 18%,transparent);flex-shrink:0}
@@ -494,19 +496,42 @@ body.light-mode .ffdt .dt-hstats{background:rgba(255,255,255,.72)}
 .ffdt-sup .dt-rev-foot{display:flex;gap:10px;align-items:center;border-top:1px solid rgba(74,159,224,.08);padding-top:12px}
 .ffdt-sup .dt-rev-av{width:36px;height:36px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:'Plus Jakarta Sans',system-ui;font-size:12px;font-weight:700;color:#fff;background:linear-gradient(135deg,var(--ac),color-mix(in srgb,var(--ac) 55%,#000))}
 .ffdt-sup .dt-rev-meta{flex:1;min-width:0}
-/* Responsive */
+/* Responsive
+   Service branch (.ffdt) keeps its sidebar collapse at 900px. The supplier
+   branch (.ffdt-sup) mirrors supplier-profile.html's breakpoints exactly:
+   all structural collapses land at 768px, with ov-facts + cert-grid taking a
+   second step down at 480px. */
 @media (max-width:900px){
 .ffdt .dt-cols{grid-template-columns:1fr}
-.ffdt .dt-sim-grid{grid-template-columns:1fr}
-.ffdt-sup .dt-ov-grid,.ffdt-sup .dt-rev-grid{grid-template-columns:1fr}
-.ffdt-sup .dt-ov-grid > .dt-box:last-child:nth-child(odd){grid-column:auto}
 }
 @media (max-width:768px){
+/* Shared hero collapse (ref .sp-inner / .sp-logo / .ch-stats @768) */
 .ffdt .dt-wrap,.ffdt .dt-tabs-in{padding-left:20px;padding-right:20px}
 .ffdt .dt-hgrid{flex-direction:column;gap:16px}
 .ffdt .dt-logo{width:84px;height:84px;font-size:28px}
 .ffdt .dt-h1{font-size:26px}
+.ffdt .dt-hstats{flex-wrap:wrap}
 .ffdt .dt-hstat{flex:1 1 45%}
+.ffdt .dt-acts{flex-wrap:wrap}
+.ffdt .dt-btn-p,.ffdt .dt-btn-s{flex:1 1 auto;justify-content:center}
+.ffdt .dt-sim-grid{grid-template-columns:1fr}
+/* Supplier-specific parity with reference @768 */
+.ffdt-sup .dt-wrap,.ffdt-sup .dt-tabs-in{padding-left:16px;padding-right:16px}
+.ffdt-sup .dt-body{padding-top:20px}
+.ffdt-sup .dt-logo{width:64px;height:64px;font-size:20px}
+.ffdt-sup .dt-h1{font-size:20px}
+.ffdt-sup .dt-meta{gap:8px}
+.ffdt-sup .dt-ov-grid,.ffdt-sup .dt-rev-grid{grid-template-columns:1fr}
+.ffdt-sup .dt-ov-grid > .dt-box:last-child:nth-child(odd){grid-column:auto}
+.ffdt-sup .dt-cert-cards{grid-template-columns:1fr 1fr}
+.ffdt-sup .dt-cert-bar{flex-direction:column;gap:10px;align-items:flex-start}
+.ffdt-sup .dt-tab{padding:12px 14px;font-size:12px}
+}
+@media (max-width:480px){
+/* Second step down (ref @480: .ov-facts 2-col, .cert-grid 1-col, name 18px) */
+.ffdt-sup .dt-facts{grid-template-columns:1fr 1fr}
+.ffdt-sup .dt-cert-cards{grid-template-columns:1fr}
+.ffdt-sup .dt-h1{font-size:18px}
 }
 </style>
 
