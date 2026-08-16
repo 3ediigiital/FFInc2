@@ -45,9 +45,20 @@ if (!function_exists('ffinc2_gd_initials')) {
     function ffinc2_gd_initials($name) {
         $name = trim(wp_strip_all_tags($name));
         if ($name === '') return '—';
-        $words = preg_split('/\s+/', $name);
-        if (count($words) >= 2) return strtoupper(substr($words[0], 0, 1) . substr($words[1], 0, 1));
-        return strtoupper(substr($name, 0, 2));
+        // Drop legal/common suffixes so they never become an initial.
+        $stop = array('ltd','inc','llc','co','corp','plc','gmbh','bv','sa','ag','pty','group','holdings','company','the','and');
+        $raw = preg_split('/[^A-Za-z0-9]+/', $name, -1, PREG_SPLIT_NO_EMPTY);
+        $tokens = array();
+        foreach ($raw as $w) {
+            if (in_array(strtolower($w), $stop, true)) continue;
+            // Split camelCase / PascalCase: "GlobalFresh" -> "Global","Fresh".
+            foreach (preg_split('/(?<=[a-z0-9])(?=[A-Z])/', $w) as $p) {
+                if ($p !== '') $tokens[] = $p;
+            }
+        }
+        if (count($tokens) >= 2) return strtoupper(substr($tokens[0], 0, 1) . substr($tokens[1], 0, 1));
+        if (count($tokens) === 1)  return strtoupper(substr($tokens[0], 0, 2));
+        return strtoupper(substr(preg_replace('/[^A-Za-z0-9]/', '', $name), 0, 2));
     }
 }
 if (!function_exists('ffinc2_gd_add_url')) {
@@ -102,15 +113,28 @@ $cat_name  = $cat_term ? $cat_term->name : ($is_service ? 'Cold Chain Services' 
 $accent    = isset($CAT[$cat_slug]) ? $CAT[$cat_slug][0] : ($is_service ? '#A78BFA' : '#4A9FE0');
 $cat_icon  = isset($CAT[$cat_slug]) ? $CAT[$cat_slug][1] : ($is_service ? 'ti ti-truck' : 'ti ti-building-warehouse');
 
-/* Logo: GD listing image if present, else initials. */
+/* Logo: genuine per-listing image if present, else initials. GeoDirectory
+   returns a default/placeholder for image-less listings (ID 0, empty src, a
+   bare relative file path); using that bare path as an <img src> 404s and the
+   browser then paints the alt text (the full title) inside the box — so only
+   accept a real attachment (ID > 0) and resolve it to an absolute URL. */
 $logo_url = '';
 if (function_exists('geodir_get_images')) {
     $imgs = geodir_get_images($pid, 1);
     if (!empty($imgs)) {
         $im = is_array($imgs) ? reset($imgs) : $imgs;
-        if (is_object($im)) {
-            if (!empty($im->src))       $logo_url = $im->src;
-            elseif (!empty($im->file))  $logo_url = $im->file;
+        if (is_object($im) && !empty($im->ID)) {
+            if (!empty($im->src)) {
+                $logo_url = $im->src;
+            } elseif (!empty($im->file)) {
+                $file = $im->file;
+                if (preg_match('#^https?://#i', $file)) {
+                    $logo_url = $file;
+                } else {
+                    $up = wp_get_upload_dir();
+                    $logo_url = trailingslashit($up['baseurl']) . ltrim($file, '/');
+                }
+            }
         }
     }
 }
@@ -470,6 +494,32 @@ body.light-mode .ffdt .dt-si-value{color:#050D18 !important}
 body.light-mode .ffdt .dt-si-detail{color:#3A5E75 !important}
 body.light-mode .ffdt .dt-si-label{color:#6B9DB7 !important}
 body.light-mode .ffdt .dt-si-icon{background:rgba(74,159,224,.1) !important;border-color:rgba(74,159,224,.22) !important}
+/* ── Light-mode text-contrast parity with supplier-profile.html. Every element
+   below was rendering at its dark-mode light-blue value (#9BBFD8 / #8DCAF2 /
+   #cfe2f2 / accent #4A9FE0 / star #F5B301) — faded on the light background.
+   Pinned to the reference's ink scale: #050D18 / #3A5E75 / #6B9DB7 / #1E6BAB /
+   star #D97706. Accent elements are scoped to .ffdt-sup (Supplier). ── */
+body.light-mode .ffdt .dt-meta a{color:#3A5E75 !important}
+body.light-mode .ffdt .dt-meta i{color:#1E6BAB !important}
+body.light-mode .ffdt .dt-stars,body.light-mode .ffdt .dt-rev-st{color:#D97706 !important}
+body.light-mode .ffdt .dt-hsl{color:#6B9DB7 !important}
+body.light-mode .ffdt-sup .dt-hsv{color:#1E6BAB !important}
+body.light-mode .ffdt-sup .dt-catbdg{color:#1E6BAB !important}
+body.light-mode .ffdt-sup .dt-bc .cur{color:#1E6BAB !important}
+body.light-mode .ffdt-sup .dt-btn-s{color:#1E6BAB !important}
+body.light-mode .ffdt-sup .dt-box-h i{color:#1E6BAB !important}
+body.light-mode .ffdt .dt-why-i{color:#3A5E75 !important}
+body.light-mode .ffdt-sup .dt-mkt{color:#1E6BAB !important}
+body.light-mode .ffdt .dt-cert-bar-desc{color:#3A5E75 !important}
+body.light-mode .ffdt-sup .dt-cert-vbadge{color:#1E6BAB !important}
+body.light-mode .ffdt .dt-cert-note{background:rgba(238,246,255,.85) !important;color:#6B9DB7 !important}
+body.light-mode .ffdt .dt-cert-vf{color:#0F9B72 !important}
+body.light-mode .ffdt-sup .dt-cert-lbl-v{color:#1E6BAB !important}
+body.light-mode .ffdt .dt-empty h4{color:#050D18 !important}
+body.light-mode .ffdt .dt-contact h4{color:#050D18 !important}
+body.light-mode .ffdt .dt-contact p{color:#3A5E75 !important}
+body.light-mode .ffdt .dt-sim-lo{color:#6B9DB7 !important}
+body.light-mode .ffdt-sup .dt-sim-link{color:#1E6BAB !important}
 @media (max-width:768px){.ffdt .dt-si{padding:36px 20px 44px}.ffdt .dt-si-inner{padding:0}.ffdt .dt-si-grid{grid-template-columns:1fr 1fr;gap:12px}.ffdt .dt-si-h{font-size:20px}}
 @media (max-width:480px){.ffdt .dt-si-grid{grid-template-columns:1fr}}
 /* ============================================================
