@@ -285,6 +285,48 @@ if ($is_service) {
     $tab_label   = 'Products';
 }
 
+/* Structured catalog — up to 5 supplier product slots or 4 service slots. A
+   slot counts as populated when its name field is non-empty; empty slots are
+   skipped so partial catalogs render cleanly. Spec rows drop any pair with an
+   empty value. When nothing is populated the tab falls back to the existing
+   "contact for full catalog" state. */
+$catalog = array();
+if ($is_service) {
+    for ($n = 1; $n <= 4; $n++) {
+        $sn = trim((string) ffinc2_gd_meta($pid, "service_{$n}_name"));
+        if ($sn === '') continue;
+        $specs = array();
+        for ($k = 1; $k <= 4; $k++) {
+            $l = trim((string) ffinc2_gd_meta($pid, "service_{$n}_spec{$k}_label"));
+            $v = trim((string) ffinc2_gd_meta($pid, "service_{$n}_spec{$k}_value"));
+            if ($l !== '' && $v !== '') $specs[] = array($l, $v);
+        }
+        $catalog[] = array(
+            'name'  => $sn,
+            'desc'  => ffinc2_gd_meta($pid, "service_{$n}_desc"),
+            'specs' => $specs,
+            'tags'  => ffinc2_gd_multi(ffinc2_gd_meta($pid, "service_{$n}_tags")),
+        );
+    }
+} else {
+    $pspecs = array('MOQ' => 'moq', 'Packaging' => 'packaging', 'Origin' => 'origin', 'Shelf Life' => 'shelf_life');
+    for ($n = 1; $n <= 5; $n++) {
+        $pn = trim((string) ffinc2_gd_meta($pid, "product_{$n}_name"));
+        if ($pn === '') continue;
+        $specs = array();
+        foreach ($pspecs as $label => $suffix) {
+            $v = trim((string) ffinc2_gd_meta($pid, "product_{$n}_{$suffix}"));
+            if ($v !== '') $specs[] = array($label, $v);
+        }
+        $catalog[] = array(
+            'name'  => $pn,
+            'desc'  => ffinc2_gd_meta($pid, "product_{$n}_desc"),
+            'specs' => $specs,
+            'tags'  => ffinc2_gd_multi(ffinc2_gd_meta($pid, "product_{$n}_tags")),
+        );
+    }
+}
+
 /* Certifications (declared, from the real multiselect). */
 $certs = ffinc2_gd_multi(ffinc2_gd_meta($pid, 'certifications'));
 
@@ -395,6 +437,32 @@ $qattr_self = 'data-supplier-id="' . esc_attr($pid) . '" data-supplier-name="' .
 .ffdt .dt-contact i{font-size:34px;color:var(--ac);margin-bottom:12px;display:block}
 .ffdt .dt-contact h4{font-family:'Plus Jakarta Sans',system-ui;font-size:18px;font-weight:800;margin-bottom:8px}
 .ffdt .dt-contact p{font-size:13px;color:#9BBFD8;line-height:1.6;max-width:420px;margin:0 auto 18px}
+/* Catalog product/service cards — ref .prod-card (accent-tinted via --ac so
+   suppliers keep category colour and services render purple). */
+.ffdt .dt-prod-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.ffdt-svc .dt-prod-grid{grid-template-columns:1fr 1fr 1fr;gap:14px}
+.ffdt .dt-prod-card{position:relative;overflow:hidden;background:rgba(18,34,52,.48);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(74,159,224,.1);border-radius:16px;padding:22px}
+.ffdt .dt-prod-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,color-mix(in srgb,var(--ac) 40%,transparent),transparent)}
+.ffdt .dt-prod-icon{width:42px;height:42px;border-radius:11px;background:color-mix(in srgb,var(--ac) 10%,transparent);border:1px solid color-mix(in srgb,var(--ac) 22%,transparent);display:flex;align-items:center;justify-content:center;margin-bottom:12px}
+.ffdt .dt-prod-icon i{font-size:22px;color:var(--ac)}
+.ffdt .dt-prod-name{font-family:'Plus Jakarta Sans',system-ui;font-size:15px;font-weight:700;margin-bottom:6px}
+.ffdt .dt-prod-desc{font-size:12px;color:#9BBFD8;line-height:1.6;margin-bottom:12px}
+.ffdt .dt-prod-specs{display:flex;flex-direction:column;gap:5px;margin-bottom:12px}
+.ffdt .dt-prod-spec{display:flex;justify-content:space-between;gap:8px;font-size:11.5px;border-bottom:1px solid rgba(74,159,224,.08);padding:5px 0}
+.ffdt .dt-prod-spec:last-child{border-bottom:none}
+.ffdt .dt-prod-spec .lbl{color:#6B9DB7}
+.ffdt .dt-prod-spec .val{color:#fff;font-weight:500;text-align:right}
+.ffdt .dt-prod-tags{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:14px}
+.ffdt .dt-prod-tag{font-size:10px;padding:3px 9px;border-radius:7px;background:color-mix(in srgb,var(--ac) 9%,transparent);border:1px solid color-mix(in srgb,var(--ac) 20%,transparent);color:#cfe6f6}
+.ffdt .dt-prod-rq{width:100%;display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:9px 13px;font-size:12px;background:linear-gradient(135deg,var(--ac),color-mix(in srgb,var(--ac) 72%,#000));color:#fff}
+body.light-mode .ffdt .dt-prod-card{background:rgba(255,255,255,.78) !important;border-color:rgba(74,159,224,.2) !important;box-shadow:0 4px 20px rgba(74,159,224,.08),inset 0 1px 0 rgba(255,255,255,.95) !important}
+body.light-mode .ffdt .dt-prod-name{color:#050D18 !important}
+body.light-mode .ffdt .dt-prod-desc{color:#3A5E75 !important}
+body.light-mode .ffdt .dt-prod-spec .lbl{color:#6B9DB7 !important}
+body.light-mode .ffdt .dt-prod-spec .val{color:#050D18 !important}
+body.light-mode .ffdt .dt-prod-spec{border-bottom-color:rgba(74,159,224,.12) !important}
+body.light-mode .ffdt-sup .dt-prod-tag{color:#1E6BAB !important}
+@media(max-width:768px){.ffdt .dt-prod-grid,.ffdt-svc .dt-prod-grid{grid-template-columns:1fr}}
 /* Certifications */
 .ffdt .dt-cert-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px}
 .ffdt .dt-cert-card{display:flex;align-items:center;gap:11px;background:rgba(10,22,40,.5);border:1px solid color-mix(in srgb,var(--ac) 18%,transparent);border-radius:12px;padding:14px}
@@ -803,6 +871,28 @@ body.light-mode .ffdt-sup .dt-sim-link{color:#1E6BAB !important}
 
 <!-- Products / Services -->
 <div class="dt-panel" id="tab-range" role="tabpanel">
+<?php if ($catalog) { /* Real catalog cards from the slot fields (ref .prod-card). */ ?>
+<div class="dt-prod-grid">
+<?php foreach ($catalog as $it) { ?>
+<div class="dt-prod-card">
+<div class="dt-prod-icon"><i class="<?php echo esc_attr($cat_icon); ?>" aria-hidden="true"></i></div>
+<div class="dt-prod-name"><?php echo esc_html($it['name']); ?></div>
+<?php if (trim((string) $it['desc']) !== '') { ?><div class="dt-prod-desc"><?php echo esc_html($it['desc']); ?></div><?php } ?>
+<?php if (!empty($it['specs'])) { ?>
+<div class="dt-prod-specs">
+<?php foreach ($it['specs'] as $sp) { ?>
+<div class="dt-prod-spec"><span class="lbl"><?php echo esc_html($sp[0]); ?></span><span class="val"><?php echo esc_html($sp[1]); ?></span></div>
+<?php } ?>
+</div>
+<?php } ?>
+<?php if (!empty($it['tags'])) { ?>
+<div class="dt-prod-tags"><?php foreach ($it['tags'] as $tg) { echo '<span class="dt-prod-tag">' . esc_html($tg) . '</span>'; } ?></div>
+<?php } ?>
+<button class="rq-btn dt-prod-rq" <?php echo $qattr_self; ?>><i class="ti ti-message-circle" aria-hidden="true"></i>Request Quote</button>
+</div>
+<?php } ?>
+</div>
+<?php } else { /* No catalog data yet — original declared-range + contact fallback. */ ?>
 <?php if ($range) { ?>
 <div class="dt-box">
 <div class="dt-box-h"><i class="ti ti-package" aria-hidden="true"></i><?php echo esc_html($range_label); ?></div>
@@ -815,6 +905,7 @@ body.light-mode .ffdt-sup .dt-sim-link{color:#1E6BAB !important}
 <p>Contact <?php echo esc_html($name); ?> directly for full <?php echo esc_html($is_service ? 'service' : 'product'); ?> specifications, pack sizes, pricing and availability.</p>
 <button class="dt-btn-p" <?php echo $qattr_self; ?>><i class="ti ti-mail" aria-hidden="true"></i>Request a Quote</button>
 </div>
+<?php } ?>
 </div>
 
 <!-- Certifications -->
