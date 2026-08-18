@@ -74,6 +74,28 @@ if (!function_exists('ffinc2_gd_add_url')) {
         return home_url('/');
     }
 }
+if (!function_exists('ffinc2_gd_flag')) {
+    // Country name -> flag emoji. Countries are stored human-readable in wp-admin
+    // (the multiselect option list), so flags live here rather than in the data.
+    // Unknown names return '' and simply render without a flag.
+    function ffinc2_gd_flag($country) {
+        static $map = array(
+            'germany' => '🇩🇪', 'france' => '🇫🇷', 'united kingdom' => '🇬🇧', 'uk' => '🇬🇧',
+            'netherlands' => '🇳🇱', 'belgium' => '🇧🇪', 'spain' => '🇪🇸', 'italy' => '🇮🇹',
+            'poland' => '🇵🇱', 'sweden' => '🇸🇪', 'norway' => '🇳🇴', 'denmark' => '🇩🇰',
+            'ireland' => '🇮🇪', 'portugal' => '🇵🇹', 'switzerland' => '🇨🇭', 'austria' => '🇦🇹',
+            'united states' => '🇺🇸', 'usa' => '🇺🇸', 'canada' => '🇨🇦', 'mexico' => '🇲🇽',
+            'brazil' => '🇧🇷', 'united arab emirates' => '🇦🇪', 'uae' => '🇦🇪', 'saudi arabia' => '🇸🇦',
+            'qatar' => '🇶🇦', 'kuwait' => '🇰🇼', 'egypt' => '🇪🇬', 'south africa' => '🇿🇦',
+            'nigeria' => '🇳🇬', 'kenya' => '🇰🇪', 'china' => '🇨🇳', 'japan' => '🇯🇵',
+            'south korea' => '🇰🇷', 'singapore' => '🇸🇬', 'malaysia' => '🇲🇾', 'indonesia' => '🇮🇩',
+            'thailand' => '🇹🇭', 'vietnam' => '🇻🇳', 'india' => '🇮🇳', 'australia' => '🇦🇺',
+            'new zealand' => '🇳🇿',
+        );
+        $k = strtolower(trim($country));
+        return isset($map[$k]) ? $map[$k] : '';
+    }
+}
 if (!function_exists('ffinc2_dt_stars')) {
     // Render 5 star icons for a float average (full / half / empty).
     function ffinc2_dt_stars($avg) {
@@ -226,15 +248,27 @@ if ($is_service) {
         array('ti ti-building-factory',  'Facility Size',    ffinc2_gd_meta($pid, 'facility_size')),
         array('ti ti-world',             'Export Countries', ffinc2_gd_meta($pid, 'export_countries')),
         array('ti ti-list-details',      'Product Lines',    ffinc2_gd_meta($pid, 'product_lines_count')),
-        array('ti ti-box',               'Min. Order',       ffinc2_gd_meta($pid, 'minimum_order_quantity')),
+        /* Min. Order intentionally omitted here — already shown in the hero stat
+           strip; the reference Company Facts card drops it to avoid duplication. */
     );
 }
 /* Facts that actually have a value (shared by both modes). */
 $facts_out = array();
 foreach ($facts as $f) { if ($f[2] !== '' && $f[2] !== null && $f[2] !== '0') $facts_out[] = $f; }
-/* The reference Overview "Why Choose" box has no backing GeoDirectory field;
-   left empty so the box gracefully omits (per spec: never invent data). */
+/* Overview "Why Choose" — 5 fixed text slots (why_choose_1..5); populated when
+   non-empty, empty slots skipped (same convention as the product catalog). */
 $why_points = array();
+if (!$is_service) {
+    for ($wn = 1; $wn <= 5; $wn++) {
+        $wv = trim((string) ffinc2_gd_meta($pid, "why_choose_{$wn}"));
+        if ($wv !== '') $why_points[] = $wv;
+    }
+}
+
+/* Overview "Export Markets" — supplier multiselect of country names (flags added
+   in the template via ffinc2_gd_flag). Service branch keeps its coverage list. */
+$export_markets = $is_service ? array() : ffinc2_gd_multi(ffinc2_gd_meta($pid, 'export_market_countries'));
+
 
 /* Sourcing Intelligence (ref .si-section). GeoDirectory has no dedicated fields
    for seasonality / lead time / pricing, so these surface honest frozen-supply-
@@ -348,7 +382,10 @@ $sim_q = new WP_Query($sim_args);
 $add_url    = ffinc2_gd_add_url($post_type);
 $db_link    = get_post_type_archive_link($post_type);
 $cat_link   = ($cat_term && !is_wp_error(get_term_link($cat_term))) ? get_term_link($cat_term) : $db_link;
-$qattr_self = 'data-supplier-id="' . esc_attr($pid) . '" data-supplier-name="' . esc_attr($name) . '" data-supplier-logo="' . esc_attr($initials) . '" data-supplier-location="' . esc_attr($loc) . '"';
+/* Populated product names for the RFQ "Product Required" select. */
+$product_names = array();
+if (!$is_service) { foreach ($catalog as $ci) { if (!empty($ci['name'])) $product_names[] = $ci['name']; } }
+$qattr_self = 'data-supplier-id="' . esc_attr($pid) . '" data-supplier-name="' . esc_attr($name) . '" data-supplier-logo="' . esc_attr($initials) . '" data-supplier-location="' . esc_attr($loc) . '" data-supplier-products="' . esc_attr(implode(',', $product_names)) . '"';
 ?>
 
 <!-- ============================================================
@@ -849,10 +886,14 @@ body.light-mode .ffdt-sup .dt-sim-link{color:#1E6BAB !important}
 <div class="dt-why"><?php foreach ($why_points as $w) { echo '<div class="dt-why-i">' . esc_html($w) . '</div>'; } ?></div>
 </div>
 <?php } ?>
-<?php if (!empty($markets)) { ?>
+<?php if (!empty($export_markets)) { ?>
 <div class="dt-box">
 <div class="dt-box-h"><i class="ti ti-world" aria-hidden="true"></i>Export Markets</div>
-<div class="dt-mkts"><?php foreach ($markets as $m) { echo '<span class="dt-mkt">' . esc_html($m) . '</span>'; } ?></div>
+<div class="dt-mkts"><?php
+$em_max = 12; $em_shown = array_slice($export_markets, 0, $em_max); $em_rest = count($export_markets) - count($em_shown);
+foreach ($em_shown as $m) { $fl = ffinc2_gd_flag($m); echo '<span class="dt-mkt">' . ($fl ? $fl . ' ' : '') . esc_html($m) . '</span>'; }
+if ($em_rest > 0) { echo '<span class="dt-mkt dt-mkt-more">+' . (int) $em_rest . ' more</span>'; }
+?></div>
 </div>
 <?php } ?>
 <?php if ($facts_out) { ?>
@@ -1108,7 +1149,9 @@ body.light-mode .ffdt-sup .dt-sim-link{color:#1E6BAB !important}
     $sloc = trim($scity . (($scity && $sctry) ? ', ' : '') . $sctry); if ($sloc === '') $sloc = $sctry ?: $scity;
     $slogo = '';
     if (function_exists('geodir_get_images')) { $simgs = geodir_get_images($spid, 1); if (!empty($simgs)) { $sim = is_array($simgs) ? reset($simgs) : $simgs; if (is_object($sim) && !empty($sim->src)) $slogo = $sim->src; } }
-    $sqattr = 'data-supplier-id="' . esc_attr($spid) . '" data-supplier-name="' . esc_attr($sname) . '" data-supplier-logo="' . esc_attr($sini) . '" data-supplier-location="' . esc_attr($sloc) . '"';
+    $sprods = array();
+    if (!$is_service) { for ($spn = 1; $spn <= 5; $spn++) { $spv = trim((string) ffinc2_gd_meta($spid, "product_{$spn}_name")); if ($spv !== '') $sprods[] = $spv; } }
+    $sqattr = 'data-supplier-id="' . esc_attr($spid) . '" data-supplier-name="' . esc_attr($sname) . '" data-supplier-logo="' . esc_attr($sini) . '" data-supplier-location="' . esc_attr($sloc) . '" data-supplier-products="' . esc_attr(implode(',', $sprods)) . '"';
     ?>
 <div class="dt-sim-card">
 <div class="dt-sim-top">
@@ -1143,7 +1186,15 @@ body.light-mode .ffdt-sup .dt-sim-link{color:#1E6BAB !important}
 <div class="qm-f"><label class="qm-lb">Company Name</label><input class="qm-in" type="text" placeholder="Acme Foods Ltd"></div>
 <div class="qm-f"><label class="qm-lb">Email Address</label><input class="qm-in" type="email" placeholder="you@company.com"></div>
 <div class="qm-f"><label class="qm-lb">Country</label><input class="qm-in" type="text" placeholder="United Kingdom"></div>
+<?php if ($is_service) { /* Service branch — unchanged. */ ?>
 <div class="qm-f full"><label class="qm-lb">Requirements</label><textarea class="qm-ta" rows="4" placeholder="Product/service required, quantity, certifications, delivery terms, timeline..."></textarea></div>
+<?php } else { /* Supplier branch — extended RFQ fields. */ ?>
+<div class="qm-f"><label class="qm-lb">Product Required</label><select class="qm-se" id="qm-products"><?php foreach ($product_names as $pn) { echo '<option>' . esc_html($pn) . '</option>'; } ?><option>Other</option></select></div>
+<div class="qm-f"><label class="qm-lb">Quantity / MOQ Required</label><input class="qm-in" type="text" placeholder="e.g. 5 Metric Tonnes"></div>
+<div class="qm-f"><label class="qm-lb">Delivery Terms</label><select class="qm-se"><option>FOB</option><option>CIF</option><option>CFR</option><option>EXW</option><option>DDP</option></select></div>
+<div class="qm-f"><label class="qm-lb">Target Price per MT</label><input class="qm-in" type="text" placeholder="e.g. $1,200/MT"></div>
+<div class="qm-f full"><label class="qm-lb">Additional Requirements</label><textarea class="qm-ta" rows="4" placeholder="Certifications needed, packaging specs, delivery timeline, labelling requirements..."></textarea></div>
+<?php } ?>
 </div>
 <button class="qm-sub-btn" type="submit"><i class="ti ti-send" aria-hidden="true"></i>Send Quote Request</button>
 <div class="qm-priv">Your details are sent directly to the <?php echo esc_html($noun_lc); ?>. FrozenFoodInc does not store quote request data or charge any commission.</div>
@@ -1178,11 +1229,19 @@ body.light-mode .ffdt-sup .dt-sim-link{color:#1E6BAB !important}
   });
   /* Quote modal */
   var ov=document.getElementById('qm-ov'),card=document.getElementById('qm-card');
-  function openModal(name,logo,loc){
+  function openModal(name,logo,loc,products){
     var sn=document.getElementById('qm-sn'),lg=document.getElementById('qm-logo'),sl=document.getElementById('qm-sl');
     if(name&&sn)sn.textContent=name;
     if(logo&&lg)lg.textContent=logo;
     if(loc!=null&&sl)sl.textContent=loc;
+    /* Supplier modal: rebuild the Product Required options from the trigger. */
+    var psel=document.getElementById('qm-products');
+    if(psel&&products!=null){
+      var list=String(products).split(',').map(function(s){return s.trim();}).filter(Boolean);
+      psel.innerHTML='';
+      list.forEach(function(p){var o=document.createElement('option');o.textContent=p;psel.appendChild(o);});
+      var oo=document.createElement('option');oo.textContent='Other';psel.appendChild(oo);
+    }
     if(!ov)return;
     ov.classList.add('open');ov.setAttribute('aria-hidden','false');
     if(window.gsap){gsap.fromTo(ov,{opacity:0},{opacity:1,duration:.25,ease:'power2.out'});gsap.fromTo(card,{scale:.94,opacity:0},{scale:1,opacity:1,duration:.35,ease:'back.out(1.4)'});}
@@ -1194,7 +1253,7 @@ body.light-mode .ffdt-sup .dt-sim-link{color:#1E6BAB !important}
   }
   document.addEventListener('click',function(e){
     var t=e.target.closest?e.target.closest('[data-supplier-name]'):null;
-    if(t){openModal(t.getAttribute('data-supplier-name'),t.getAttribute('data-supplier-logo'),t.getAttribute('data-supplier-location'));}
+    if(t){openModal(t.getAttribute('data-supplier-name'),t.getAttribute('data-supplier-logo'),t.getAttribute('data-supplier-location'),t.getAttribute('data-supplier-products'));}
   });
   var x=document.getElementById('qm-x'); if(x)x.addEventListener('click',closeModal);
   if(ov)ov.addEventListener('click',function(e){if(e.target===ov)closeModal();});
