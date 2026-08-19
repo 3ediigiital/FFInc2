@@ -382,9 +382,11 @@ $sim_q = new WP_Query($sim_args);
 $add_url    = ffinc2_gd_add_url($post_type);
 $db_link    = get_post_type_archive_link($post_type);
 $cat_link   = ($cat_term && !is_wp_error(get_term_link($cat_term))) ? get_term_link($cat_term) : $db_link;
-/* Populated product names for the RFQ "Product Required" select. */
+/* Populated catalog names for the RFQ Product/Service Required select.
+   $catalog already holds the right slot data for both branches (products
+   for suppliers, services for providers), so this is branch-agnostic. */
 $product_names = array();
-if (!$is_service) { foreach ($catalog as $ci) { if (!empty($ci['name'])) $product_names[] = $ci['name']; } }
+foreach ($catalog as $ci) { if (!empty($ci['name'])) $product_names[] = $ci['name']; }
 $qattr_self = 'data-supplier-id="' . esc_attr($pid) . '" data-supplier-name="' . esc_attr($name) . '" data-supplier-logo="' . esc_attr($initials) . '" data-supplier-location="' . esc_attr($loc) . '" data-supplier-products="' . esc_attr(implode(',', $product_names)) . '"';
 ?>
 
@@ -772,12 +774,23 @@ body.light-mode .ffdt-svc .dt-prod-tag{color:#6D28D9 !important}
 .ffdt .dt-cert-cards{grid-template-columns:1fr 1fr}
 .ffdt .dt-cert-bar{flex-direction:column;gap:10px;align-items:flex-start}
 .ffdt .dt-tab{padding:12px 14px;font-size:12px}
+/* Mobile header clearance: the global overlay header (#1603) shrinks on
+   phones — at this breakpoint its pill padding drops to 10/10 so it is
+   ~99px tall (container 3+25, pill 10+10, ~50px logo row, 1px border),
+   vs ~109px on desktop. The desktop hero clears 120px; without this
+   override phones inherit that full 120px and show a large empty band
+   above the title. 104px keeps a tight ~5px gap below the mobile header. */
+.ffdt .dt-hero{padding-top:104px}
 }
 @media (max-width:480px){
 /* Second step down (ref @480: .ov-facts 2-col, .cert-grid 1-col, name 18px) */
 .ffdt .dt-facts{grid-template-columns:1fr 1fr}
 .ffdt .dt-cert-cards{grid-template-columns:1fr}
 .ffdt .dt-h1{font-size:18px}
+/* Phone-portrait: header container padding collapses to 0/0 (pill stays
+   10/10), so the overlay header is only ~71px tall — reduce clearance to
+   match (tight ~7px gap below the header). */
+.ffdt .dt-hero{padding-top:78px}
 }
 </style>
 
@@ -1167,7 +1180,8 @@ if ($em_rest > 0) { echo '<span class="dt-mkt dt-mkt-more">+' . (int) $em_rest .
     $slogo = '';
     if (function_exists('geodir_get_images')) { $simgs = geodir_get_images($spid, 1); if (!empty($simgs)) { $sim = is_array($simgs) ? reset($simgs) : $simgs; if (is_object($sim) && !empty($sim->src)) $slogo = $sim->src; } }
     $sprods = array();
-    if (!$is_service) { for ($spn = 1; $spn <= 5; $spn++) { $spv = trim((string) ffinc2_gd_meta($spid, "product_{$spn}_name")); if ($spv !== '') $sprods[] = $spv; } }
+    if ($is_service) { for ($spn = 1; $spn <= 4; $spn++) { $spv = trim((string) ffinc2_gd_meta($spid, "service_{$spn}_name")); if ($spv !== '') $sprods[] = $spv; } }
+    else { for ($spn = 1; $spn <= 5; $spn++) { $spv = trim((string) ffinc2_gd_meta($spid, "product_{$spn}_name")); if ($spv !== '') $sprods[] = $spv; } }
     $sqattr = 'data-supplier-id="' . esc_attr($spid) . '" data-supplier-name="' . esc_attr($sname) . '" data-supplier-logo="' . esc_attr($sini) . '" data-supplier-location="' . esc_attr($sloc) . '" data-supplier-products="' . esc_attr(implode(',', $sprods)) . '"';
     ?>
 <div class="dt-sim-card">
@@ -1203,8 +1217,12 @@ if ($em_rest > 0) { echo '<span class="dt-mkt dt-mkt-more">+' . (int) $em_rest .
 <div class="qm-f"><label class="qm-lb">Company Name</label><input class="qm-in" type="text" placeholder="Acme Foods Ltd"></div>
 <div class="qm-f"><label class="qm-lb">Email Address</label><input class="qm-in" type="email" placeholder="you@company.com"></div>
 <div class="qm-f"><label class="qm-lb">Country</label><input class="qm-in" type="text" placeholder="United Kingdom"></div>
-<?php if ($is_service) { /* Service branch — unchanged. */ ?>
-<div class="qm-f full"><label class="qm-lb">Requirements</label><textarea class="qm-ta" rows="4" placeholder="Product/service required, quantity, certifications, delivery terms, timeline..."></textarea></div>
+<?php if ($is_service) { /* Service branch — extended RFQ fields. */ ?>
+<div class="qm-f"><label class="qm-lb">Service Required</label><select class="qm-se" id="qm-products"><?php foreach ($product_names as $pn) { echo '<option>' . esc_html($pn) . '</option>'; } ?><option>Other</option></select></div>
+<div class="qm-f"><label class="qm-lb">Estimated Volume / Throughput</label><input class="qm-in" type="text" placeholder="e.g. 500 pallets/month or 10 containers/week"></div>
+<div class="qm-f"><label class="qm-lb">Frequency</label><select class="qm-se"><option>One-off</option><option>Weekly</option><option>Monthly</option><option>Ongoing Contract</option></select></div>
+<div class="qm-f"><label class="qm-lb">Preferred Start Date</label><input class="qm-in" type="text" placeholder="e.g. Within 30 days"></div>
+<div class="qm-f full"><label class="qm-lb">Additional Requirements</label><textarea class="qm-ta" rows="4" placeholder="Certifications needed, temperature range, coverage regions, special handling requirements..."></textarea></div>
 <?php } else { /* Supplier branch — extended RFQ fields. */ ?>
 <div class="qm-f"><label class="qm-lb">Product Required</label><select class="qm-se" id="qm-products"><?php foreach ($product_names as $pn) { echo '<option>' . esc_html($pn) . '</option>'; } ?><option>Other</option></select></div>
 <div class="qm-f"><label class="qm-lb">Quantity / MOQ Required</label><input class="qm-in" type="text" placeholder="e.g. 5 Metric Tonnes"></div>
@@ -1251,7 +1269,7 @@ if ($em_rest > 0) { echo '<span class="dt-mkt dt-mkt-more">+' . (int) $em_rest .
     if(name&&sn)sn.textContent=name;
     if(logo&&lg)lg.textContent=logo;
     if(loc!=null&&sl)sl.textContent=loc;
-    /* Supplier modal: rebuild the Product Required options from the trigger. */
+    /* Rebuild the Product/Service Required options from the trigger (both branches). */
     var psel=document.getElementById('qm-products');
     if(psel&&products!=null){
       var list=String(products).split(',').map(function(s){return s.trim();}).filter(Boolean);
