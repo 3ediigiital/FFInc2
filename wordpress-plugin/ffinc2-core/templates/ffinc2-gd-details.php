@@ -371,7 +371,7 @@ $about = $current_post ? apply_filters('the_content', $current_post->post_conten
 $sim_args = array(
     'post_type'      => $post_type,
     'post_status'    => 'publish',
-    'posts_per_page' => 3,
+    'posts_per_page' => 9, /* slider scrolls when a category has >3 siblings */
     'post__not_in'   => array($pid),
 );
 if ($cat_slug) {
@@ -534,7 +534,15 @@ body.light-mode .ffdt-sup .dt-prod-tag{color:#1E6BAB !important}
 /* Similar */
 .ffdt .dt-similar{background:#050D18;padding:20px 0 56px;position:relative;z-index:2}
 .ffdt .dt-sim-h{font-family:'Plus Jakarta Sans',system-ui;font-size:20px;font-weight:800;margin-bottom:16px}
-.ffdt .dt-sim-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+/* Similar listings slider: horizontal scroll-snap track + prev/next arrows. */
+.ffdt .dt-sim-slider{position:relative;display:flex;align-items:stretch;gap:12px}
+.ffdt .dt-sim-track{display:flex;gap:16px;flex:1;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;padding:4px 2px;-ms-overflow-style:none;scrollbar-width:none}
+.ffdt .dt-sim-track::-webkit-scrollbar{display:none}
+.ffdt .dt-sim-card{flex:0 0 calc(33.333% - 11px);min-width:0;scroll-snap-align:start}
+.ffdt .dt-sim-arrow{align-self:center;width:38px;height:38px;border-radius:50%;flex-shrink:0;border:1px solid color-mix(in srgb,var(--ac) 25%,transparent);background:rgba(18,34,52,.6);color:var(--ac);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .2s;font-size:16px}
+.ffdt .dt-sim-arrow:hover{background:color-mix(in srgb,var(--ac) 18%,transparent);border-color:color-mix(in srgb,var(--ac) 50%,transparent);color:#fff;transform:scale(1.08)}
+.ffdt .dt-sim-arrow:disabled{opacity:.3;cursor:default;transform:none}
+.ffdt .dt-sim-slider.dt-sim-fits .dt-sim-arrow{display:none}
 .ffdt .dt-sim-card{background:rgba(18,34,52,.48);border:1px solid rgba(74,159,224,.1);border-radius:16px;padding:18px;transition:transform .25s,border-color .25s}
 .ffdt .dt-sim-card:hover{transform:translateY(-4px);border-color:color-mix(in srgb,var(--ac) 26%,transparent)}
 .ffdt .dt-sim-top{display:flex;gap:11px;align-items:center;margin-bottom:12px}
@@ -626,7 +634,9 @@ body.light-mode .ffdt .dt-empty h4{color:#050D18 !important}
 body.light-mode .ffdt .dt-contact h4{color:#050D18 !important}
 body.light-mode .ffdt .dt-contact p{color:#3A5E75 !important}
 body.light-mode .ffdt .dt-sim-lo{color:#6B9DB7 !important}
+body.light-mode .ffdt .dt-sim-arrow{background:rgba(255,255,255,.82) !important;border-color:rgba(74,159,224,.25) !important}
 body.light-mode .ffdt-sup .dt-sim-link{color:#1E6BAB !important}
+body.light-mode .ffdt-sup .dt-sim-arrow{color:#1E6BAB !important}
 /* Service branch light-mode accent text — the raw purple (#A78BFA) is too pale
    on white, so pin the same small-text elements to a legible deep violet
    (#6D28D9, ~7.3:1 on white — WCAG AA), mirroring the supplier #1E6BAB set. */
@@ -640,6 +650,7 @@ body.light-mode .ffdt-svc .dt-mkt{color:#6D28D9 !important}
 body.light-mode .ffdt-svc .dt-cert-vbadge{color:#6D28D9 !important}
 body.light-mode .ffdt-svc .dt-cert-lbl-v{color:#6D28D9 !important}
 body.light-mode .ffdt-svc .dt-sim-link{color:#6D28D9 !important}
+body.light-mode .ffdt-svc .dt-sim-arrow{color:#6D28D9 !important}
 body.light-mode .ffdt-svc .dt-prod-tag{color:#6D28D9 !important}
 @media (max-width:768px){.ffdt .dt-si{padding:36px 20px 44px}.ffdt .dt-si-inner{padding:0}.ffdt .dt-si-grid{grid-template-columns:1fr 1fr;gap:12px}.ffdt .dt-si-h{font-size:20px}}
 @media (max-width:480px){.ffdt .dt-si-grid{grid-template-columns:1fr}}
@@ -762,7 +773,8 @@ body.light-mode .ffdt-svc .dt-prod-tag{color:#6D28D9 !important}
 .ffdt .dt-hstat{flex:1 1 45%}
 .ffdt .dt-acts{flex-wrap:wrap}
 .ffdt .dt-btn-p,.ffdt .dt-btn-s{flex:1 1 auto;justify-content:center}
-.ffdt .dt-sim-grid{grid-template-columns:1fr}
+.ffdt .dt-sim-card{flex:0 0 100%}
+.ffdt .dt-sim-arrow{display:none}
 /* Supplier-specific parity with reference @768 */
 .ffdt .dt-wrap,.ffdt .dt-tabs-in{padding-left:16px;padding-right:16px}
 .ffdt .dt-body{padding-top:20px}
@@ -774,13 +786,14 @@ body.light-mode .ffdt-svc .dt-prod-tag{color:#6D28D9 !important}
 .ffdt .dt-cert-cards{grid-template-columns:1fr 1fr}
 .ffdt .dt-cert-bar{flex-direction:column;gap:10px;align-items:flex-start}
 .ffdt .dt-tab{padding:12px 14px;font-size:12px}
-/* Mobile header clearance: the global overlay header (#1603) shrinks on
-   phones — at this breakpoint its pill padding drops to 10/10 so it is
-   ~99px tall (container 3+25, pill 10+10, ~50px logo row, 1px border),
-   vs ~109px on desktop. The desktop hero clears 120px; without this
-   override phones inherit that full 120px and show a large empty band
-   above the title. 104px keeps a tight ~5px gap below the mobile header. */
-.ffdt .dt-hero{padding-top:104px}
+/* Mobile header clearance. The global header (#1603) is position:fixed and
+   content flows under it, so the hero's padding-top is what pushes the
+   breadcrumb clear of it (.dt-wrap/.dt-bc add no top padding — .dt-bc is
+   padding-top:0). At this tier the header's opaque logo pill sits ~3–73px
+   (container pad 3/25, pill pad 10/10, 50px logo); the 25px container-bottom
+   is transparent, so the breadcrumb only needs to clear the pill (~73px),
+   not the full box. 84px lands the breadcrumb just below the pill. */
+.ffdt .dt-hero{padding-top:84px}
 }
 @media (max-width:480px){
 /* Second step down (ref @480: .ov-facts 2-col, .cert-grid 1-col, name 18px) */
@@ -788,9 +801,11 @@ body.light-mode .ffdt-svc .dt-prod-tag{color:#6D28D9 !important}
 .ffdt .dt-cert-cards{grid-template-columns:1fr}
 .ffdt .dt-h1{font-size:18px}
 /* Phone-portrait: header container padding collapses to 0/0 (pill stays
-   10/10), so the overlay header is only ~71px tall — reduce clearance to
-   match (tight ~7px gap below the header). */
-.ffdt .dt-hero{padding-top:78px}
+   10/10) so the fixed header is a full-height ~70px opaque pill with no
+   transparent zone below it — the breadcrumb can only tighten to just
+   below the pill. 74px clears the ~70px pill by ~4px (line-box leading
+   included); going lower would slide the breadcrumb under the logo. */
+.ffdt .dt-hero{padding-top:74px}
 }
 </style>
 
@@ -1172,7 +1187,9 @@ if ($em_rest > 0) { echo '<span class="dt-mkt dt-mkt-more">+' . (int) $em_rest .
 <section class="dt-similar" aria-label="Similar <?php echo esc_attr($noun); ?>s">
 <div class="dt-wrap">
 <h2 class="dt-sim-h">Similar <?php echo esc_html($noun); ?>s</h2>
-<div class="dt-sim-grid">
+<div class="dt-sim-slider">
+<button class="dt-sim-arrow dt-sim-prev" type="button" aria-label="Previous <?php echo esc_attr($noun); ?>s"><i class="ti ti-chevron-left" aria-hidden="true"></i></button>
+<div class="dt-sim-track">
 <?php while ($sim_q->have_posts()) { $sim_q->the_post();
     $spid = get_the_ID(); $sname = get_the_title(); $sini = ffinc2_gd_initials($sname);
     $scity = ffinc2_gd_meta($spid, 'city'); $sctry = ffinc2_gd_meta($spid, 'country');
@@ -1196,6 +1213,8 @@ if ($em_rest > 0) { echo '<span class="dt-mkt dt-mkt-more">+' . (int) $em_rest .
 </div>
 </div>
 <?php } wp_reset_postdata(); ?>
+</div>
+<button class="dt-sim-arrow dt-sim-next" type="button" aria-label="Next <?php echo esc_attr($noun); ?>s"><i class="ti ti-chevron-right" aria-hidden="true"></i></button>
 </div>
 </div>
 </section>
@@ -1300,6 +1319,28 @@ if ($em_rest > 0) { echo '<span class="dt-mkt dt-mkt-more">+' . (int) $em_rest .
       .fromTo('.ffdt .dt-meta',{y:18,opacity:0},{y:0,opacity:1,duration:.5},'-=.35')
       .fromTo('.ffdt .dt-hstats',{y:18,opacity:0},{y:0,opacity:1,duration:.5},'-=.35')
       .fromTo('.ffdt .dt-acts',{y:16,opacity:0},{y:0,opacity:1,duration:.45},'-=.3');
+  }
+  /* Similar-listings slider: scroll-snap track + prev/next arrows. Arrows
+     scroll by one card; they disable at the ends and hide entirely when all
+     cards already fit (nothing to scroll). */
+  var simTrack=document.querySelector('.ffdt .dt-sim-track');
+  var simPrev=document.querySelector('.ffdt .dt-sim-prev');
+  var simNext=document.querySelector('.ffdt .dt-sim-next');
+  if(simTrack&&simPrev&&simNext){
+    var simSlider=simTrack.closest('.dt-sim-slider');
+    function simStep(){var c=simTrack.querySelector('.dt-sim-card');return c?Math.round(c.getBoundingClientRect().width)+16:280;}
+    function simUpdate(){
+      var max=simTrack.scrollWidth-simTrack.clientWidth-2;
+      /* class drives arrow visibility so CSS can still hide them on mobile */
+      if(simSlider)simSlider.classList.toggle('dt-sim-fits',max<=0);
+      simPrev.disabled=simTrack.scrollLeft<=2;
+      simNext.disabled=simTrack.scrollLeft>=max;
+    }
+    simPrev.addEventListener('click',function(){simTrack.scrollBy({left:-simStep(),behavior:'smooth'});});
+    simNext.addEventListener('click',function(){simTrack.scrollBy({left:simStep(),behavior:'smooth'});});
+    simTrack.addEventListener('scroll',simUpdate,{passive:true});
+    window.addEventListener('resize',simUpdate);
+    simUpdate();
   }
 })();
 </script>
