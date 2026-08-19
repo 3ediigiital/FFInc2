@@ -235,10 +235,12 @@ $markets_label = 'Coverage Regions';
 /* Overview: company facts — only rendered when a value actually exists. */
 if ($is_service) {
     $facts = array(
-        array('ti ti-calendar', 'Founded',            $est),
-        array('ti ti-world',    'Coverage Regions',   ($cov ? count($cov) : '')),
-        array('ti ti-truck',    'Capacity / Fleet',   ffinc2_gd_meta($pid, 'capacity__fleet_size')),
-        array('ti ti-clock',    'Typical Turnaround', ffinc2_gd_meta($pid, 'typical_turnaround')),
+        array('ti ti-calendar',          'Founded',           $est),
+        array('ti ti-users',             'Employees',         ffinc2_gd_meta($pid, 'employee_count')),
+        array('ti ti-building-warehouse','Storage Capacity',  ffinc2_gd_meta($pid, 'storage_capacity')),
+        array('ti ti-truck',             'Reefer Fleet Size', ffinc2_gd_meta($pid, 'reefer_fleet_size')),
+        array('ti ti-world',             'Regions Covered',   ($cov ? count($cov) : '')),
+        array('ti ti-list-details',      'Service Lines',     ffinc2_gd_meta($pid, 'service_lines_count')),
     );
 } else {
     $facts = array(
@@ -258,11 +260,9 @@ foreach ($facts as $f) { if ($f[2] !== '' && $f[2] !== null && $f[2] !== '0') $f
 /* Overview "Why Choose" — 5 fixed text slots (why_choose_1..5); populated when
    non-empty, empty slots skipped (same convention as the product catalog). */
 $why_points = array();
-if (!$is_service) {
-    for ($wn = 1; $wn <= 5; $wn++) {
-        $wv = trim((string) ffinc2_gd_meta($pid, "why_choose_{$wn}"));
-        if ($wv !== '') $why_points[] = $wv;
-    }
+for ($wn = 1; $wn <= 5; $wn++) {
+    $wv = trim((string) ffinc2_gd_meta($pid, "why_choose_{$wn}"));
+    if ($wv !== '') $why_points[] = $wv;
 }
 
 /* Overview "Export Markets" — supplier multiselect of country names (flags added
@@ -371,7 +371,7 @@ $about = $current_post ? apply_filters('the_content', $current_post->post_conten
 $sim_args = array(
     'post_type'      => $post_type,
     'post_status'    => 'publish',
-    'posts_per_page' => 3,
+    'posts_per_page' => 9, /* slider scrolls when a category has >3 siblings */
     'post__not_in'   => array($pid),
 );
 if ($cat_slug) {
@@ -382,9 +382,11 @@ $sim_q = new WP_Query($sim_args);
 $add_url    = ffinc2_gd_add_url($post_type);
 $db_link    = get_post_type_archive_link($post_type);
 $cat_link   = ($cat_term && !is_wp_error(get_term_link($cat_term))) ? get_term_link($cat_term) : $db_link;
-/* Populated product names for the RFQ "Product Required" select. */
+/* Populated catalog names for the RFQ Product/Service Required select.
+   $catalog already holds the right slot data for both branches (products
+   for suppliers, services for providers), so this is branch-agnostic. */
 $product_names = array();
-if (!$is_service) { foreach ($catalog as $ci) { if (!empty($ci['name'])) $product_names[] = $ci['name']; } }
+foreach ($catalog as $ci) { if (!empty($ci['name'])) $product_names[] = $ci['name']; }
 $qattr_self = 'data-supplier-id="' . esc_attr($pid) . '" data-supplier-name="' . esc_attr($name) . '" data-supplier-logo="' . esc_attr($initials) . '" data-supplier-location="' . esc_attr($loc) . '" data-supplier-products="' . esc_attr(implode(',', $product_names)) . '"';
 ?>
 
@@ -532,7 +534,15 @@ body.light-mode .ffdt-sup .dt-prod-tag{color:#1E6BAB !important}
 /* Similar */
 .ffdt .dt-similar{background:#050D18;padding:20px 0 56px;position:relative;z-index:2}
 .ffdt .dt-sim-h{font-family:'Plus Jakarta Sans',system-ui;font-size:20px;font-weight:800;margin-bottom:16px}
-.ffdt .dt-sim-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+/* Similar listings slider: horizontal scroll-snap track + prev/next arrows. */
+.ffdt .dt-sim-slider{position:relative;display:flex;align-items:stretch;gap:12px}
+.ffdt .dt-sim-track{display:flex;gap:16px;flex:1;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;padding:4px 2px;-ms-overflow-style:none;scrollbar-width:none}
+.ffdt .dt-sim-track::-webkit-scrollbar{display:none}
+.ffdt .dt-sim-card{flex:0 0 calc(33.333% - 11px);min-width:0;scroll-snap-align:start}
+.ffdt .dt-sim-arrow{align-self:center;width:38px;height:38px;border-radius:50%;flex-shrink:0;border:1px solid color-mix(in srgb,var(--ac) 25%,transparent);background:rgba(18,34,52,.6);color:var(--ac);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .2s;font-size:16px}
+.ffdt .dt-sim-arrow:hover{background:color-mix(in srgb,var(--ac) 18%,transparent);border-color:color-mix(in srgb,var(--ac) 50%,transparent);color:#fff;transform:scale(1.08)}
+.ffdt .dt-sim-arrow:disabled{opacity:.3;cursor:default;transform:none}
+.ffdt .dt-sim-slider.dt-sim-fits .dt-sim-arrow{display:none}
 .ffdt .dt-sim-card{background:rgba(18,34,52,.48);border:1px solid rgba(74,159,224,.1);border-radius:16px;padding:18px;transition:transform .25s,border-color .25s}
 .ffdt .dt-sim-card:hover{transform:translateY(-4px);border-color:color-mix(in srgb,var(--ac) 26%,transparent)}
 .ffdt .dt-sim-top{display:flex;gap:11px;align-items:center;margin-bottom:12px}
@@ -603,7 +613,7 @@ body.light-mode .ffdt .dt-si-icon{background:rgba(74,159,224,.1) !important;bord
    below was rendering at its dark-mode light-blue value (#9BBFD8 / #8DCAF2 /
    #cfe2f2 / accent #4A9FE0 / star #F5B301) — faded on the light background.
    Pinned to the reference's ink scale: #050D18 / #3A5E75 / #6B9DB7 / #1E6BAB /
-   star #D97706. Accent elements are scoped to .ffdt-sup (Supplier). ── */
+   star #D97706. Accent elements are scoped to .ffdt (Supplier). ── */
 body.light-mode .ffdt .dt-meta a{color:#3A5E75 !important}
 body.light-mode .ffdt .dt-meta i{color:#1E6BAB !important}
 body.light-mode .ffdt .dt-stars,body.light-mode .ffdt .dt-rev-st{color:#D97706 !important}
@@ -624,12 +634,29 @@ body.light-mode .ffdt .dt-empty h4{color:#050D18 !important}
 body.light-mode .ffdt .dt-contact h4{color:#050D18 !important}
 body.light-mode .ffdt .dt-contact p{color:#3A5E75 !important}
 body.light-mode .ffdt .dt-sim-lo{color:#6B9DB7 !important}
+body.light-mode .ffdt .dt-sim-arrow{background:rgba(255,255,255,.82) !important;border-color:rgba(74,159,224,.25) !important}
 body.light-mode .ffdt-sup .dt-sim-link{color:#1E6BAB !important}
+body.light-mode .ffdt-sup .dt-sim-arrow{color:#1E6BAB !important}
+/* Service branch light-mode accent text — the raw purple (#A78BFA) is too pale
+   on white, so pin the same small-text elements to a legible deep violet
+   (#6D28D9, ~7.3:1 on white — WCAG AA), mirroring the supplier #1E6BAB set. */
+body.light-mode .ffdt-svc .dt-tab.on{color:#6D28D9 !important;border-bottom-color:#6D28D9 !important}
+body.light-mode .ffdt-svc .dt-hsv{color:#6D28D9 !important}
+body.light-mode .ffdt-svc .dt-catbdg{color:#6D28D9 !important}
+body.light-mode .ffdt-svc .dt-bc .cur{color:#6D28D9 !important}
+body.light-mode .ffdt-svc .dt-btn-s{color:#6D28D9 !important}
+body.light-mode .ffdt-svc .dt-box-h i{color:#6D28D9 !important}
+body.light-mode .ffdt-svc .dt-mkt{color:#6D28D9 !important}
+body.light-mode .ffdt-svc .dt-cert-vbadge{color:#6D28D9 !important}
+body.light-mode .ffdt-svc .dt-cert-lbl-v{color:#6D28D9 !important}
+body.light-mode .ffdt-svc .dt-sim-link{color:#6D28D9 !important}
+body.light-mode .ffdt-svc .dt-sim-arrow{color:#6D28D9 !important}
+body.light-mode .ffdt-svc .dt-prod-tag{color:#6D28D9 !important}
 @media (max-width:768px){.ffdt .dt-si{padding:36px 20px 44px}.ffdt .dt-si-inner{padding:0}.ffdt .dt-si-grid{grid-template-columns:1fr 1fr;gap:12px}.ffdt .dt-si-h{font-size:20px}}
 @media (max-width:480px){.ffdt .dt-si-grid{grid-template-columns:1fr}}
 /* ============================================================
    SUPPLIER-BRANCH LITERAL PARITY with supplier-profile.html.
-   Scoped to .ffdt-sup so the Service branch (.ffdt only, out of
+   Scoped to .ffdt so the Service branch (.ffdt only, out of
    scope for this pass) renders byte-for-byte unchanged. Accent-
    tinted values stay on --ac/color-mix so every supplier category
    (poultry blue, veg green, beef amber, seafood teal) keeps its
@@ -639,98 +666,98 @@ body.light-mode .ffdt-sup .dt-sim-link{color:#1E6BAB !important}
    overrides below still win at ≤768px.
    ============================================================ */
 /* Content width + gutter (ref .sp-inner/.sp-panel-inner max 1200, 48px pad) */
-.ffdt-sup .dt-wrap{max-width:1200px;padding-left:48px;padding-right:48px}
+.ffdt .dt-wrap{max-width:1200px;padding-left:48px;padding-right:48px}
 /* Top clearance: the live global header (Breakdance "FFInc Header" #1603)
    is position:sticky + overlay (floats over content, z-index 100) and is
    ~109px tall (container 3+25 pad, inner pill 15+15 pad, 50px logo row,
    1px border). 109 + 11px comfortable buffer = 120px. */
-.ffdt-sup .dt-hero{background:linear-gradient(180deg,#050D18,#061428);border-bottom:none;padding:120px 0 36px}
-.ffdt-sup .dt-bc{padding-top:0}
+.ffdt .dt-hero{background:linear-gradient(180deg,#050D18,#061428);border-bottom:none;padding:120px 0 36px}
+.ffdt .dt-bc{padding-top:0}
 /* Hero grid + logo (ref .sp-inner gap 28; .sp-logo 88/r20/2px/26px/shadow) */
-.ffdt-sup .dt-hgrid{gap:28px}
-.ffdt-sup .dt-logo{width:88px;height:88px;border-radius:20px;font-size:26px;border-width:2px;border-color:color-mix(in srgb,var(--ac) 30%,transparent);background:color-mix(in srgb,var(--ac) 12%,transparent);box-shadow:0 0 40px color-mix(in srgb,var(--ac) 15%,transparent)}
-.ffdt-sup .dt-catbdg{background:color-mix(in srgb,var(--ac) 10%,transparent);border-color:color-mix(in srgb,var(--ac) 25%,transparent)}
-.ffdt-sup .dt-h1{font-size:28px;letter-spacing:-.7px;line-height:1.1;margin:2px 0 8px}
+.ffdt .dt-hgrid{gap:28px}
+.ffdt .dt-logo{width:88px;height:88px;border-radius:20px;font-size:26px;border-width:2px;border-color:color-mix(in srgb,var(--ac) 30%,transparent);background:color-mix(in srgb,var(--ac) 12%,transparent);box-shadow:0 0 40px color-mix(in srgb,var(--ac) 15%,transparent)}
+.ffdt .dt-catbdg{background:color-mix(in srgb,var(--ac) 10%,transparent);border-color:color-mix(in srgb,var(--ac) 25%,transparent)}
+.ffdt .dt-h1{font-size:28px;letter-spacing:-.7px;line-height:1.1;margin:2px 0 8px}
 /* Hero stat bar (ref .ch-stats border .18; .chs pad 12px 20px; .chs-n 20px) */
-.ffdt-sup .dt-hstats{border-color:color-mix(in srgb,var(--ac) 18%,transparent)}
-.ffdt-sup .dt-hstat{padding:12px 20px}
-.ffdt-sup .dt-hsv{font-size:20px}
+.ffdt .dt-hstats{border-color:color-mix(in srgb,var(--ac) 18%,transparent)}
+.ffdt .dt-hstat{padding:12px 20px}
+.ffdt .dt-hsv{font-size:20px}
 /* Hero actions (ref .ch-btn-p white text; .ch-btn-s pad 12px 22px, border .28) */
-.ffdt-sup .dt-btn-p{color:#fff}
-.ffdt-sup .dt-btn-s{padding:12px 22px;border-color:color-mix(in srgb,var(--ac) 28%,transparent)}
+.ffdt .dt-btn-p{color:#fff}
+.ffdt .dt-btn-s{padding:12px 22px;border-color:color-mix(in srgb,var(--ac) 28%,transparent)}
 /* Tabs — full parity with reference .tab-nav / .sp-tab / .sp-tab-count.
    Sticks just below the live header (top:108px). Tabs are butted together
    (no gap), 14px 20px pad, 14px icon; non-active hover gets the accent
    underline; the review count badge mirrors .sp-tab-count exactly. */
-.ffdt-sup .dt-tabs{top:108px}
+.ffdt .dt-tabs{top:108px}
 /* Tab strip is full-bleed like reference .tab-nav (no centered max-width);
    tabs hug the left gutter (48px) rather than the centered content column. */
-.ffdt-sup .dt-tabs-in{gap:0;max-width:none;margin:0;padding-left:48px;padding-right:48px}
-.ffdt-sup .dt-tab{padding:14px 20px}
-.ffdt-sup .dt-tab i{font-size:14px}
-.ffdt-sup .dt-tab:hover:not(.on){color:#fff;border-bottom-color:color-mix(in srgb,var(--ac) 30%,transparent)}
-.ffdt-sup .dt-tab.on{font-weight:600}
-.ffdt-sup .dt-tab-badge{font-weight:500;padding:1px 6px;border-radius:8px;background:color-mix(in srgb,var(--ac) 12%,transparent);border:1px solid color-mix(in srgb,var(--ac) 25%,transparent);margin-left:4px}
+.ffdt .dt-tabs-in{gap:0;max-width:none;margin:0;padding-left:48px;padding-right:48px}
+.ffdt .dt-tab{padding:14px 20px}
+.ffdt .dt-tab i{font-size:14px}
+.ffdt .dt-tab:hover:not(.on){color:#fff;border-bottom-color:color-mix(in srgb,var(--ac) 30%,transparent)}
+.ffdt .dt-tab.on{font-weight:600}
+.ffdt .dt-tab-badge{font-weight:500;padding:1px 6px;border-radius:8px;background:color-mix(in srgb,var(--ac) 12%,transparent);border:1px solid color-mix(in srgb,var(--ac) 25%,transparent);margin-left:4px}
 /* Panels + cards (ref .sp-panel pad-top 32; .ov-box r16/22 + ::before accent line) */
-.ffdt-sup .dt-body{padding-top:32px}
-.ffdt-sup .dt-box{border-radius:16px;padding:22px;position:relative;overflow:hidden}
-.ffdt-sup .dt-box::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,color-mix(in srgb,var(--ac) 40%,transparent),transparent)}
-.ffdt-sup .dt-box-h{font-size:15px}
-.ffdt-sup .dt-box-h i{font-size:17px}
+.ffdt .dt-body{padding-top:32px}
+.ffdt .dt-box{border-radius:16px;padding:22px;position:relative;overflow:hidden}
+.ffdt .dt-box::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,color-mix(in srgb,var(--ac) 40%,transparent),transparent)}
+.ffdt .dt-box-h{font-size:15px}
+.ffdt .dt-box-h i{font-size:17px}
 /* Facts (ref .ov-facts 3-col gap 8; .ov-fact r9/10px 12px; .ov-fv 15px) */
-.ffdt-sup .dt-facts{grid-template-columns:1fr 1fr 1fr;gap:8px}
-.ffdt-sup .dt-fact{border-radius:9px;padding:10px 12px}
-.ffdt-sup .dt-fact-v{font-size:15px}
+.ffdt .dt-facts{grid-template-columns:1fr 1fr 1fr;gap:8px}
+.ffdt .dt-fact{border-radius:9px;padding:10px 12px}
+.ffdt .dt-fact-v{font-size:15px}
 /* Reviews (ref .rev-big 48px; star-amber bars + labels, track 5px/r3) */
-.ffdt-sup .dt-rev-big{font-size:48px}
-.ffdt-sup .dt-rev-bl{color:#F59E0B}
-.ffdt-sup .dt-rev-track{height:5px;border-radius:3px}
-.ffdt-sup .dt-rev-fill{border-radius:3px;background:linear-gradient(90deg,#F59E0B,#FCD34D)}
+.ffdt .dt-rev-big{font-size:48px}
+.ffdt .dt-rev-bl{color:#F59E0B}
+.ffdt .dt-rev-track{height:5px;border-radius:3px}
+.ffdt .dt-rev-fill{border-radius:3px;background:linear-gradient(90deg,#F59E0B,#FCD34D)}
 /* Similar (ref .sim gradient bg + border-top; .sim-h 18px) */
-.ffdt-sup .dt-similar{background:linear-gradient(180deg,#050D18,#060F1A);border-top:1px solid rgba(74,159,224,.08);padding:28px 0 48px}
-.ffdt-sup .dt-sim-h{font-size:18px}
+.ffdt .dt-similar{background:linear-gradient(180deg,#050D18,#060F1A);border-top:1px solid rgba(74,159,224,.08);padding:28px 0 48px}
+.ffdt .dt-sim-h{font-size:18px}
 /* Overview — reference .ov-grid (2-col boxes). Boxes with no backing data
    omit gracefully; a lone box on an odd row spans full width. */
-.ffdt-sup .dt-ov-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:start}
-.ffdt-sup .dt-ov-grid > .dt-box{margin-bottom:0}
-.ffdt-sup .dt-ov-grid > .dt-box:last-child:nth-child(odd){grid-column:1 / -1}
-.ffdt-sup .dt-prose{font-size:13px}
-.ffdt-sup .dt-why{display:flex;flex-direction:column;gap:9px}
-.ffdt-sup .dt-why-i{display:flex;gap:9px;font-size:12.5px;color:#9BBFD8;line-height:1.55}
-.ffdt-sup .dt-why-i::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--ac);flex-shrink:0;margin-top:6px}
-.ffdt-sup .dt-mkts{display:flex;flex-wrap:wrap;gap:6px}
-.ffdt-sup .dt-mkt{font-size:11px;padding:4px 10px;border-radius:8px;background:color-mix(in srgb,var(--ac) 8%,transparent);border:1px solid color-mix(in srgb,var(--ac) 15%,transparent);color:#8DCAF2}
+.ffdt .dt-ov-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:start}
+.ffdt .dt-ov-grid > .dt-box{margin-bottom:0}
+.ffdt .dt-ov-grid > .dt-box:last-child:nth-child(odd){grid-column:1 / -1}
+.ffdt .dt-prose{font-size:13px}
+.ffdt .dt-why{display:flex;flex-direction:column;gap:9px}
+.ffdt .dt-why-i{display:flex;gap:9px;font-size:12.5px;color:#9BBFD8;line-height:1.55}
+.ffdt .dt-why-i::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--ac);flex-shrink:0;margin-top:6px}
+.ffdt .dt-mkts{display:flex;flex-wrap:wrap;gap:6px}
+.ffdt .dt-mkt{font-size:11px;padding:4px 10px;border-radius:8px;background:color-mix(in srgb,var(--ac) 8%,transparent);border:1px solid color-mix(in srgb,var(--ac) 15%,transparent);color:#8DCAF2}
 /* Certifications — reference two-tier layout (.cert-tier-bar / .cert-lbl / note) */
-.ffdt-sup .dt-cert-bar{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;background:color-mix(in srgb,var(--ac) 6%,transparent);border:1px solid color-mix(in srgb,var(--ac) 20%,transparent);border-radius:12px;padding:14px 18px;margin-bottom:22px}
-.ffdt-sup .dt-cert-bar-l{display:flex;align-items:center;gap:10px;flex-wrap:wrap;flex:1;min-width:0}
-.ffdt-sup .dt-cert-vbadge{display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg,color-mix(in srgb,var(--ac) 18%,transparent),color-mix(in srgb,var(--ac) 10%,#000));border:1px solid color-mix(in srgb,var(--ac) 40%,transparent);color:var(--ac);border-radius:10px;padding:6px 14px;font-size:11.5px;font-weight:700;white-space:nowrap;flex-shrink:0}
-.ffdt-sup .dt-cert-vbadge i{font-size:13px}
-.ffdt-sup .dt-cert-bar-desc{font-size:12px;color:#9BBFD8;line-height:1.5}
-.ffdt-sup .dt-cert-premium{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:600;padding:3px 10px;border-radius:8px;background:rgba(245,158,11,.1);color:#F59E0B;border:1px solid rgba(245,158,11,.25);white-space:nowrap;flex-shrink:0}
-.ffdt-sup .dt-cert-lbl{display:flex;align-items:center;gap:10px;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:#3A5E75;margin-bottom:12px}
-.ffdt-sup .dt-cert-lbl::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,color-mix(in srgb,var(--ac) 10%,transparent),transparent)}
-.ffdt-sup .dt-cert-lbl-v{color:var(--ac);margin-top:22px}
-.ffdt-sup .dt-cert-lbl-v::after{background:linear-gradient(90deg,color-mix(in srgb,var(--ac) 15%,transparent),transparent)}
-.ffdt-sup .dt-cert-note{padding:10px 14px;background:rgba(10,22,40,.5);border-left:2px solid color-mix(in srgb,var(--ac) 25%,transparent);border-radius:0 9px 9px 0;font-size:11.5px;color:#6B9DB7;line-height:1.6;margin:14px 0}
+.ffdt .dt-cert-bar{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;background:color-mix(in srgb,var(--ac) 6%,transparent);border:1px solid color-mix(in srgb,var(--ac) 20%,transparent);border-radius:12px;padding:14px 18px;margin-bottom:22px}
+.ffdt .dt-cert-bar-l{display:flex;align-items:center;gap:10px;flex-wrap:wrap;flex:1;min-width:0}
+.ffdt .dt-cert-vbadge{display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg,color-mix(in srgb,var(--ac) 18%,transparent),color-mix(in srgb,var(--ac) 10%,#000));border:1px solid color-mix(in srgb,var(--ac) 40%,transparent);color:var(--ac);border-radius:10px;padding:6px 14px;font-size:11.5px;font-weight:700;white-space:nowrap;flex-shrink:0}
+.ffdt .dt-cert-vbadge i{font-size:13px}
+.ffdt .dt-cert-bar-desc{font-size:12px;color:#9BBFD8;line-height:1.5}
+.ffdt .dt-cert-premium{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:600;padding:3px 10px;border-radius:8px;background:rgba(245,158,11,.1);color:#F59E0B;border:1px solid rgba(245,158,11,.25);white-space:nowrap;flex-shrink:0}
+.ffdt .dt-cert-lbl{display:flex;align-items:center;gap:10px;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:#3A5E75;margin-bottom:12px}
+.ffdt .dt-cert-lbl::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,color-mix(in srgb,var(--ac) 10%,transparent),transparent)}
+.ffdt .dt-cert-lbl-v{color:var(--ac);margin-top:22px}
+.ffdt .dt-cert-lbl-v::after{background:linear-gradient(90deg,color-mix(in srgb,var(--ac) 15%,transparent),transparent)}
+.ffdt .dt-cert-note{padding:10px 14px;background:rgba(10,22,40,.5);border-left:2px solid color-mix(in srgb,var(--ac) 25%,transparent);border-radius:0 9px 9px 0;font-size:11.5px;color:#6B9DB7;line-height:1.6;margin:14px 0}
 /* Verified cert cards — ref .cert-grid 3-col gap 13 (→2col @768, →1col @480) */
-.ffdt-sup .dt-cert-cards{grid-template-columns:1fr 1fr 1fr;gap:13px}
+.ffdt .dt-cert-cards{grid-template-columns:1fr 1fr 1fr;gap:13px}
 /* Reviews — reference .rev-agg 3-part card + .rev-grid cards with avatars */
-.ffdt-sup .dt-rev-agg{background:rgba(18,34,52,.4);border:1px solid rgba(74,159,224,.1);border-radius:14px;padding:20px;gap:16px}
-.ffdt-sup .dt-rev-vdiv{width:1px;height:48px;background:color-mix(in srgb,var(--ac) 18%,transparent);flex-shrink:0}
-.ffdt-sup .dt-rev-side{text-align:center;flex-shrink:0}
-.ffdt-sup .dt-rev-side-t{font-size:12px;color:#9BBFD8;margin-bottom:8px}
-.ffdt-sup .dt-rev-verified{display:flex;gap:5px;justify-content:center;align-items:center;color:#52DEB5;font-size:12px}
-.ffdt-sup .dt-rev-verified i{font-size:13px}
-.ffdt-sup .dt-rev-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
-.ffdt-sup .dt-rev-card{position:relative;overflow:hidden;background:rgba(18,34,52,.48);border:1px solid rgba(74,159,224,.1);border-radius:14px;padding:18px}
-.ffdt-sup .dt-rev-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,color-mix(in srgb,var(--ac) 30%,transparent),transparent)}
-.ffdt-sup .dt-rev-card .dt-rev-tx{font-style:italic;color:#E8F4FD;line-height:1.7;margin-bottom:14px}
-.ffdt-sup .dt-rev-foot{display:flex;gap:10px;align-items:center;border-top:1px solid rgba(74,159,224,.08);padding-top:12px}
-.ffdt-sup .dt-rev-av{width:36px;height:36px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:'Plus Jakarta Sans',system-ui;font-size:12px;font-weight:700;color:#fff;background:linear-gradient(135deg,var(--ac),color-mix(in srgb,var(--ac) 55%,#000))}
-.ffdt-sup .dt-rev-meta{flex:1;min-width:0}
+.ffdt .dt-rev-agg{background:rgba(18,34,52,.4);border:1px solid rgba(74,159,224,.1);border-radius:14px;padding:20px;gap:16px}
+.ffdt .dt-rev-vdiv{width:1px;height:48px;background:color-mix(in srgb,var(--ac) 18%,transparent);flex-shrink:0}
+.ffdt .dt-rev-side{text-align:center;flex-shrink:0}
+.ffdt .dt-rev-side-t{font-size:12px;color:#9BBFD8;margin-bottom:8px}
+.ffdt .dt-rev-verified{display:flex;gap:5px;justify-content:center;align-items:center;color:#52DEB5;font-size:12px}
+.ffdt .dt-rev-verified i{font-size:13px}
+.ffdt .dt-rev-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+.ffdt .dt-rev-card{position:relative;overflow:hidden;background:rgba(18,34,52,.48);border:1px solid rgba(74,159,224,.1);border-radius:14px;padding:18px}
+.ffdt .dt-rev-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,color-mix(in srgb,var(--ac) 30%,transparent),transparent)}
+.ffdt .dt-rev-card .dt-rev-tx{font-style:italic;color:#E8F4FD;line-height:1.7;margin-bottom:14px}
+.ffdt .dt-rev-foot{display:flex;gap:10px;align-items:center;border-top:1px solid rgba(74,159,224,.08);padding-top:12px}
+.ffdt .dt-rev-av{width:36px;height:36px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:'Plus Jakarta Sans',system-ui;font-size:12px;font-weight:700;color:#fff;background:linear-gradient(135deg,var(--ac),color-mix(in srgb,var(--ac) 55%,#000))}
+.ffdt .dt-rev-meta{flex:1;min-width:0}
 /* Responsive
    Service branch (.ffdt) keeps its sidebar collapse at 900px. The supplier
-   branch (.ffdt-sup) mirrors supplier-profile.html's breakpoints exactly:
+   branch (.ffdt) mirrors supplier-profile.html's breakpoints exactly:
    all structural collapses land at 768px, with ov-facts + cert-grid taking a
    second step down at 480px. */
 @media (max-width:900px){
@@ -746,24 +773,39 @@ body.light-mode .ffdt-sup .dt-sim-link{color:#1E6BAB !important}
 .ffdt .dt-hstat{flex:1 1 45%}
 .ffdt .dt-acts{flex-wrap:wrap}
 .ffdt .dt-btn-p,.ffdt .dt-btn-s{flex:1 1 auto;justify-content:center}
-.ffdt .dt-sim-grid{grid-template-columns:1fr}
+.ffdt .dt-sim-card{flex:0 0 100%}
+.ffdt .dt-sim-arrow{display:none}
 /* Supplier-specific parity with reference @768 */
-.ffdt-sup .dt-wrap,.ffdt-sup .dt-tabs-in{padding-left:16px;padding-right:16px}
-.ffdt-sup .dt-body{padding-top:20px}
-.ffdt-sup .dt-logo{width:64px;height:64px;font-size:20px}
-.ffdt-sup .dt-h1{font-size:20px}
-.ffdt-sup .dt-meta{gap:8px}
-.ffdt-sup .dt-ov-grid,.ffdt-sup .dt-rev-grid{grid-template-columns:1fr}
-.ffdt-sup .dt-ov-grid > .dt-box:last-child:nth-child(odd){grid-column:auto}
-.ffdt-sup .dt-cert-cards{grid-template-columns:1fr 1fr}
-.ffdt-sup .dt-cert-bar{flex-direction:column;gap:10px;align-items:flex-start}
-.ffdt-sup .dt-tab{padding:12px 14px;font-size:12px}
+.ffdt .dt-wrap,.ffdt .dt-tabs-in{padding-left:16px;padding-right:16px}
+.ffdt .dt-body{padding-top:20px}
+.ffdt .dt-logo{width:64px;height:64px;font-size:20px}
+.ffdt .dt-h1{font-size:20px}
+.ffdt .dt-meta{gap:8px}
+.ffdt .dt-ov-grid,.ffdt .dt-rev-grid{grid-template-columns:1fr}
+.ffdt .dt-ov-grid > .dt-box:last-child:nth-child(odd){grid-column:auto}
+.ffdt .dt-cert-cards{grid-template-columns:1fr 1fr}
+.ffdt .dt-cert-bar{flex-direction:column;gap:10px;align-items:flex-start}
+.ffdt .dt-tab{padding:12px 14px;font-size:12px}
+/* Mobile header clearance. The global header (#1603) is position:fixed and
+   content flows under it, so the hero's padding-top is what pushes the
+   breadcrumb clear of it (.dt-wrap/.dt-bc add no top padding — .dt-bc is
+   padding-top:0). At this tier the header's opaque logo pill sits ~3–73px
+   (container pad 3/25, pill pad 10/10, 50px logo); the 25px container-bottom
+   is transparent, so the breadcrumb only needs to clear the pill (~73px),
+   not the full box. 84px lands the breadcrumb just below the pill. */
+.ffdt .dt-hero{padding-top:84px}
 }
 @media (max-width:480px){
 /* Second step down (ref @480: .ov-facts 2-col, .cert-grid 1-col, name 18px) */
-.ffdt-sup .dt-facts{grid-template-columns:1fr 1fr}
-.ffdt-sup .dt-cert-cards{grid-template-columns:1fr}
-.ffdt-sup .dt-h1{font-size:18px}
+.ffdt .dt-facts{grid-template-columns:1fr 1fr}
+.ffdt .dt-cert-cards{grid-template-columns:1fr}
+.ffdt .dt-h1{font-size:18px}
+/* Phone-portrait: header container padding collapses to 0/0 (pill stays
+   10/10) so the fixed header is a full-height ~70px opaque pill with no
+   transparent zone below it — the breadcrumb can only tighten to just
+   below the pill. 74px clears the ~70px pill by ~4px (line-box leading
+   included); going lower would slide the breadcrumb under the logo. */
+.ffdt .dt-hero{padding-top:74px}
 }
 </style>
 
@@ -840,17 +882,28 @@ body.light-mode .ffdt-sup .dt-sim-link{color:#1E6BAB !important}
 
 <!-- Overview -->
 <div class="dt-panel on" id="tab-overview" role="tabpanel">
-<?php if ($is_service) { /* Service branch — unchanged (out of scope). */ ?>
-<div class="dt-cols">
-<div class="dt-main">
+<?php if ($is_service) { /* Service branch — reference .ov-grid (2-col), mirrors Supplier.
+   Row 1: About + Why Choose. Row 2: Coverage Regions (flags) + Company Facts.
+   No sidebar CTA (the hero Request a Quote button already serves that). */ ?>
+<div class="dt-ov-grid">
 <div class="dt-box">
 <div class="dt-box-h"><i class="ti ti-info-circle" aria-hidden="true"></i>About <?php echo esc_html($name); ?></div>
 <div class="dt-prose"><?php echo $about ? wp_kses_post($about) : '<p>No description provided yet.</p>'; ?></div>
 </div>
-<?php if ($markets) { ?>
+<?php if (!empty($why_points)) { ?>
+<div class="dt-box">
+<div class="dt-box-h"><i class="ti ti-checks" aria-hidden="true"></i>Why Choose <?php echo esc_html($name); ?></div>
+<div class="dt-why"><?php foreach ($why_points as $w) { echo '<div class="dt-why-i">' . esc_html($w) . '</div>'; } ?></div>
+</div>
+<?php } ?>
+<?php if (!empty($markets)) { ?>
 <div class="dt-box">
 <div class="dt-box-h"><i class="ti ti-world" aria-hidden="true"></i><?php echo esc_html($markets_label); ?></div>
-<div class="dt-pills"><?php foreach ($markets as $m) { echo '<span class="dt-pill">' . esc_html($m) . '</span>'; } ?></div>
+<div class="dt-mkts"><?php
+$cv_max = 12; $cv_shown = array_slice($markets, 0, $cv_max); $cv_rest = count($markets) - count($cv_shown);
+foreach ($cv_shown as $m) { $fl = ffinc2_gd_flag($m); echo '<span class="dt-mkt">' . ($fl ? $fl . ' ' : '') . esc_html($m) . '</span>'; }
+if ($cv_rest > 0) { echo '<span class="dt-mkt dt-mkt-more">+' . (int) $cv_rest . ' more</span>'; }
+?></div>
 </div>
 <?php } ?>
 <?php if ($facts_out) { ?>
@@ -863,14 +916,6 @@ body.light-mode .ffdt-sup .dt-sim-link{color:#1E6BAB !important}
 </div>
 </div>
 <?php } ?>
-</div>
-<aside class="dt-side">
-<div class="dt-side-cta">
-<h4>Interested in <?php echo esc_html($name); ?>?</h4>
-<p>Send a quote request directly — zero commission, the <?php echo esc_html($noun_lc); ?> replies to your email.</p>
-<button class="dt-btn-p" style="width:100%;justify-content:center" <?php echo $qattr_self; ?>><i class="ti ti-mail" aria-hidden="true"></i>Request a Quote</button>
-</div>
-</aside>
 </div>
 <?php } else { /* Supplier — reference .ov-grid (2-col). No sidebar. Data-less
    boxes (Why Choose, Export Markets) omit gracefully; a lone box on an odd
@@ -1142,7 +1187,9 @@ if ($em_rest > 0) { echo '<span class="dt-mkt dt-mkt-more">+' . (int) $em_rest .
 <section class="dt-similar" aria-label="Similar <?php echo esc_attr($noun); ?>s">
 <div class="dt-wrap">
 <h2 class="dt-sim-h">Similar <?php echo esc_html($noun); ?>s</h2>
-<div class="dt-sim-grid">
+<div class="dt-sim-slider">
+<button class="dt-sim-arrow dt-sim-prev" type="button" aria-label="Previous <?php echo esc_attr($noun); ?>s"><i class="ti ti-chevron-left" aria-hidden="true"></i></button>
+<div class="dt-sim-track">
 <?php while ($sim_q->have_posts()) { $sim_q->the_post();
     $spid = get_the_ID(); $sname = get_the_title(); $sini = ffinc2_gd_initials($sname);
     $scity = ffinc2_gd_meta($spid, 'city'); $sctry = ffinc2_gd_meta($spid, 'country');
@@ -1150,7 +1197,8 @@ if ($em_rest > 0) { echo '<span class="dt-mkt dt-mkt-more">+' . (int) $em_rest .
     $slogo = '';
     if (function_exists('geodir_get_images')) { $simgs = geodir_get_images($spid, 1); if (!empty($simgs)) { $sim = is_array($simgs) ? reset($simgs) : $simgs; if (is_object($sim) && !empty($sim->src)) $slogo = $sim->src; } }
     $sprods = array();
-    if (!$is_service) { for ($spn = 1; $spn <= 5; $spn++) { $spv = trim((string) ffinc2_gd_meta($spid, "product_{$spn}_name")); if ($spv !== '') $sprods[] = $spv; } }
+    if ($is_service) { for ($spn = 1; $spn <= 4; $spn++) { $spv = trim((string) ffinc2_gd_meta($spid, "service_{$spn}_name")); if ($spv !== '') $sprods[] = $spv; } }
+    else { for ($spn = 1; $spn <= 5; $spn++) { $spv = trim((string) ffinc2_gd_meta($spid, "product_{$spn}_name")); if ($spv !== '') $sprods[] = $spv; } }
     $sqattr = 'data-supplier-id="' . esc_attr($spid) . '" data-supplier-name="' . esc_attr($sname) . '" data-supplier-logo="' . esc_attr($sini) . '" data-supplier-location="' . esc_attr($sloc) . '" data-supplier-products="' . esc_attr(implode(',', $sprods)) . '"';
     ?>
 <div class="dt-sim-card">
@@ -1165,6 +1213,8 @@ if ($em_rest > 0) { echo '<span class="dt-mkt dt-mkt-more">+' . (int) $em_rest .
 </div>
 </div>
 <?php } wp_reset_postdata(); ?>
+</div>
+<button class="dt-sim-arrow dt-sim-next" type="button" aria-label="Next <?php echo esc_attr($noun); ?>s"><i class="ti ti-chevron-right" aria-hidden="true"></i></button>
 </div>
 </div>
 </section>
@@ -1186,8 +1236,12 @@ if ($em_rest > 0) { echo '<span class="dt-mkt dt-mkt-more">+' . (int) $em_rest .
 <div class="qm-f"><label class="qm-lb">Company Name</label><input class="qm-in" type="text" placeholder="Acme Foods Ltd"></div>
 <div class="qm-f"><label class="qm-lb">Email Address</label><input class="qm-in" type="email" placeholder="you@company.com"></div>
 <div class="qm-f"><label class="qm-lb">Country</label><input class="qm-in" type="text" placeholder="United Kingdom"></div>
-<?php if ($is_service) { /* Service branch — unchanged. */ ?>
-<div class="qm-f full"><label class="qm-lb">Requirements</label><textarea class="qm-ta" rows="4" placeholder="Product/service required, quantity, certifications, delivery terms, timeline..."></textarea></div>
+<?php if ($is_service) { /* Service branch — extended RFQ fields. */ ?>
+<div class="qm-f"><label class="qm-lb">Service Required</label><select class="qm-se" id="qm-products"><?php foreach ($product_names as $pn) { echo '<option>' . esc_html($pn) . '</option>'; } ?><option>Other</option></select></div>
+<div class="qm-f"><label class="qm-lb">Estimated Volume / Throughput</label><input class="qm-in" type="text" placeholder="e.g. 500 pallets/month or 10 containers/week"></div>
+<div class="qm-f"><label class="qm-lb">Frequency</label><select class="qm-se"><option>One-off</option><option>Weekly</option><option>Monthly</option><option>Ongoing Contract</option></select></div>
+<div class="qm-f"><label class="qm-lb">Preferred Start Date</label><input class="qm-in" type="text" placeholder="e.g. Within 30 days"></div>
+<div class="qm-f full"><label class="qm-lb">Additional Requirements</label><textarea class="qm-ta" rows="4" placeholder="Certifications needed, temperature range, coverage regions, special handling requirements..."></textarea></div>
 <?php } else { /* Supplier branch — extended RFQ fields. */ ?>
 <div class="qm-f"><label class="qm-lb">Product Required</label><select class="qm-se" id="qm-products"><?php foreach ($product_names as $pn) { echo '<option>' . esc_html($pn) . '</option>'; } ?><option>Other</option></select></div>
 <div class="qm-f"><label class="qm-lb">Quantity / MOQ Required</label><input class="qm-in" type="text" placeholder="e.g. 5 Metric Tonnes"></div>
@@ -1234,7 +1288,7 @@ if ($em_rest > 0) { echo '<span class="dt-mkt dt-mkt-more">+' . (int) $em_rest .
     if(name&&sn)sn.textContent=name;
     if(logo&&lg)lg.textContent=logo;
     if(loc!=null&&sl)sl.textContent=loc;
-    /* Supplier modal: rebuild the Product Required options from the trigger. */
+    /* Rebuild the Product/Service Required options from the trigger (both branches). */
     var psel=document.getElementById('qm-products');
     if(psel&&products!=null){
       var list=String(products).split(',').map(function(s){return s.trim();}).filter(Boolean);
@@ -1265,6 +1319,28 @@ if ($em_rest > 0) { echo '<span class="dt-mkt dt-mkt-more">+' . (int) $em_rest .
       .fromTo('.ffdt .dt-meta',{y:18,opacity:0},{y:0,opacity:1,duration:.5},'-=.35')
       .fromTo('.ffdt .dt-hstats',{y:18,opacity:0},{y:0,opacity:1,duration:.5},'-=.35')
       .fromTo('.ffdt .dt-acts',{y:16,opacity:0},{y:0,opacity:1,duration:.45},'-=.3');
+  }
+  /* Similar-listings slider: scroll-snap track + prev/next arrows. Arrows
+     scroll by one card; they disable at the ends and hide entirely when all
+     cards already fit (nothing to scroll). */
+  var simTrack=document.querySelector('.ffdt .dt-sim-track');
+  var simPrev=document.querySelector('.ffdt .dt-sim-prev');
+  var simNext=document.querySelector('.ffdt .dt-sim-next');
+  if(simTrack&&simPrev&&simNext){
+    var simSlider=simTrack.closest('.dt-sim-slider');
+    function simStep(){var c=simTrack.querySelector('.dt-sim-card');return c?Math.round(c.getBoundingClientRect().width)+16:280;}
+    function simUpdate(){
+      var max=simTrack.scrollWidth-simTrack.clientWidth-2;
+      /* class drives arrow visibility so CSS can still hide them on mobile */
+      if(simSlider)simSlider.classList.toggle('dt-sim-fits',max<=0);
+      simPrev.disabled=simTrack.scrollLeft<=2;
+      simNext.disabled=simTrack.scrollLeft>=max;
+    }
+    simPrev.addEventListener('click',function(){simTrack.scrollBy({left:-simStep(),behavior:'smooth'});});
+    simNext.addEventListener('click',function(){simTrack.scrollBy({left:simStep(),behavior:'smooth'});});
+    simTrack.addEventListener('scroll',simUpdate,{passive:true});
+    window.addEventListener('resize',simUpdate);
+    simUpdate();
   }
 })();
 </script>

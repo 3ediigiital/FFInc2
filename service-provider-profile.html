@@ -188,11 +188,10 @@ body{font-family:'Inter',system-ui,sans-serif;background:#050D18;color:#fff;widt
 .pf-legal a:hover{color:#6B9DB7}
 
 /* ============================================================
-   Light-mode parity (INERT).
-   This file has no mode-toggle button or JS and will never switch
-   modes at runtime. These rules exist purely for repo consistency
-   so a future session copying this pattern inherits correct
-   light-mode styling. Ported from supplier-profile.html's
+   Light-mode parity.
+   The header now carries a #mode-toggle button (added below) plus
+   the toggle JS at the foot of the file, matching supplier-profile.html,
+   so these rules switch at runtime. Ported from supplier-profile.html's
    body.light-mode block, mapped to this file's class names, keeping
    the page's purple accent (#7C3AED = light-legible purple). The
    shared .pf footer keeps its blue brand accent, as elsewhere.
@@ -370,13 +369,52 @@ body.light-mode .pf-si:hover{background:rgba(74,159,224,.12) !important;color:#1
 .pf-copy{font-size:10px}
 .pf-legal a,.pf-legal span{font-size:10px}
 }
+
+/* ── Dark/light toggle button (ported from supplier-profile.html, purple accent) ── */
+#mode-toggle{width:34px;height:34px;border-radius:50%;border:1px solid rgba(167,139,250,0.28);background:rgba(167,139,250,0.08);color:#C4B5FD;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.2s;flex-shrink:0;padding:0}
+#mode-toggle:hover{background:rgba(167,139,250,0.18);border-color:rgba(167,139,250,0.5);color:#fff;transform:scale(1.08)}
+#mode-toggle i{font-size:15px}
+body.light-mode #mode-toggle{border-color:rgba(124,58,237,0.4);background:rgba(124,58,237,0.12);color:#7C3AED}
+
+/* ── Sourcing Intelligence (ported from supplier-profile.html, purple accent) ── */
+.si-section{position:relative;background:linear-gradient(180deg,#060F1A,#0A1628);padding:48px 48px 56px;overflow:hidden;border-top:1px solid rgba(74,159,224,.1);border-bottom:1px solid rgba(74,159,224,.1)}
+.si-aura{position:absolute;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(167,139,250,.1),transparent 65%);top:-100px;right:-80px;filter:blur(60px);pointer-events:none}
+.si-inner{position:relative;z-index:2;max-width:1200px;margin:0 auto}
+.si-head{margin-bottom:28px}
+.si-pill{display:inline-flex;align-items:center;gap:6px;background:rgba(167,139,250,.08);border:1px solid rgba(167,139,250,.2);border-radius:20px;padding:4px 14px;font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#A78BFA;margin-bottom:12px}
+.si-pill i{font-size:12px}
+.si-h{font-family:'Plus Jakarta Sans',system-ui;font-size:26px;font-weight:800;letter-spacing:-.6px;margin-bottom:8px;color:#fff}
+.si-h em{color:#A78BFA;font-style:normal}
+.si-sub{font-size:14px;color:#9BBFD8;line-height:1.6;max-width:480px}
+.si-grid{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:14px}
+.si-card{background:rgba(18,34,52,.48);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(167,139,250,.12);border-radius:16px;padding:22px 18px;position:relative;overflow:hidden;transition:transform .25s cubic-bezier(.34,1.3,.64,1),border-color .22s,box-shadow .25s}
+.si-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(167,139,250,.45),transparent)}
+.si-card:hover{transform:translateY(-4px);border-color:rgba(167,139,250,.3);box-shadow:0 14px 40px rgba(0,0,0,.35),0 0 32px -16px #A78BFA}
+.si-icon{width:42px;height:42px;border-radius:11px;background:rgba(167,139,250,.1);border:1px solid rgba(167,139,250,.22);display:flex;align-items:center;justify-content:center;margin-bottom:14px}
+.si-icon i{font-size:20px;color:#A78BFA}
+.si-label{font-size:10.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#6B9DB7;margin-bottom:6px}
+.si-value{font-family:'Plus Jakarta Sans',system-ui;font-size:20px;font-weight:800;color:#fff;margin-bottom:8px;letter-spacing:-.3px}
+.si-detail{font-size:12px;color:#9BBFD8;line-height:1.65}
+body.light-mode .si-section{background:linear-gradient(180deg,#EEF6FF,#E8F4FF) !important;border-color:rgba(74,159,224,.14) !important}
+body.light-mode .si-pill{color:#7C3AED !important;background:rgba(124,58,237,.08) !important;border-color:rgba(124,58,237,.25) !important}
+body.light-mode .si-h{color:#050D18 !important}
+body.light-mode .si-h em{color:#7C3AED !important}
+body.light-mode .si-sub{color:#3A5E75 !important}
+body.light-mode .si-card{background:rgba(255,255,255,.78) !important;border-color:rgba(167,139,250,.22) !important;box-shadow:0 4px 20px rgba(167,139,250,.08),inset 0 1px 0 rgba(255,255,255,.95) !important}
+body.light-mode .si-icon{background:rgba(124,58,237,.1) !important;border-color:rgba(124,58,237,.22) !important}
+body.light-mode .si-icon i{color:#7C3AED !important}
+body.light-mode .si-value{color:#050D18 !important}
+body.light-mode .si-detail{color:#3A5E75 !important}
+body.light-mode .si-label{color:#6B9DB7 !important}
+@media (max-width:768px){.si-section{padding:36px 20px 44px}.si-grid{grid-template-columns:1fr 1fr;gap:12px}.si-h{font-size:20px}}
+@media (max-width:480px){.si-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 
 <nav class="pn" aria-label="Primary navigation">
 <a class="pn-logo" href="#"><div class="pn-icon"><i class="ti ti-snowflake" style="font-size:16px;color:#fff"></i></div><span class="pn-wm">FrozenFood<em>Inc</em></span></a>
-<div class="pn-links"><a class="pnl" href="#">Database</a><a class="pnl" href="#">Services</a><a class="pnl" href="#">For Suppliers</a><a class="pnl" href="#">Sign In</a><button class="pn-cta">List Your Business</button></div>
+<div class="pn-links"><a class="pnl" href="#">Database</a><a class="pnl" href="#">Services</a><a class="pnl" href="#">For Suppliers</a><a class="pnl" href="#">Sign In</a><button id="mode-toggle" aria-label="Switch to light mode" title="Toggle light/dark mode"><i class="ti ti-sun" id="mode-icon"></i></button><button class="pn-cta">List Your Business</button></div>
 </nav>
 
 <div class="csn">
@@ -612,6 +650,44 @@ body.light-mode .pf-si:hover{background:rgba(74,159,224,.12) !important;color:#1
 </div>
 </div>
 
+<!-- Sourcing Intelligence -->
+<section class="si-section" aria-label="Sourcing intelligence">
+<div class="si-aura"></div>
+<div class="si-inner">
+<div class="si-head">
+<div class="si-pill"><i class="ti ti-bulb" aria-hidden="true"></i>Sourcing Intelligence</div>
+<h2 class="si-h">Smart data for this <em>service provider</em></h2>
+<p class="si-sub">Key sourcing signals to help you decide when and how to engage ColdFlow Logistics.</p>
+</div>
+<div class="si-grid">
+<div class="si-card">
+<div class="si-icon"><i class="ti ti-calendar-event" aria-hidden="true"></i></div>
+<div class="si-label">Availability</div>
+<div class="si-value">Year-Round</div>
+<div class="si-detail">Cold-chain services scheduled year-round; capacity is confirmed per booking window.</div>
+</div>
+<div class="si-card">
+<div class="si-icon"><i class="ti ti-clock" aria-hidden="true"></i></div>
+<div class="si-label">Typical Response</div>
+<div class="si-value">24–48 Hrs</div>
+<div class="si-detail">Typical turnaround to confirm a service request; exact timelines are confirmed on enquiry.</div>
+</div>
+<div class="si-card">
+<div class="si-icon"><i class="ti ti-map-pin" aria-hidden="true"></i></div>
+<div class="si-label">Coverage</div>
+<div class="si-value">Netherlands</div>
+<div class="si-detail">Service coverage is centred on Netherlands; confirm specific lanes and regions on enquiry.</div>
+</div>
+<div class="si-card">
+<div class="si-icon"><i class="ti ti-snowflake" aria-hidden="true"></i></div>
+<div class="si-label">Cold-Chain Standard</div>
+<div class="si-value">−18°C Maintained</div>
+<div class="si-detail">Temperature-controlled handling throughout, preserving product integrity end to end.</div>
+</div>
+</div>
+</div>
+</section>
+
 <div class="sim">
 <div class="sim-inner">
 <div class="sim-h">Similar <em>Cold Chain Services</em> Providers</div>
@@ -643,6 +719,9 @@ function switchTab(id,el){
   document.getElementById('tab-'+id).classList.add('on');
   el.classList.add('on');
 }
+/* ── Dark/light toggle (ported from supplier-profile.html) ── */
+var modeToggle=document.getElementById('mode-toggle'),modeIcon=document.getElementById('mode-icon'),isLight=false;
+if(modeToggle){modeToggle.addEventListener('click',function(){isLight=!isLight;document.body.classList.toggle('light-mode',isLight);modeIcon.className=isLight?'ti ti-moon':'ti ti-sun';modeToggle.setAttribute('aria-label',isLight?'Switch to dark mode':'Switch to light mode');});}
 </script>
 </body>
 </html>
