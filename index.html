@@ -158,7 +158,7 @@ body.light-mode #mode-toggle{border-color:rgba(30,107,171,.4);background:rgba(30
    ============================================================ */
 .pw{position:relative;z-index:2;background:linear-gradient(180deg,#0A1628,#0D1B2A);padding:88px 48px 0}
 .pw-inner{position:relative;z-index:1;max-width:1200px;margin:0 auto}
-.how-grid{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center;margin-bottom:64px}
+.how-grid{display:grid;grid-template-columns:2fr 3fr;gap:56px;align-items:center;margin-bottom:64px}
 .how-steps{display:flex;flex-direction:column}
 .hstep{display:flex;gap:18px;align-items:flex-start}
 .hstep-conn{width:2px;height:34px;margin-left:29px;background:repeating-linear-gradient(180deg,rgba(74,159,224,.4) 0,rgba(74,159,224,.4) 5px,transparent 5px,transparent 12px);transform:scaleY(0);transform-origin:top}
@@ -170,15 +170,40 @@ body.light-mode #mode-toggle{border-color:rgba(30,107,171,.4);background:rgba(30
 .stitle{font-family:'Plus Jakarta Sans';font-size:16px;font-weight:700;margin-bottom:8px;letter-spacing:-.2px}
 .sdesc{font-size:13.5px;color:#9BBFD8;line-height:1.6}
 
-/* World map — right column */
-.how-map{position:relative;background:rgba(18,34,52,.35);border:1px solid rgba(74,159,224,.12);border-radius:24px;padding:18px;backdrop-filter:blur(10px)}
-.how-map svg{width:100%;height:auto;display:block}
-.wm-lbl{font-size:8px;fill:#6B9DB7;letter-spacing:.03em}
-@keyframes hubpulse{0%,100%{opacity:.55}50%{opacity:1}}
-.wm-hubdot{animation:hubpulse 2.4s ease-in-out infinite}
-body.light-mode .how-map{background:rgba(255,255,255,.6);border-color:rgba(74,159,224,.22)}
-body.light-mode .wm-land{fill:#1E6BAB!important}
-body.light-mode .wm-lbl{fill:#3A5E75}
+/* Direct-connection network — right column. Real verified suppliers wired
+   straight to the buyer hub; the broker lane is struck through. */
+.how-net{position:relative;background:linear-gradient(165deg,rgba(18,34,52,.55),rgba(10,22,40,.42));border:1px solid rgba(74,159,224,.14);border-radius:24px;padding:14px 16px;backdrop-filter:blur(10px);box-shadow:0 24px 60px rgba(0,0,0,.32),inset 0 1px 0 rgba(255,255,255,.03);overflow:hidden}
+.how-net::before{content:'';position:absolute;inset:0;background:radial-gradient(120% 95% at 20% 52%,rgba(74,159,224,.12),transparent 62%);pointer-events:none}
+.how-net svg{width:100%;height:auto;display:block;position:relative;z-index:1;overflow:visible}
+.net-cap{position:relative;z-index:1;margin-top:8px;text-align:center;font-size:11.5px;color:#6B9DB7;line-height:1.5}
+.net-cap b{color:#8DCAF2;font-weight:600}
+.net-lane{stroke-width:1.4;stroke-dasharray:1 7;fill:none;stroke-linecap:round;opacity:0}
+.net-draw{stroke-width:1.7;fill:none;stroke-linecap:round;opacity:0}
+.net-chip-bg{fill:rgba(18,34,52,.74);stroke:rgba(74,159,224,.18);stroke-width:1}
+.net-chip-name{fill:#e8f4fd;font-family:'Plus Jakarta Sans';font-weight:600;font-size:11.5px}
+.net-chip-loc{fill:#6B9DB7;font-family:'Inter';font-size:9.5px}
+.net-badge-t{font-family:'Plus Jakarta Sans';font-weight:800;font-size:10px}
+.net-ring{fill:none;stroke:rgba(74,159,224,.32)}
+.net-broker-bg{fill:rgba(120,140,160,.05);stroke:rgba(150,168,186,.34);stroke-width:1;stroke-dasharray:4 3}
+.net-broker-t{fill:#8296a8;font-family:'Inter';font-size:9.5px;text-anchor:middle;font-weight:500}
+.net-strike{stroke:#F5726B;stroke-width:1.5;opacity:.75;stroke-linecap:round}
+.net-seal{fill:rgba(46,204,154,.1);stroke:rgba(46,204,154,.42);stroke-width:1}
+.net-seal-t{fill:#52DEB5;font-family:'Plus Jakarta Sans';font-weight:700;font-size:10px;text-anchor:middle}
+.net-tag{fill:rgba(74,159,224,.1);stroke:rgba(74,159,224,.3);stroke-width:1}
+.net-tag-t{fill:#8DCAF2;font-family:'Inter';font-size:9px;font-weight:600;letter-spacing:.03em}
+.net-eyebrow-t{fill:#6B9DB7;font-family:'Inter';font-size:8.5px;font-weight:600;letter-spacing:.16em}
+body.light-mode .how-net{background:linear-gradient(165deg,rgba(255,255,255,.78),rgba(232,243,252,.62));border-color:rgba(74,159,224,.22)}
+body.light-mode .net-cap{color:#5c7186}
+body.light-mode .net-cap b{color:#1E6BAB}
+body.light-mode .net-chip-bg{fill:rgba(255,255,255,.92);stroke:rgba(74,159,224,.24)}
+body.light-mode .net-chip-name{fill:#0A1628}
+body.light-mode .net-chip-loc{fill:#5c7186}
+body.light-mode .net-broker-t{fill:#6d8296}
+body.light-mode .net-eyebrow-t{fill:#5c7186}
+body.light-mode .net-tag{fill:rgba(74,159,224,.14);stroke:rgba(74,159,224,.42)}
+body.light-mode .net-tag-t{fill:#1E6BAB}
+body.light-mode .net-seal{fill:rgba(46,204,154,.14);stroke:rgba(24,150,110,.5)}
+body.light-mode .net-seal-t{fill:#12855F}
 
 /* Trust band — folded into the bottom of the same section, connected visually */
 .trust-wrap{position:relative;z-index:1;background:linear-gradient(180deg,rgba(74,159,224,.06),rgba(74,159,224,0));padding:44px 0 88px;margin-top:8px}
@@ -500,13 +525,26 @@ body.light-mode .pf-mq-item{color:#3A5E75}
 <div class="hstep-conn" id="hc2"></div>
 <div class="hstep" id="hs3"><div class="snw"><div class="sring" id="sr3"></div><div class="scirc" id="sc3i">3</div></div><div class="hstep-body"><div class="sico"><i class="ti ti-shield-check" style="font-size:18px;color:#4A9FE0"></i></div><div class="stitle">Source with confidence</div><div class="sdesc">Every listing is verified and rated. Review credentials before committing.</div></div></div>
 </div>
-<div class="how-map">
-<svg viewBox="0 0 600 340" id="worldmap" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-<g id="wm-dots"></g>
-<g id="wm-lanes"></g>
-<g id="wm-hubs"></g>
+<div>
+<div class="how-net">
+<svg viewBox="0 0 600 384" id="ffnet" xmlns="http://www.w3.org/2000/svg" aria-label="Direct buyer to verified supplier connections, bypassing brokers">
+<defs>
+<radialGradient id="hubgrad" cx="38%" cy="34%" r="72%">
+<stop offset="0%" stop-color="#6FB6EE"/><stop offset="55%" stop-color="#2D7FC4"/><stop offset="100%" stop-color="#1E5C96"/>
+</radialGradient>
+<filter id="softglow" x="-60%" y="-60%" width="220%" height="220%">
+<feGaussianBlur stdDeviation="3.2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+</filter>
+</defs>
+<g id="net-frame"></g><g id="net-broker"></g><g id="net-lanes"></g><g id="net-pulses"></g><g id="net-hub"></g><g id="net-chips"></g>
 </svg>
+<div class="net-cap">Every line is a <b>direct</b> buyer&ndash;supplier connection. Brokers and their fees, removed.</div>
 </div>
+</div>
+<script>
+window.FF_NET=[{"n":"Highland Frost Poultry","loc":"Aberdeen, United Kingdom","ac":"#4A9FE0"},{"n":"Nordfjord Poultry AS","loc":"Bergen, Norway","ac":"#4A9FE0"},{"n":"FrostRail Cold Logistics","loc":"Lyon, France","ac":"#A78BFA"},{"n":"IceBridge Distribution","loc":"Copenhagen, Denmark","ac":"#A78BFA"},{"n":"Arctic Wing Poultry Co","loc":"Reykjavik, Iceland","ac":"#4A9FE0"}];
+window.FF_ICON="https://frozenfoodinc.com/wp-content/uploads/2023/12/cropped-FrozenFoodInc-fav-180x180.png";
+</script>
 </div>
 </div>
 <div class="trust-wrap">
@@ -715,103 +753,160 @@ gsap.fromTo(['#hs1','#hs2','#hs3'],{opacity:0,y:30},{opacity:1,y:0,duration:.65,
 gsap.to(['#sc1i','#sc2i','#sc3i'],{scale:1,opacity:1,duration:.62,stagger:.18,ease:'back.out(2.2)',delay:.4});
 gsap.to(['#hc1','#hc2'],{scaleY:1,duration:.7,stagger:.3,ease:'power2.out',delay:.75});
 gsap.to(['#sr1','#sr2','#sr3'],{opacity:.1,scale:1.55,duration:1.8,repeat:-1,yoyo:true,ease:'sine.inOut',stagger:.6});
-buildWorldMap();
+buildNetwork();
 },.1);
 
-// World map — stylized dot-matrix continents + animated shipping lanes,
-// built once on first reveal (matches the section's own reveal trigger)
-function buildWorldMap(){
-var dotsG = document.getElementById('wm-dots');
-if (!dotsG || dotsG.dataset.built) return;
-dotsG.dataset.built = '1';
-var lanesG = document.getElementById('wm-lanes');
-var hubsG = document.getElementById('wm-hubs');
-var ns = 'http://www.w3.org/2000/svg';
-
-var regions = [
-  {cx:130,cy:100,rx:70,ry:52,n:42},
-  {cx:178,cy:232,rx:38,ry:62,n:26},
-  {cx:300,cy:78, rx:34,ry:28,n:20},
-  {cx:312,cy:190,rx:44,ry:68,n:32},
-  {cx:440,cy:108,rx:92,ry:62,n:50},
-  {cx:505,cy:250,rx:34,ry:24,n:16}
-];
-regions.forEach(function(r){
-  for (var i=0;i<r.n;i++){
-    var a = Math.random()*Math.PI*2, rad = Math.sqrt(Math.random());
-    var x = r.cx + Math.cos(a)*r.rx*rad;
-    var y = r.cy + Math.sin(a)*r.ry*rad;
-    var c = document.createElementNS(ns,'circle');
-    c.setAttribute('cx', x.toFixed(1));
-    c.setAttribute('cy', y.toFixed(1));
-    c.setAttribute('r', (0.9 + Math.random()*0.6).toFixed(1));
-    c.setAttribute('class','wm-land');
-    c.setAttribute('fill','#4A9FE0');
-    c.setAttribute('opacity', (0.22 + Math.random()*0.22).toFixed(2));
-    dotsG.appendChild(c);
-  }
-});
-
-var hubs = {
-  rot:{x:295,y:65}, mia:{x:155,y:115}, sgp:{x:445,y:175},
-  sha:{x:490,y:100}, sao:{x:185,y:235}, cpt:{x:315,y:255}
-};
-Object.keys(hubs).forEach(function(k){
-  var h = hubs[k];
-  var dot = document.createElementNS(ns,'circle');
-  dot.setAttribute('cx',h.x); dot.setAttribute('cy',h.y); dot.setAttribute('r',4);
-  dot.setAttribute('fill','#8DCAF2'); dot.setAttribute('class','wm-hubdot');
-  hubsG.appendChild(dot);
-});
-[['rot','Rotterdam'],['sgp','Singapore'],['sha','Shanghai']].forEach(function(pair){
-  var h = hubs[pair[0]];
-  var t = document.createElementNS(ns,'text');
-  t.setAttribute('x', h.x + 7); t.setAttribute('y', h.y - 6);
-  t.setAttribute('class','wm-lbl'); t.textContent = pair[1];
-  hubsG.appendChild(t);
-});
-
-var lanes = [
-  {a:'rot',b:'sha',bow:-35,color:'#4A9FE0',dur:11},
-  {a:'mia',b:'rot',bow:-30,color:'#2ECC9A',dur:9},
-  {a:'sao',b:'rot',bow:-90,color:'#F59E0B',dur:13},
-  {a:'sgp',b:'sha',bow:-35,color:'#52DEB5',dur:8},
-  {a:'cpt',b:'sgp',bow:-25,color:'#A78BFA',dur:12},
-  {a:'mia',b:'sgp',bow:-60,color:'#4A9FE0',dur:15}
-];
-lanes.forEach(function(l, i){
-  var p1 = hubs[l.a], p2 = hubs[l.b];
-  var mx = (p1.x+p2.x)/2, my = (p1.y+p2.y)/2 + l.bow;
-  var d = 'M'+p1.x+','+p1.y+' Q'+mx+','+my+' '+p2.x+','+p2.y;
-  var pathId = 'lane'+i;
-  var path = document.createElementNS(ns,'path');
-  path.setAttribute('id', pathId);
-  path.setAttribute('d', d);
-  path.setAttribute('fill','none');
-  path.setAttribute('stroke', l.color);
-  path.setAttribute('stroke-width','1.3');
-  path.setAttribute('stroke-dasharray','1 6');
-  path.setAttribute('opacity','.32');
-  lanesG.appendChild(path);
-
-  [{r:6,op:.28},{r:2.4,op:.95}].forEach(function(spec, si){
-    var dot = document.createElementNS(ns,'circle');
-    dot.setAttribute('r', spec.r);
-    dot.setAttribute('fill', l.color);
-    dot.setAttribute('opacity', spec.op);
-    var anim = document.createElementNS(ns,'animateMotion');
-    anim.setAttribute('dur', l.dur + 's');
-    anim.setAttribute('repeatCount','indefinite');
-    anim.setAttribute('begin', (-(i*1.4) - si*0.3) + 's');
-    var mpath = document.createElementNS(ns,'mpath');
-    mpath.setAttributeNS('http://www.w3.org/1999/xlink','href','#'+pathId);
-    mpath.setAttribute('href','#'+pathId);
-    anim.appendChild(mpath);
-    dot.appendChild(anim);
-    lanesG.appendChild(dot);
-  });
-});
+// Direct-connection network — real verified suppliers wired straight to the
+// buyer hub, with the broker lane struck through. Rebuilds on breakpoint
+// change (wide fan on desktop, portrait stack on phones).
+function ffInitials(n){
+var p=n.split(' ').filter(function(w){return w.length>2;}).slice(0,2);
+var o=p.map(function(w){return w[0].toUpperCase();}).join('');
+return o||n.slice(0,2).toUpperCase();
 }
+function ffTrunc(s,m){return s.length>m?s.slice(0,m-1).trim()+'…':s;}
+var FF_NS='http://www.w3.org/2000/svg';
+function ffMk(t,a){var e=document.createElementNS(FF_NS,t);for(var k in a)e.setAttribute(k,a[k]);return e;}
+var ffNetMode=null, ffNetRAF=null, ffBuildToken=0;
+
+function ffBuildNet(mode){
+var svg=document.getElementById('ffnet'); if(!svg) return;
+var myToken=++ffBuildToken;
+var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+var G={frame:svg.querySelector('#net-frame'),broker:svg.querySelector('#net-broker'),
+lanes:svg.querySelector('#net-lanes'),pulses:svg.querySelector('#net-pulses'),
+hub:svg.querySelector('#net-hub'),chips:svg.querySelector('#net-chips')};
+if(window.gsap){try{gsap.killTweensOf(svg.querySelectorAll('*'));}catch(e){}}
+Object.keys(G).forEach(function(k){var g=G[k];while(g&&g.firstChild)g.removeChild(g.firstChild);});
+
+var data=(window.FF_NET||[]).slice(0,5);
+if(!data.length)return;
+var tall=(mode==='tall');
+svg.setAttribute('viewBox', tall?'0 0 384 520':'0 0 600 384');
+var hub=tall?{x:192,y:96}:{x:150,y:196};
+var rings=tall?[52,40,30]:[64,50,38];
+var core=tall?26:30;
+
+var ebX=tall?30:31, tagX=tall?300:508, tagW=tall?70:80;
+G.frame.appendChild(ffMk('circle',{cx:tall?19:20,cy:22,r:3.4,fill:'#2ECC9A',id:'net-livedot'}));
+var eb=ffMk('text',{x:ebX,y:26,'class':'net-eyebrow-t'}); eb.textContent=tall?'DIRECT NETWORK':'LIVE · DIRECT NETWORK'; G.frame.appendChild(eb);
+G.frame.appendChild(ffMk('rect',{x:tagX,y:11,width:tagW,height:23,rx:11.5,'class':'net-tag'}));
+var tg=ffMk('text',{x:tagX+tagW/2,y:26,'class':'net-tag-t','text-anchor':'middle'}); tg.textContent='−18°C chain'; G.frame.appendChild(tg);
+
+var defs=svg.querySelector('defs');
+var oldClip=defs.querySelector('#hubclip'); if(oldClip)defs.removeChild(oldClip);
+var clip=ffMk('clipPath',{id:'hubclip'}); clip.appendChild(ffMk('circle',{cx:hub.x,cy:hub.y,r:core-2})); defs.appendChild(clip);
+rings.forEach(function(r,i){G.hub.appendChild(ffMk('circle',{cx:hub.x,cy:hub.y,r:r,'class':'net-ring',id:'net-ring'+i}));});
+G.hub.appendChild(ffMk('circle',{cx:hub.x,cy:hub.y,r:core+7,fill:'#8DCAF2',opacity:0,id:'net-halo'}));
+G.hub.appendChild(ffMk('circle',{cx:hub.x,cy:hub.y,r:core,fill:'url(#hubgrad)',filter:'url(#softglow)',id:'net-core'}));
+if(window.FF_ICON){
+var img=ffMk('image',{x:hub.x-core*0.58,y:hub.y-core*0.58,width:core*1.16,height:core*1.16,'clip-path':'url(#hubclip)',preserveAspectRatio:'xMidYMid meet',id:'net-icon'});
+img.setAttributeNS('http://www.w3.org/1999/xlink','href',window.FF_ICON); img.setAttribute('href',window.FF_ICON);
+G.hub.appendChild(img);
+}
+var sealY=tall?497:298;
+G.hub.appendChild(ffMk('rect',{x:hub.x-58,y:sealY-13,width:116,height:24,rx:12,'class':'net-seal'}));
+var sl=ffMk('text',{x:hub.x,y:sealY+3,'class':'net-seal-t'}); sl.textContent='0% commission'; G.hub.appendChild(sl);
+
+if(!tall){
+G.broker.appendChild(ffMk('rect',{x:250,y:181,width:118,height:28,rx:14,'class':'net-broker-bg'}));
+var bt=ffMk('text',{x:309,y:199,'class':'net-broker-t'}); bt.textContent='Brokers · +15% fees'; G.broker.appendChild(bt);
+G.broker.appendChild(ffMk('line',{x1:258,y1:205,x2:360,y2:185,'class':'net-strike'}));
+}
+
+var chipH=tall?46:40;
+var wideChip={left:372,w:214,ys:[58,127,196,265,334]};
+var tallChip={left:26,w:332,ys:[180,246,312,378,444]};
+var netItems=[];
+data.forEach(function(d,i){
+var col=d.ac||'#4A9FE0';
+var cL=tall?tallChip.left:wideChip.left, cW=tall?tallChip.w:wideChip.w, cy=(tall?tallChip.ys:wideChip.ys)[i];
+var aX,aY,dd;
+if(tall){
+aX=cL+cW/2; aY=cy-chipH/2;
+dd='M'+aX+','+aY+' Q'+aX+','+((aY+hub.y)/2)+' '+hub.x+','+(hub.y+core-2);
+}else{
+aX=cL-2; aY=cy;
+var mX=(aX+hub.x)/2, mY=(aY+hub.y)/2+(cy===196?0:(cy<196?-14:14));
+dd='M'+aX+','+aY+' Q'+mX+','+mY+' '+hub.x+','+hub.y;
+}
+var lane=ffMk('path',{d:dd,'class':'net-lane',stroke:col}); G.lanes.appendChild(lane);
+var draw=ffMk('path',{d:dd,'class':'net-draw',stroke:'#8DCAF2'}); G.lanes.appendChild(draw);
+var g=ffMk('g',{}); G.chips.appendChild(g);
+var bg=ffMk('rect',{x:cL-2,y:cy-chipH/2,width:cW,height:chipH,rx:10,'class':'net-chip-bg'}); g.appendChild(bg);
+g.appendChild(ffMk('rect',{x:cL+8,y:cy-13,width:26,height:26,rx:7,fill:col+'22',stroke:col+'55','stroke-width':1}));
+var bdg=ffMk('text',{x:cL+21,y:cy+4,'class':'net-badge-t',fill:col,'text-anchor':'middle'}); bdg.textContent=ffInitials(d.n); g.appendChild(bdg);
+var nm=ffMk('text',{x:cL+44,y:cy-1,'class':'net-chip-name'}); nm.textContent=ffTrunc(d.n,tall?30:25); g.appendChild(nm);
+if(d.loc){var lc=ffMk('text',{x:cL+44,y:cy+12,'class':'net-chip-loc'}); lc.textContent=d.loc; g.appendChild(lc);}
+var chkX=cL+cW-18;
+g.appendChild(ffMk('circle',{cx:chkX,cy:cy,r:8,fill:'rgba(46,204,154,.14)',stroke:'rgba(46,204,154,.5)','stroke-width':1}));
+g.appendChild(ffMk('path',{d:'M'+(chkX-4)+','+cy+' l3,3 l5,-6',fill:'none',stroke:'#2ECC9A','stroke-width':1.6,'stroke-linecap':'round','stroke-linejoin':'round'}));
+netItems.push({path:lane,chip:bg,group:g,cx:(cL-2+cW/2),cy:cy,col:col});
+});
+
+var lanes=Array.prototype.slice.call(G.lanes.querySelectorAll('.net-lane'));
+var draws=Array.prototype.slice.call(G.lanes.querySelectorAll('.net-draw'));
+if(reduce||!window.gsap){lanes.forEach(function(l){l.style.opacity='.5';});draws.forEach(function(d){d.style.opacity='0';});return;}
+draws.forEach(function(dp,i){
+var len=dp.getTotalLength();
+dp.style.strokeDasharray=len; dp.style.strokeDashoffset=len; dp.style.opacity=1;
+gsap.to(dp,{strokeDashoffset:0,duration:.62,ease:'power2.inOut',delay:.15+i*0.16});
+gsap.to(dp,{opacity:0,duration:.4,delay:.15+i*0.16+.5});
+gsap.to(lanes[i],{opacity:.5,duration:.5,delay:.15+i*0.16+.35});
+});
+gsap.set(G.chips.children,{opacity:0});
+gsap.to(G.chips.children,{opacity:1,duration:.5,stagger:.14,delay:.35,ease:'power2.out'});
+gsap.fromTo('#net-core',{scale:0,transformOrigin:'center'},{scale:1,duration:.7,ease:'back.out(2)'});
+if(window.FF_ICON){gsap.fromTo('#net-icon',{opacity:0,scale:0,transformOrigin:'center'},{opacity:1,scale:1,duration:.6,ease:'back.out(2)',delay:.15});}
+['#net-ring0','#net-ring1','#net-ring2'].forEach(function(r,i){
+gsap.fromTo(r,{opacity:0},{opacity:1,duration:.5,delay:.2+i*.08});
+gsap.to(r,{scale:1.16,opacity:.05,transformOrigin:'center',duration:2.4+i*.4,repeat:-1,yoyo:true,ease:'sine.inOut',delay:.8+i*.3});
+});
+gsap.to('#net-livedot',{opacity:.25,scale:1.4,transformOrigin:'center',duration:1,repeat:-1,yoyo:true,ease:'sine.inOut'});
+
+// Sequential dispatch: the hub sends an enquiry down one lane at a time and
+// the receiving supplier chip lights up as the pulse lands.
+var GAP=1.15, TRAVEL=1.0;
+function dispatch(k){
+if(myToken!==ffBuildToken)return;
+var it=netItems[k%netItems.length];
+var path=it.path, len=path.getTotalLength(), col=it.col;
+var dot=ffMk('circle',{r:3,fill:'#8DCAF2',opacity:0,filter:'url(#softglow)'});
+var glow=ffMk('circle',{r:7,fill:col,opacity:0});
+G.pulses.appendChild(glow); G.pulses.appendChild(dot);
+var setPos=function(t){var p=path.getPointAtLength(t*len);dot.setAttribute('cx',p.x);dot.setAttribute('cy',p.y);glow.setAttribute('cx',p.x);glow.setAttribute('cy',p.y);};
+setPos(1);
+gsap.fromTo('#net-halo',{opacity:.4,scale:.7,transformOrigin:'center'},{opacity:0,scale:1.35,duration:.5,ease:'power2.out'});
+gsap.fromTo('#net-core',{scale:1.1,transformOrigin:'center'},{scale:1,duration:.4,ease:'power2.out'});
+gsap.to([dot,glow],{opacity:1,duration:.16});
+var st={t:1};
+gsap.to(st,{t:0,duration:TRAVEL,ease:'power1.inOut',
+onUpdate:function(){setPos(st.t);},
+onComplete:function(){
+gsap.to([dot,glow],{opacity:0,duration:.28,onComplete:function(){
+if(dot.parentNode)dot.parentNode.removeChild(dot); if(glow.parentNode)glow.parentNode.removeChild(glow);
+}});
+gsap.timeline()
+.to(it.chip,{stroke:col,strokeWidth:2,duration:.2,ease:'power2.out'})
+.to(it.group,{scale:1.05,svgOrigin:it.cx+' '+it.cy,duration:.2,ease:'power2.out'},'<')
+.to(it.chip,{stroke:'rgba(74,159,224,.18)',strokeWidth:1,duration:.7,ease:'power1.inOut'},'+=.35')
+.to(it.group,{scale:1,svgOrigin:it.cx+' '+it.cy,duration:.5,ease:'power1.inOut'},'<');
+}});
+gsap.delayedCall(GAP,function(){dispatch(k+1);});
+}
+gsap.delayedCall(1.5,function(){dispatch(0);});
+}
+
+function buildNetwork(){
+var m=(window.innerWidth<=600)?'tall':'wide';
+if(m===ffNetMode)return; ffNetMode=m;
+ffBuildNet(m);
+}
+window.addEventListener('resize',function(){
+if(ffNetRAF)cancelAnimationFrame(ffNetRAF);
+ffNetRAF=requestAnimationFrame(buildNetwork);
+});
+
 
 // Trust stats — reveal + count up, now triggered as part of the merged section
 io('#trustInner',function(){
