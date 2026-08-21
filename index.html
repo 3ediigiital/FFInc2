@@ -40,13 +40,12 @@ body.light-mode #mode-toggle{border-color:rgba(30,107,171,.4);background:rgba(30
    HERO — mockup version, now with 4 category cards
    ============================================================ */
 .hero{position:relative;z-index:2;padding:190px 48px 84px;max-width:1280px;margin:0 auto;display:grid;grid-template-columns:1.1fr 0.9fr;gap:56px;align-items:start}
-.hero > div:not(.section-flakes){position:relative;z-index:1;min-width:0}
+.hero > div:not(.section-flakes){position:relative;z-index:1}
 .section-flakes{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:0}
 .hero-pill{display:inline-flex;align-items:center;gap:8px;background:rgba(46,204,154,.08);border:1px solid rgba(46,204,154,.28);border-radius:24px;padding:6px 16px;margin-bottom:26px}
 .hero-dot{width:7px;height:7px;background:#2ECC9A;border-radius:50%;box-shadow:0 0 10px #2ECC9A}
 .hero-pt{font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#85ECD0}
-.hero h1{font-family:'Plus Jakarta Sans';font-size:60px;font-weight:800;line-height:1.05;letter-spacing:-2.1px;margin-bottom:22px;overflow-wrap:break-word}
-.hero h1 .gt{background:linear-gradient(110deg,#fff 20%,#8DCAF2 38%,#4A9FE0 50%,#8DCAF2 62%,#fff 80%);background-size:200% auto;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.hero h1{font-family:'Plus Jakarta Sans';font-size:60px;font-weight:800;line-height:1.05;letter-spacing:-2.1px;margin-bottom:22px;overflow-wrap:break-word;background:linear-gradient(100deg,#fff 0%,#fff 40%,#8DCAF2 46%,#4A9FE0 50%,#8DCAF2 54%,#fff 60%,#fff 100%);background-size:280% auto;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
 .hero-sub{font-size:16.5px;color:#9BBFD8;max-width:440px;margin-bottom:34px;line-height:1.65}
 .hero-sb{display:flex;gap:8px;background:rgba(18,34,52,.72);backdrop-filter:blur(20px);border:1px solid rgba(74,159,224,.2);border-radius:14px;padding:8px;max-width:540px;margin-bottom:22px}
 .hero-si{flex:1;display:flex;align-items:center;gap:10px;padding:0 10px}
@@ -60,7 +59,8 @@ body.light-mode #mode-toggle{border-color:rgba(30,107,171,.4);background:rgba(30
 
 /* 4-card overlapping visual */
 .hero-visual{position:relative;height:470px}
-.hv-card{position:absolute;background:rgba(18,34,52,.55);backdrop-filter:blur(16px);border:1px solid rgba(74,159,224,.16);border-radius:20px;padding:20px;box-shadow:0 24px 60px rgba(0,0,0,.4);width:225px}
+.hv-card{position:absolute;background:rgba(18,34,52,.55);backdrop-filter:blur(16px);border:1px solid rgba(74,159,224,.16);border-radius:20px;padding:20px;box-shadow:0 24px 60px rgba(0,0,0,.4);width:225px;transition:box-shadow .3s ease;will-change:transform}
+.hv-card:hover{box-shadow:0 34px 80px rgba(0,0,0,.5)}
 .hv-1{top:0;left:0;transform:rotate(-5deg);z-index:1}
 .hv-2{top:38px;right:0;transform:rotate(4deg);z-index:3}
 .hv-3{top:210px;left:30px;transform:rotate(-3deg);z-index:2}
@@ -158,16 +158,27 @@ body.light-mode #mode-toggle{border-color:rgba(30,107,171,.4);background:rgba(30
    ============================================================ */
 .pw{position:relative;z-index:2;background:linear-gradient(180deg,#0A1628,#0D1B2A);padding:88px 48px 0}
 .pw-inner{position:relative;z-index:1;max-width:1200px;margin:0 auto}
-.hiw-row{display:flex;align-items:flex-start;margin-bottom:64px}
-.hiw-step{flex:1;text-align:center;padding:0 20px}
-.hiw-conn{flex:0 0 60px;display:flex;align-items:center;margin-top:28px}
-.hiw-cl{flex:1;height:1px;background:repeating-linear-gradient(90deg,rgba(74,159,224,.4) 0,rgba(74,159,224,.4) 6px,transparent 6px,transparent 14px);transform:scaleX(0);transform-origin:left}
-.snw{position:relative;width:60px;height:60px;margin:0 auto 18px}
+.how-grid{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center;margin-bottom:64px}
+.how-steps{display:flex;flex-direction:column}
+.hstep{display:flex;gap:18px;align-items:flex-start}
+.hstep-conn{width:2px;height:34px;margin-left:29px;background:repeating-linear-gradient(180deg,rgba(74,159,224,.4) 0,rgba(74,159,224,.4) 5px,transparent 5px,transparent 12px);transform:scaleY(0);transform-origin:top}
+.snw{position:relative;width:60px;height:60px;flex-shrink:0}
 .sring{position:absolute;inset:-12px;border-radius:50%;border:1.5px solid rgba(74,159,224,.28)}
 .scirc{position:absolute;inset:0;border-radius:50%;background:linear-gradient(135deg,rgba(74,159,224,.22),rgba(30,107,171,.12));border:1.5px solid rgba(74,159,224,.4);display:flex;align-items:center;justify-content:center;font-family:'Plus Jakarta Sans';font-size:22px;font-weight:800;color:#8DCAF2;transform:scale(0);opacity:0}
-.sico{width:38px;height:38px;border-radius:10px;background:rgba(74,159,224,.07);border:1px solid rgba(74,159,224,.14);display:flex;align-items:center;justify-content:center;margin:0 auto 14px}
-.stitle{font-family:'Plus Jakarta Sans';font-size:17px;font-weight:700;margin-bottom:10px;letter-spacing:-.2px}
-.sdesc{font-size:14px;color:#9BBFD8;line-height:1.65;max-width:220px;margin:0 auto}
+.hstep-body{flex:1;padding-top:8px}
+.sico{width:34px;height:34px;border-radius:10px;background:rgba(74,159,224,.07);border:1px solid rgba(74,159,224,.14);display:flex;align-items:center;justify-content:center;margin-bottom:10px}
+.stitle{font-family:'Plus Jakarta Sans';font-size:16px;font-weight:700;margin-bottom:8px;letter-spacing:-.2px}
+.sdesc{font-size:13.5px;color:#9BBFD8;line-height:1.6}
+
+/* World map — right column */
+.how-map{position:relative;background:rgba(18,34,52,.35);border:1px solid rgba(74,159,224,.12);border-radius:24px;padding:18px;backdrop-filter:blur(10px)}
+.how-map svg{width:100%;height:auto;display:block}
+.wm-lbl{font-size:8px;fill:#6B9DB7;letter-spacing:.03em}
+@keyframes hubpulse{0%,100%{opacity:.55}50%{opacity:1}}
+.wm-hubdot{animation:hubpulse 2.4s ease-in-out infinite}
+body.light-mode .how-map{background:rgba(255,255,255,.6);border-color:rgba(74,159,224,.22)}
+body.light-mode .wm-land{fill:#1E6BAB!important}
+body.light-mode .wm-lbl{fill:#3A5E75}
 
 /* Trust band — folded into the bottom of the same section, connected visually */
 .trust-wrap{position:relative;z-index:1;background:linear-gradient(180deg,rgba(74,159,224,.06),rgba(74,159,224,0));padding:44px 0 88px;margin-top:8px}
@@ -257,8 +268,7 @@ body.light-mode .nv{background:rgba(255,255,255,.75);border-bottom-color:rgba(74
 body.light-mode .nv-links a{color:#3A5E75}
 body.light-mode .nv-wm{color:#050D18}
 
-body.light-mode .hero h1{color:#050D18}
-body.light-mode .gt{background:linear-gradient(110deg,#050D18 20%,#1E6BAB 38%,#4A9FE0 50%,#1E6BAB 62%,#050D18 80%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+body.light-mode .hero h1{background:linear-gradient(100deg,#050D18 0%,#050D18 40%,#4A9FE0 46%,#1E6BAB 50%,#4A9FE0 54%,#050D18 60%,#050D18 100%);background-size:280% auto;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
 body.light-mode .hero-sub{color:#3A5E75}
 body.light-mode .hero-ql-l{color:#6B9DB7}
 body.light-mode .hero-sb{background:rgba(255,255,255,.68);border-color:rgba(74,159,224,.28);box-shadow:0 4px 20px rgba(74,159,224,.1),inset 0 1px 0 rgba(255,255,255,.95)}
@@ -332,6 +342,14 @@ body.light-mode .pk-cta{background:#EEF6FF}
 body.light-mode .pk-glow{opacity:.5}
 body.light-mode #ctaBlurb h2{color:#050D18}
 body.light-mode #ctaBlurb p{color:#3A5E75}
+
+/* CTA certification collage — generic, illustrated, not real trademarked marks */
+.cta-collage{position:relative;width:180px;height:104px;margin:0 auto 26px}
+.cc-card{position:absolute;width:76px;height:92px;border-radius:12px;background:rgba(18,34,52,.6);backdrop-filter:blur(8px);border:1px solid rgba(74,159,224,.14);border-top:3px solid var(--cc-ac);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;box-shadow:0 14px 30px rgba(0,0,0,.35)}
+.cc-card i{font-size:20px;color:var(--cc-ac)}
+.cc-card span{font-size:8px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#9BBFD8}
+body.light-mode .cc-card{background:rgba(255,255,255,.85);border-color:rgba(74,159,224,.18);box-shadow:0 10px 26px rgba(74,159,224,.18)}
+body.light-mode .cc-card span{color:#3A5E75}
 body.light-mode .cta-col.buyers::before{background:rgba(210,232,255,.65);border-color:rgba(74,159,224,.28)}
 body.light-mode .cta-col.supps::before{background:rgba(210,248,238,.65);border-color:rgba(46,204,154,.28)}
 body.light-mode .cta-h{color:#050D18}
@@ -344,60 +362,20 @@ body.light-mode .pf-mq-fl{background:linear-gradient(90deg,#EEF6FF,transparent)}
 body.light-mode .pf-mq-fr{background:linear-gradient(270deg,#EEF6FF,transparent)}
 body.light-mode .pf-mq-item{color:#3A5E75}
 
-/* ---- Tablet + mobile shared layout collapse ---- */
 @media (max-width:900px){
 .nv-links{display:none}
 .hero{grid-template-columns:1fr;padding:130px 24px 56px}
 .hero-visual{display:none}
-.hero h1{font-size:46px;letter-spacing:-1.4px}
-.hero-sub{font-size:15.5px}
-.cats,.pu,.pw,.pr,.pk-cta{padding-left:24px;padding-right:24px}
-.cats-h,.sec-h{font-size:30px;letter-spacing:-.5px}
-.cats-sub{font-size:15px}
 .bento{grid-template-columns:1fr}
-.bento .bcard{grid-column:auto!important}
-.bcard.big{grid-row:auto;min-height:auto}
-.bento .bcard[style*="flex-direction:row"]{flex-direction:column!important;align-items:flex-start!important}
-.bento .bcard[style*="flex-direction:row"] > div[style*="text-align:right"]{text-align:left!important}
-.bento .bcard[style*="flex-direction:row"] .barr{margin-left:0!important}
+.bcard.big{grid-row:auto;min-height:200px}
 .sgrid{grid-template-columns:1fr 1fr}
-.sc{min-width:0}
 .rgrid{grid-template-columns:1fr}
 .trust-inner{flex-wrap:wrap}
 .trust-item{flex:1 1 50%}
-.trust-n{font-size:28px}
-.hiw-row{flex-direction:column;gap:24px}
+.how-grid{grid-template-columns:1fr;gap:36px}
 .hiw-conn{display:none}
 .pk-inner{flex-direction:column}
 .cta-div{display:none}
-.cta-h{font-size:28px}
-}
-/* ---- Phones: single-column cards + tighter type/padding ---- */
-@media (max-width:600px){
-.hero{padding:120px 20px 48px}
-.hero h1{font-size:34px;letter-spacing:-1px}
-.hero-sub{font-size:14.5px;margin-bottom:26px}
-.cats{padding:64px 18px 68px}
-.pu,.pr{padding:64px 18px 68px}
-.pw{padding:64px 18px 0}
-.pk-cta{padding:64px 18px 72px}
-.cats-h,.sec-h{font-size:25px}
-.cats-sub,.sec-sub{font-size:14.5px;margin-bottom:32px}
-.sgrid{grid-template-columns:1fr;gap:16px}
-.sc{padding:20px}
-.bento{gap:12px}
-.trust-inner{padding:6px}
-.trust-item{padding:20px 12px}
-.cta-col{padding:34px 24px}
-.cta-h{font-size:26px}
-.hero-sb{flex-wrap:wrap}
-.hero-btn{flex:1 1 100%;justify-content:center}
-}
-/* ---- Narrow phones ---- */
-@media (max-width:400px){
-.hero h1{font-size:30px;letter-spacing:-.8px}
-.cats-h,.sec-h{font-size:23px}
-.trust-item{flex:1 1 100%}
 }
 </style>
 </head>
@@ -423,7 +401,7 @@ body.light-mode .pf-mq-item{color:#3A5E75}
 <div class="section-flakes" id="fl-hero"></div>
 <div>
 <div class="hero-pill"><div class="hero-dot"></div><span class="hero-pt">Live · Global B2B Database</span></div>
-<h1>The Global Wholesale <span class="gt">Frozen Food</span> Database</h1>
+<h1>The Global Wholesale Frozen Food Database</h1>
 <p class="hero-sub">Search the world's most comprehensive database of verified frozen food suppliers — manufacturers, distributors &amp; cold chain providers across 50+ countries.</p>
 <div class="hero-sb">
 <div class="hero-si"><i class="ti ti-search"></i><input class="hero-in" placeholder="Search suppliers, products, regions..."></div>
@@ -438,10 +416,10 @@ body.light-mode .pf-mq-item{color:#3A5E75}
 </div>
 </div>
 <div class="hero-visual">
-<div class="hv-card hv-1"><div class="hv-icon" style="background:rgba(74,159,224,.12);border:1px solid rgba(74,159,224,.3)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#4A9FE0" stroke-width="1.6"><path d="M9 21c0-5 1-8 1-11a2 2 0 114 0c0 3 1 6 1 11"/><path d="M8 21h8"/></svg></div><div class="hv-name">Frozen Poultry</div><div class="hv-meta">Halal-certified · 180+ suppliers</div></div>
-<div class="hv-card hv-2"><div class="hv-icon" style="background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.3)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="1.6"><ellipse cx="12" cy="12" rx="8" ry="5.5" transform="rotate(-18 12 12)"/><path d="M7 10.5c3 1.5 7 1.5 10 0M6.5 13.5c3.5 1.5 7.5 1.5 11 0" opacity=".6"/></svg></div><div class="hv-name">Beef &amp; Meat</div><div class="hv-meta">USDA-inspected exporters</div></div>
-<div class="hv-card hv-3"><div class="hv-icon" style="background:rgba(46,204,154,.12);border:1px solid rgba(46,204,154,.3)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2ECC9A" stroke-width="1.6"><path d="M6 20c8 0 12-4 12-12 0-1-.1-2-.3-3-6 0-10 2-11 6"/><path d="M6 20c0-4 1-7 3-9"/></svg></div><div class="hv-name">Fruits &amp; Veg</div><div class="hv-meta">Fastest-growing · 6.2% CAGR</div></div>
-<div class="hv-card hv-4"><div class="hv-icon" style="background:rgba(82,222,181,.12);border:1px solid rgba(82,222,181,.3)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#52DEB5" stroke-width="1.6"><path d="M12 3c-3 2-5 5-5 9a5 5 0 0010 0c0-4-2-7-5-9z"/><path d="M12 3v14"/></svg></div><div class="hv-name">Frozen Seafood</div><div class="hv-meta">MSC-certified · IQF processed</div></div>
+<div class="hv-card hv-1" data-rot="-5"><div class="hv-icon" style="background:rgba(74,159,224,.12);border:1px solid rgba(74,159,224,.3)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#4A9FE0" stroke-width="1.6"><path d="M9 21c0-5 1-8 1-11a2 2 0 114 0c0 3 1 6 1 11"/><path d="M8 21h8"/></svg></div><div class="hv-name">Frozen Poultry</div><div class="hv-meta">Halal-certified · 180+ suppliers</div></div>
+<div class="hv-card hv-2" data-rot="4"><div class="hv-icon" style="background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.3)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="1.6"><ellipse cx="12" cy="12" rx="8" ry="5.5" transform="rotate(-18 12 12)"/><path d="M7 10.5c3 1.5 7 1.5 10 0M6.5 13.5c3.5 1.5 7.5 1.5 11 0" opacity=".6"/></svg></div><div class="hv-name">Beef &amp; Meat</div><div class="hv-meta">USDA-inspected exporters</div></div>
+<div class="hv-card hv-3" data-rot="-3"><div class="hv-icon" style="background:rgba(46,204,154,.12);border:1px solid rgba(46,204,154,.3)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2ECC9A" stroke-width="1.6"><path d="M6 20c8 0 12-4 12-12 0-1-.1-2-.3-3-6 0-10 2-11 6"/><path d="M6 20c0-4 1-7 3-9"/></svg></div><div class="hv-name">Fruits &amp; Veg</div><div class="hv-meta">Fastest-growing · 6.2% CAGR</div></div>
+<div class="hv-card hv-4" data-rot="3"><div class="hv-icon" style="background:rgba(82,222,181,.12);border:1px solid rgba(82,222,181,.3)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#52DEB5" stroke-width="1.6"><path d="M12 3c-3 2-5 5-5 9a5 5 0 0010 0c0-4-2-7-5-9z"/><path d="M12 3v14"/></svg></div><div class="hv-name">Frozen Seafood</div><div class="hv-meta">MSC-certified · IQF processed</div></div>
 </div>
 </section>
 
@@ -514,12 +492,21 @@ body.light-mode .pf-mq-item{color:#3A5E75}
 <div class="pw-inner">
 <h2 class="sec-h" style="text-align:center" id="pw-h">How FrozenFood<em>Inc</em> Works</h2>
 <p class="sec-sub" style="text-align:center;margin:0 auto 52px" id="pw-sub">Three steps from search to sourcing deal — no middlemen, no commission.</p>
-<div class="hiw-row">
-<div class="hiw-step" id="hs1"><div class="snw"><div class="sring" id="sr1"></div><div class="scirc" id="sc1i">1</div></div><div class="sico"><i class="ti ti-search" style="font-size:18px;color:#4A9FE0"></i></div><div class="stitle">Search the database</div><div class="sdesc">Search by category, region, certification and MOQ to find the right supplier match.</div></div>
-<div class="hiw-conn"><div class="hiw-cl" id="hc1"></div></div>
-<div class="hiw-step" id="hs2"><div class="snw"><div class="sring" id="sr2"></div><div class="scirc" id="sc2i">2</div></div><div class="sico"><i class="ti ti-send" style="font-size:18px;color:#4A9FE0"></i></div><div class="stitle">Contact directly</div><div class="sdesc">Send enquiries straight to verified suppliers — no brokers, zero commission.</div></div>
-<div class="hiw-conn"><div class="hiw-cl" id="hc2"></div></div>
-<div class="hiw-step" id="hs3"><div class="snw"><div class="sring" id="sr3"></div><div class="scirc" id="sc3i">3</div></div><div class="sico"><i class="ti ti-shield-check" style="font-size:18px;color:#4A9FE0"></i></div><div class="stitle">Source with confidence</div><div class="sdesc">Every listing is verified and rated. Review credentials before committing.</div></div>
+<div class="how-grid">
+<div class="how-steps">
+<div class="hstep" id="hs1"><div class="snw"><div class="sring" id="sr1"></div><div class="scirc" id="sc1i">1</div></div><div class="hstep-body"><div class="sico"><i class="ti ti-search" style="font-size:18px;color:#4A9FE0"></i></div><div class="stitle">Search the database</div><div class="sdesc">Search by category, region, certification and MOQ to find the right supplier match.</div></div></div>
+<div class="hstep-conn" id="hc1"></div>
+<div class="hstep" id="hs2"><div class="snw"><div class="sring" id="sr2"></div><div class="scirc" id="sc2i">2</div></div><div class="hstep-body"><div class="sico"><i class="ti ti-send" style="font-size:18px;color:#4A9FE0"></i></div><div class="stitle">Contact directly</div><div class="sdesc">Send enquiries straight to verified suppliers — no brokers, zero commission.</div></div></div>
+<div class="hstep-conn" id="hc2"></div>
+<div class="hstep" id="hs3"><div class="snw"><div class="sring" id="sr3"></div><div class="scirc" id="sc3i">3</div></div><div class="hstep-body"><div class="sico"><i class="ti ti-shield-check" style="font-size:18px;color:#4A9FE0"></i></div><div class="stitle">Source with confidence</div><div class="sdesc">Every listing is verified and rated. Review credentials before committing.</div></div></div>
+</div>
+<div class="how-map">
+<svg viewBox="0 0 600 340" id="worldmap" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+<g id="wm-dots"></g>
+<g id="wm-lanes"></g>
+<g id="wm-hubs"></g>
+</svg>
+</div>
 </div>
 </div>
 <div class="trust-wrap">
@@ -556,8 +543,10 @@ body.light-mode .pf-mq-item{color:#3A5E75}
 <div class="pk-glow" style="width:500px;height:500px;background:radial-gradient(circle,rgba(74,159,224,.14),transparent 70%);top:-100px;left:-100px"></div>
 <div class="pk-glow" style="width:500px;height:500px;background:radial-gradient(circle,rgba(46,204,154,.14),transparent 70%);bottom:-100px;right:-100px"></div>
 <div style="position:relative;z-index:1;max-width:620px;margin:0 auto 56px;text-align:center" id="ctaBlurb">
-<div style="width:52px;height:52px;border-radius:14px;background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.3);display:flex;align-items:center;justify-content:center;margin:0 auto 22px">
-<i class="ti ti-shield-check" style="font-size:24px;color:#F59E0B"></i>
+<div class="cta-collage" id="ctaCollage">
+<div class="cc-card" style="--cc-ac:#2ECC9A;left:0;top:10px;transform:rotate(-9deg);z-index:1"><i class="ti ti-rosette-discount-check"></i><span>Verified</span></div>
+<div class="cc-card" style="--cc-ac:#4A9FE0;left:52px;top:0;transform:rotate(3deg);z-index:3"><i class="ti ti-certificate"></i><span>Certified</span></div>
+<div class="cc-card" style="--cc-ac:#F59E0B;left:104px;top:12px;transform:rotate(9deg);z-index:2"><i class="ti ti-clipboard-check"></i><span>Inspected</span></div>
 </div>
 <h2 style="font-family:'Plus Jakarta Sans';font-size:30px;font-weight:800;letter-spacing:-.6px;margin-bottom:14px;line-height:1.25">Skip the scams. Source with confidence.</h2>
 <p style="font-size:15px;color:#9BBFD8;line-height:1.7">Ghost suppliers, unverifiable certifications and middlemen padding every invoice — that's the old way of sourcing frozen food. Every listing on FrozenFoodInc is verified before it goes live, so every enquiry you send goes to someone real.</p>
@@ -696,7 +685,21 @@ gsap.to('#pa2',{x:-50,y:60,duration:26,repeat:-1,yoyo:true,ease:'sine.inOut'});
 gsap.to('#pa3',{x:40,y:-50,duration:24,repeat:-1,yoyo:true,ease:'sine.inOut'});
 gsap.to('#pa4',{x:-40,y:-30,duration:20,repeat:-1,yoyo:true,ease:'sine.inOut'});
 gsap.to('#ph-dot,.hero-dot',{opacity:.35,scale:.7,duration:1.2,repeat:-1,yoyo:true,ease:'sine.inOut'});
-gsap.to('.gt',{backgroundPosition:'200% center',duration:4,repeat:-1,ease:'none'});
+gsap.to('.hero h1',{backgroundPosition:'280% center',duration:7,repeat:-1,ease:'none'});
+
+// Hero visual cards — idle float (y) + hover tilt (rotation/scale) as
+// separate tweens on separate properties, so they compose instead of fight
+document.querySelectorAll('.hv-card').forEach(function(card, i){
+  var baseRot = parseFloat(card.dataset.rot || 0);
+  gsap.set(card, {rotation: baseRot, transformOrigin:'50% 50%'});
+  gsap.to(card, {y:'+=9', duration: 3.2 + i * 0.35, repeat: -1, yoyo: true, ease: 'sine.inOut', delay: i * 0.25});
+  card.addEventListener('mouseenter', function(){
+    gsap.to(card, {rotation: baseRot + (baseRot >= 0 ? 8 : -8), scale: 1.045, duration: .35, ease: 'power2.out', overwrite: 'auto'});
+  });
+  card.addEventListener('mouseleave', function(){
+    gsap.to(card, {rotation: baseRot, scale: 1, duration: .4, ease: 'power2.out', overwrite: 'auto'});
+  });
+});
 
 function io(selector,fn,thresh){
 var obs=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){fn(e.target);obs.unobserve(e.target);}});},{threshold:thresh||.15});
@@ -704,14 +707,111 @@ document.querySelectorAll(selector).forEach(function(el){obs.observe(el);});
 }
 window.setTab=function(t){document.querySelectorAll('.sft').forEach(function(x){x.classList.remove('on');});t.classList.add('on');};
 
-// How It Works — original animation, kept as requested
+// How It Works — original animation, kept as requested (connector now
+// animates scaleY since the steps are vertical instead of horizontal)
 io('#pw-sec',function(){
 gsap.fromTo(['#pw-h','#pw-sub'],{opacity:0,y:28},{opacity:1,y:0,duration:.7,stagger:.1,ease:'power3.out'});
 gsap.fromTo(['#hs1','#hs2','#hs3'],{opacity:0,y:30},{opacity:1,y:0,duration:.65,stagger:.18,ease:'power3.out',delay:.25});
 gsap.to(['#sc1i','#sc2i','#sc3i'],{scale:1,opacity:1,duration:.62,stagger:.18,ease:'back.out(2.2)',delay:.4});
-gsap.to(['#hc1','#hc2'],{scaleX:1,duration:.9,stagger:.3,ease:'power2.out',delay:.75});
+gsap.to(['#hc1','#hc2'],{scaleY:1,duration:.7,stagger:.3,ease:'power2.out',delay:.75});
 gsap.to(['#sr1','#sr2','#sr3'],{opacity:.1,scale:1.55,duration:1.8,repeat:-1,yoyo:true,ease:'sine.inOut',stagger:.6});
+buildWorldMap();
 },.1);
+
+// World map — stylized dot-matrix continents + animated shipping lanes,
+// built once on first reveal (matches the section's own reveal trigger)
+function buildWorldMap(){
+var dotsG = document.getElementById('wm-dots');
+if (!dotsG || dotsG.dataset.built) return;
+dotsG.dataset.built = '1';
+var lanesG = document.getElementById('wm-lanes');
+var hubsG = document.getElementById('wm-hubs');
+var ns = 'http://www.w3.org/2000/svg';
+
+var regions = [
+  {cx:130,cy:100,rx:70,ry:52,n:42},
+  {cx:178,cy:232,rx:38,ry:62,n:26},
+  {cx:300,cy:78, rx:34,ry:28,n:20},
+  {cx:312,cy:190,rx:44,ry:68,n:32},
+  {cx:440,cy:108,rx:92,ry:62,n:50},
+  {cx:505,cy:250,rx:34,ry:24,n:16}
+];
+regions.forEach(function(r){
+  for (var i=0;i<r.n;i++){
+    var a = Math.random()*Math.PI*2, rad = Math.sqrt(Math.random());
+    var x = r.cx + Math.cos(a)*r.rx*rad;
+    var y = r.cy + Math.sin(a)*r.ry*rad;
+    var c = document.createElementNS(ns,'circle');
+    c.setAttribute('cx', x.toFixed(1));
+    c.setAttribute('cy', y.toFixed(1));
+    c.setAttribute('r', (0.9 + Math.random()*0.6).toFixed(1));
+    c.setAttribute('class','wm-land');
+    c.setAttribute('fill','#4A9FE0');
+    c.setAttribute('opacity', (0.22 + Math.random()*0.22).toFixed(2));
+    dotsG.appendChild(c);
+  }
+});
+
+var hubs = {
+  rot:{x:295,y:65}, mia:{x:155,y:115}, sgp:{x:445,y:175},
+  sha:{x:490,y:100}, sao:{x:185,y:235}, cpt:{x:315,y:255}
+};
+Object.keys(hubs).forEach(function(k){
+  var h = hubs[k];
+  var dot = document.createElementNS(ns,'circle');
+  dot.setAttribute('cx',h.x); dot.setAttribute('cy',h.y); dot.setAttribute('r',4);
+  dot.setAttribute('fill','#8DCAF2'); dot.setAttribute('class','wm-hubdot');
+  hubsG.appendChild(dot);
+});
+[['rot','Rotterdam'],['sgp','Singapore'],['sha','Shanghai']].forEach(function(pair){
+  var h = hubs[pair[0]];
+  var t = document.createElementNS(ns,'text');
+  t.setAttribute('x', h.x + 7); t.setAttribute('y', h.y - 6);
+  t.setAttribute('class','wm-lbl'); t.textContent = pair[1];
+  hubsG.appendChild(t);
+});
+
+var lanes = [
+  {a:'rot',b:'sha',bow:-35,color:'#4A9FE0',dur:11},
+  {a:'mia',b:'rot',bow:-30,color:'#2ECC9A',dur:9},
+  {a:'sao',b:'rot',bow:-90,color:'#F59E0B',dur:13},
+  {a:'sgp',b:'sha',bow:-35,color:'#52DEB5',dur:8},
+  {a:'cpt',b:'sgp',bow:-25,color:'#A78BFA',dur:12},
+  {a:'mia',b:'sgp',bow:-60,color:'#4A9FE0',dur:15}
+];
+lanes.forEach(function(l, i){
+  var p1 = hubs[l.a], p2 = hubs[l.b];
+  var mx = (p1.x+p2.x)/2, my = (p1.y+p2.y)/2 + l.bow;
+  var d = 'M'+p1.x+','+p1.y+' Q'+mx+','+my+' '+p2.x+','+p2.y;
+  var pathId = 'lane'+i;
+  var path = document.createElementNS(ns,'path');
+  path.setAttribute('id', pathId);
+  path.setAttribute('d', d);
+  path.setAttribute('fill','none');
+  path.setAttribute('stroke', l.color);
+  path.setAttribute('stroke-width','1.3');
+  path.setAttribute('stroke-dasharray','1 6');
+  path.setAttribute('opacity','.32');
+  lanesG.appendChild(path);
+
+  [{r:6,op:.28},{r:2.4,op:.95}].forEach(function(spec, si){
+    var dot = document.createElementNS(ns,'circle');
+    dot.setAttribute('r', spec.r);
+    dot.setAttribute('fill', l.color);
+    dot.setAttribute('opacity', spec.op);
+    var anim = document.createElementNS(ns,'animateMotion');
+    anim.setAttribute('dur', l.dur + 's');
+    anim.setAttribute('repeatCount','indefinite');
+    anim.setAttribute('begin', (-(i*1.4) - si*0.3) + 's');
+    var mpath = document.createElementNS(ns,'mpath');
+    mpath.setAttributeNS('http://www.w3.org/1999/xlink','href','#'+pathId);
+    mpath.setAttribute('href','#'+pathId);
+    anim.appendChild(mpath);
+    dot.appendChild(anim);
+    lanesG.appendChild(dot);
+  });
+});
+}
 
 // Trust stats — reveal + count up, now triggered as part of the merged section
 io('#trustInner',function(){
@@ -737,6 +837,7 @@ gsap.to(stars,{opacity:1,scale:1,duration:.22,stagger:.08,ease:'back.out(2)',del
 // CTA reveal
 io('#pk-sec',function(){
 gsap.fromTo('#ctaBlurb',{opacity:0,y:20},{opacity:1,y:0,duration:.7,ease:'power3.out'});
+gsap.fromTo('.cc-card',{opacity:0,y:16,scale:.85},{opacity:1,y:0,scale:1,duration:.55,stagger:.12,ease:'back.out(2)',delay:.15});
 gsap.fromTo('#ctaL',{opacity:0,x:-40},{opacity:1,x:0,duration:.8,ease:'power3.out',delay:.1});
 gsap.fromTo('#ctaR',{opacity:0,x:40},{opacity:1,x:0,duration:.8,ease:'power3.out',delay:.25});
 gsap.fromTo('#ctadiv',{opacity:0,scaleY:0},{opacity:1,scaleY:1,duration:.9,ease:'power2.out',delay:.4});
