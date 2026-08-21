@@ -32,7 +32,7 @@ body.light-mode .pg-aura{opacity:.5}
 .hero-dot{width:7px;height:7px;background:#2ECC9A;border-radius:50%;box-shadow:0 0 10px #2ECC9A}
 .hero-pt{font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#85ECD0}
 /* Hero shimmer: the highlight band sits mid-image and the sweep runs
-   background-position 150% -> -50%, carrying it from just off the start of
+   background-position 130% -> -30%, carrying it from just off the start of
    the heading, across every line, to just past the end. */
 .hero h1{font-family:'Plus Jakarta Sans';font-size:60px;font-weight:800;line-height:1.05;letter-spacing:-2.1px;margin-bottom:22px;overflow-wrap:break-word;background:linear-gradient(100deg,#fff 0%,#fff 42%,#8DCAF2 47%,#4A9FE0 50%,#8DCAF2 53%,#fff 58%,#fff 100%);background-size:200% 100%;background-position:130% 50%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
 .hero-sub{font-size:16.5px;color:#9BBFD8;max-width:440px;margin-bottom:34px;line-height:1.65}
@@ -852,6 +852,8 @@ G.hub.appendChild(ffMk('circle',{cx:hub.x,cy:hub.y,r:core,fill:'url(#hubgrad)',f
 if(window.FF_ICON){
 var img=ffMk('image',{x:hub.x-core*0.58,y:hub.y-core*0.58,width:core*1.16,height:core*1.16,'clip-path':'url(#hubclip)',preserveAspectRatio:'xMidYMid meet',id:'net-icon'});
 img.setAttributeNS('http://www.w3.org/1999/xlink','href',window.FF_ICON); img.setAttribute('href',window.FF_ICON);
+// if the icon can't load, drop it and leave the clean gradient core
+img.addEventListener('error',function(){if(img.parentNode)img.parentNode.removeChild(img);});
 G.hub.appendChild(img);
 }
 var sealY=tall?497:298;

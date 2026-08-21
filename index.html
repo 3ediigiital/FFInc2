@@ -40,7 +40,7 @@ body.light-mode #mode-toggle{border-color:rgba(30,107,171,.4);background:rgba(30
    HERO — mockup version, now with 4 category cards
    ============================================================ */
 .hero{position:relative;z-index:2;padding:190px 48px 84px;max-width:1280px;margin:0 auto;display:grid;grid-template-columns:1.1fr 0.9fr;gap:56px;align-items:start}
-.hero > div:not(.section-flakes){position:relative;z-index:1}
+.hero > div:not(.section-flakes){position:relative;z-index:1;min-width:0}
 .section-flakes{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:0}
 .hero-pill{display:inline-flex;align-items:center;gap:8px;background:rgba(46,204,154,.08);border:1px solid rgba(46,204,154,.28);border-radius:24px;padding:6px 16px;margin-bottom:26px}
 .hero-dot{width:7px;height:7px;background:#2ECC9A;border-radius:50%;box-shadow:0 0 10px #2ECC9A}
@@ -390,20 +390,61 @@ body.light-mode .pf-mq-fl{background:linear-gradient(90deg,#EEF6FF,transparent)}
 body.light-mode .pf-mq-fr{background:linear-gradient(270deg,#EEF6FF,transparent)}
 body.light-mode .pf-mq-item{color:#3A5E75}
 
+/* ---- Tablet + mobile shared layout collapse ---- */
 @media (max-width:900px){
 .nv-links{display:none}
 .hero{grid-template-columns:1fr;padding:130px 24px 56px}
 .hero-visual{display:none}
+.hero h1{font-size:46px;letter-spacing:-1.4px}
+.hero-sub{font-size:15.5px}
+.cats,.pu,.pw,.pr,.pk-cta{padding-left:24px;padding-right:24px}
+.cats-h,.sec-h{font-size:30px;letter-spacing:-.5px}
+.cats-sub{font-size:15px}
 .bento{grid-template-columns:1fr}
-.bcard.big{grid-row:auto;min-height:200px}
+.bento .bcard{grid-column:auto!important}
+.bcard.big{grid-row:auto;min-height:auto}
+.bento .bcard[style*="flex-direction:row"]{flex-direction:column!important;align-items:flex-start!important}
+.bento .bcard[style*="flex-direction:row"] > div[style*="text-align:right"]{text-align:left!important}
+.bento .bcard[style*="flex-direction:row"] .barr{margin-left:0!important}
+.how-grid{grid-template-columns:1fr;gap:36px}
 .sgrid{grid-template-columns:1fr 1fr}
+.sc{min-width:0}
 .rgrid{grid-template-columns:1fr}
 .trust-inner{flex-wrap:wrap}
 .trust-item{flex:1 1 50%}
-.how-grid{grid-template-columns:1fr;gap:36px}
-.hiw-conn{display:none}
+.trust-n{font-size:28px}
 .pk-inner{flex-direction:column}
 .cta-div{display:none}
+.cta-h{font-size:28px}
+}
+/* ---- Phones: single-column cards + tighter type/padding ---- */
+@media (max-width:600px){
+.hero{padding:120px 20px 48px}
+.hero h1{font-size:34px;letter-spacing:-1px}
+.hero-sub{font-size:14.5px;margin-bottom:26px}
+.cats{padding:64px 18px 68px}
+.pu,.pr{padding:64px 18px 68px}
+.pw{padding:64px 18px 0}
+.pk-cta{padding:64px 18px 72px}
+.cats-h,.sec-h{font-size:25px}
+.cats-sub,.sec-sub{font-size:14.5px;margin-bottom:32px}
+.sgrid{grid-template-columns:1fr;gap:16px}
+.sc{padding:20px}
+.bento{gap:12px}
+.how-net{padding:12px}
+.net-cap{font-size:11px}
+.trust-inner{padding:6px}
+.trust-item{padding:20px 12px}
+.cta-col{padding:34px 24px}
+.cta-h{font-size:26px}
+.hero-sb{flex-wrap:wrap}
+.hero-btn{flex:1 1 100%;justify-content:center}
+}
+/* ---- Narrow phones ---- */
+@media (max-width:400px){
+.hero h1{font-size:30px;letter-spacing:-.8px}
+.cats-h,.sec-h{font-size:23px}
+.trust-item{flex:1 1 100%}
 }
 </style>
 </head>
@@ -805,6 +846,8 @@ G.hub.appendChild(ffMk('circle',{cx:hub.x,cy:hub.y,r:core,fill:'url(#hubgrad)',f
 if(window.FF_ICON){
 var img=ffMk('image',{x:hub.x-core*0.58,y:hub.y-core*0.58,width:core*1.16,height:core*1.16,'clip-path':'url(#hubclip)',preserveAspectRatio:'xMidYMid meet',id:'net-icon'});
 img.setAttributeNS('http://www.w3.org/1999/xlink','href',window.FF_ICON); img.setAttribute('href',window.FF_ICON);
+// if the icon can't load, drop it and leave the clean gradient core
+img.addEventListener('error',function(){if(img.parentNode)img.parentNode.removeChild(img);});
 G.hub.appendChild(img);
 }
 var sealY=tall?497:298;
