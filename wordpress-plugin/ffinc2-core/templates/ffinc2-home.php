@@ -31,7 +31,10 @@ body.light-mode .pg-aura{opacity:.5}
 .hero-pill{display:inline-flex;align-items:center;gap:8px;background:rgba(46,204,154,.08);border:1px solid rgba(46,204,154,.28);border-radius:24px;padding:6px 16px;margin-bottom:26px}
 .hero-dot{width:7px;height:7px;background:#2ECC9A;border-radius:50%;box-shadow:0 0 10px #2ECC9A}
 .hero-pt{font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#85ECD0}
-.hero h1{font-family:'Plus Jakarta Sans';font-size:60px;font-weight:800;line-height:1.05;letter-spacing:-2.1px;margin-bottom:22px;overflow-wrap:break-word;background:linear-gradient(100deg,#fff 0%,#fff 40%,#8DCAF2 46%,#4A9FE0 50%,#8DCAF2 54%,#fff 60%,#fff 100%);background-size:280% auto;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+/* Hero shimmer: the highlight band sits mid-image and the sweep runs
+   background-position 150% -> -50%, carrying it from just off the start of
+   the heading, across every line, to just past the end. */
+.hero h1{font-family:'Plus Jakarta Sans';font-size:60px;font-weight:800;line-height:1.05;letter-spacing:-2.1px;margin-bottom:22px;overflow-wrap:break-word;background:linear-gradient(100deg,#fff 0%,#fff 42%,#8DCAF2 47%,#4A9FE0 50%,#8DCAF2 53%,#fff 58%,#fff 100%);background-size:200% 100%;background-position:130% 50%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
 .hero-sub{font-size:16.5px;color:#9BBFD8;max-width:440px;margin-bottom:34px;line-height:1.65}
 .hero-sb{display:flex;gap:8px;background:rgba(18,34,52,.72);backdrop-filter:blur(20px);border:1px solid rgba(74,159,224,.2);border-radius:14px;padding:8px;max-width:540px;margin-bottom:22px}
 .hero-si{flex:1;display:flex;align-items:center;gap:10px;padding:0 10px}
@@ -246,6 +249,8 @@ body.light-mode .net-seal-t{fill:#12855F}
 .cta-lbl.b{background:rgba(74,159,224,.1);border:1px solid rgba(74,159,224,.25);color:#8DCAF2}
 .cta-lbl.s{background:rgba(46,204,154,.1);border:1px solid rgba(46,204,154,.25);color:#52DEB5}
 .cta-h{font-family:'Plus Jakarta Sans';font-size:32px;font-weight:800;letter-spacing:-.7px;margin-bottom:14px;line-height:1.15;position:relative;z-index:1}
+/* Blue half of the CTA blurb heading — tuned per theme for legibility */
+.cta-hl{color:#8DCAF2}
 .cta-p{font-size:15px;color:#9BBFD8;line-height:1.7;margin-bottom:22px;position:relative;z-index:1;max-width:360px}
 .cta-proof{font-size:12px;margin-bottom:26px;display:flex;align-items:center;gap:6px;position:relative;z-index:1}
 .cta-proof.b{color:#6B9DB7}
@@ -276,7 +281,7 @@ body.light-mode .net-seal-t{fill:#12855F}
 body.light-mode{background:#EEF6FF}
 body.light-mode .pg-grid{opacity:.5}
 
-body.light-mode .hero h1{background:linear-gradient(100deg,#050D18 0%,#050D18 40%,#4A9FE0 46%,#1E6BAB 50%,#4A9FE0 54%,#050D18 60%,#050D18 100%);background-size:280% auto;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+body.light-mode .hero h1{background:linear-gradient(100deg,#050D18 0%,#050D18 42%,#4A9FE0 47%,#1E6BAB 50%,#4A9FE0 53%,#050D18 58%,#050D18 100%);background-size:200% 100%;background-position:130% 50%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
 body.light-mode .hero-sub{color:#3A5E75}
 body.light-mode .hero-ql-l{color:#6B9DB7}
 body.light-mode .hero-sb{background:rgba(255,255,255,.68);border-color:rgba(74,159,224,.28);box-shadow:0 4px 20px rgba(74,159,224,.1),inset 0 1px 0 rgba(255,255,255,.95)}
@@ -361,6 +366,7 @@ body.light-mode .cc-card span{color:#3A5E75}
 body.light-mode .cta-col.buyers::before{background:rgba(210,232,255,.65);border-color:rgba(74,159,224,.28)}
 body.light-mode .cta-col.supps::before{background:rgba(210,248,238,.65);border-color:rgba(46,204,154,.28)}
 body.light-mode .cta-h{color:#050D18}
+body.light-mode .cta-hl{color:#1E6BAB}
 body.light-mode .cta-p{color:#3A5E75}
 body.light-mode .cta-proof.b{color:#3A5E75}
 
@@ -655,7 +661,7 @@ window.FF_ICON = <?php echo wp_json_encode($ffnet_icon); ?>;
 <div class="cc-card" style="--cc-ac:#4A9FE0;left:52px;top:0;transform:rotate(3deg);z-index:3"><i class="ti ti-certificate"></i><span>Certified</span></div>
 <div class="cc-card" style="--cc-ac:#F59E0B;left:104px;top:12px;transform:rotate(9deg);z-index:2"><i class="ti ti-clipboard-check"></i><span>Inspected</span></div>
 </div>
-<h2 style="font-family:'Plus Jakarta Sans';font-size:30px;font-weight:800;letter-spacing:-.6px;margin-bottom:14px;line-height:1.25">Skip the scams. Source with confidence.</h2>
+<h2 style="font-family:'Plus Jakarta Sans';font-size:30px;font-weight:800;letter-spacing:-.6px;margin-bottom:14px;line-height:1.25">Skip the scams. <span class="cta-hl">Source with confidence.</span></h2>
 <p style="font-size:15px;color:#9BBFD8;line-height:1.7">Ghost suppliers, unverifiable certifications and middlemen padding every invoice — that's the old way of sourcing frozen food. Every listing on FrozenFoodInc is verified before it goes live, so every enquiry you send goes to someone real.</p>
 </div>
 <div class="pk-inner">
@@ -767,7 +773,7 @@ sections.forEach(function(id, i){
 
 // Ambient aura drift — the "moving gradient for character" pass
 gsap.to('.hero-dot',{opacity:.35,scale:.7,duration:1.2,repeat:-1,yoyo:true,ease:'sine.inOut'});
-gsap.to('.hero h1',{backgroundPosition:'280% center',duration:7,repeat:-1,ease:'none'});
+gsap.fromTo('.hero h1',{backgroundPosition:'130% 50%'},{backgroundPosition:'-30% 50%',duration:4.6,repeat:-1,repeatDelay:.4,ease:'none'});
 
 // Hero visual cards — idle float (y) + hover tilt (rotation/scale) as
 // separate tweens on separate properties, so they compose instead of fight
