@@ -6,110 +6,123 @@ get_header();
 ?>
 
 <!-- ============================================================
-     Homepage-specific styles.
-     Shared chrome (base reset, page background, nav, footer,
-     dark/light toggle, badges, modal) lives in
-     assets/css/design-system.css — do not duplicate here.
+     Homepage-specific styles. Shared chrome (reset, real nav +
+     dark/light toggle, footer, badges) lives in design-system.css
+     and the theme header/footer. Fonts, Tabler icons and GSAP are
+     enqueued site-wide. Section class names are homepage-scoped.
      ============================================================ -->
 <style>
-/* Homepage fruit-drift layer (unique to the homepage) */
-#fruit-layer{position:fixed;inset:0;pointer-events:none;z-index:1;overflow:visible}
+/* ---- Ambient background: enhanced with slow drift for "character" ---- */
+.pg-grid{position:fixed;inset:0;background-image:linear-gradient(rgba(74,159,224,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(74,159,224,.04) 1px,transparent 1px);background-size:52px 52px;pointer-events:none;z-index:0;mask-image:radial-gradient(ellipse 80% 60% at 50% 30%,black,transparent)}
+.pg-aura{position:fixed;border-radius:50%;filter:blur(90px);pointer-events:none;z-index:0;will-change:transform,opacity}
+body.light-mode .pg-aura{opacity:.5}
 
-/* Homepage sections: hero, stats, categories, how-it-works,
-   featured suppliers, testimonials, CTA + trust */
-.ph{position:relative;z-index:2;padding:160px 24px 72px;text-align:center;max-width:1200px;margin:0 auto}
-.ph-pill{display:inline-flex;align-items:center;gap:8px;background:rgba(46,204,154,.08);border:1px solid rgba(46,204,154,.28);border-radius:24px;padding:6px 16px;margin-bottom:28px;backdrop-filter:blur(8px)}
-.ph-dot{width:7px;height:7px;background:#2ECC9A;border-radius:50%;box-shadow:0 0 10px #2ECC9A,0 0 22px rgba(46,204,154,.4)}
-.ph-pt{font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#85ECD0}
-.ph-h1{font-family:'Plus Jakarta Sans',system-ui;font-size:72px;font-weight:800;line-height:1.04;letter-spacing:-2.5px;margin-bottom:22px}
-.ph-h1 .l1{color:#fff;display:block}
-.ph-gt{background:linear-gradient(110deg,#fff 20%,#8DCAF2 38%,#4A9FE0 50%,#8DCAF2 62%,#fff 80%);background-size:200% auto;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
-.ph-sub{font-size:18px;color:#9BBFD8;max-width:540px;margin:0 auto 44px;line-height:1.65}
-.ph-sw{position:relative;max-width:680px;margin:0 auto 20px}
-.ph-sb{display:flex;gap:8px;background:rgba(18,34,52,.72);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(74,159,224,.2);border-radius:14px;padding:8px;transition:border-color .3s,box-shadow .3s}
-.ph-sb:focus-within{border-color:rgba(74,159,224,.55);box-shadow:0 0 0 4px rgba(74,159,224,.1)}
-.ph-si{flex:1;display:flex;align-items:center;gap:10px;padding:0 10px}
-.ph-si i{font-size:18px;color:#4A9FE0;flex-shrink:0}
-.ph-in{background:transparent;border:none;outline:none;font-size:14px;color:#fff;font-family:'Inter',system-ui;width:100%}
-.ph-in::placeholder{color:#3A5E75}
-.ph-sel{background:rgba(26,48,72,.85);border:1px solid rgba(74,159,224,.2);color:#9BBFD8;padding:11px 14px;border-radius:10px;font-size:13px;font-family:'Inter',system-ui;outline:none;cursor:pointer;flex-shrink:0}
-.ph-btn{background:linear-gradient(135deg,#4A9FE0,#2D7FC4);color:#fff;border:none;padding:13px 28px;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;font-family:'Inter',system-ui;box-shadow:0 4px 18px rgba(74,159,224,.45);transition:transform .15s;flex-shrink:0}
-.ph-btn:hover{transform:scale(1.04)}
-.ph-ql{display:flex;justify-content:center;align-items:center;gap:9px;flex-wrap:wrap}
-.ph-ql-l{font-size:12px;color:#3A5E75}
-.ph-chip{font-size:12px;color:#8DCAF2;background:rgba(74,159,224,.08);border:1px solid rgba(74,159,224,.18);padding:6px 16px;border-radius:20px;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:6px}
-.ph-chip:hover{background:rgba(74,159,224,.2);border-color:rgba(74,159,224,.45);transform:translateY(-2px);color:#fff}
-.ph-sep{color:#243C58}
-.ps{position:relative;z-index:2;background:rgba(6,15,26,.85);backdrop-filter:blur(14px);border-top:1px solid rgba(74,159,224,.1);border-bottom:1px solid rgba(74,159,224,.1);padding:22px 0;display:flex;justify-content:center}
-.ps-row{display:flex;max-width:760px;width:100%}
-.ps-item{flex:1;text-align:center;padding:0 32px;border-right:1px solid rgba(74,159,224,.1)}
-.ps-item:last-child{border-right:none}
-.ps-n{font-family:'Plus Jakarta Sans',system-ui;font-size:30px;font-weight:800;line-height:1.2;display:block;background:linear-gradient(135deg,#fff,#8DCAF2);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
-.ps-n.tl{background:linear-gradient(135deg,#85ECD0,#2ECC9A);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
-.ps-l{font-size:11px;color:#6B9DB7;letter-spacing:.08em;text-transform:uppercase;margin-top:4px;display:block}
-.pc{position:relative;z-index:2;background:linear-gradient(180deg,#060F1A,#0A1628);padding:88px 32px 96px}
-.pc-inner{max-width:1200px;margin:0 auto}
-.sec-lbl{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+
+.sec-lbl{display:inline-flex;align-items:center;gap:10px;margin-bottom:12px}
 .sec-lbl::before{content:'';width:28px;height:1.5px;background:linear-gradient(90deg,#4A9FE0,transparent)}
 .sec-lbl-t{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#4A9FE0}
-.sec-h{font-family:'Plus Jakarta Sans',system-ui;font-size:40px;font-weight:800;letter-spacing:-.8px;margin-bottom:10px}
+
+/* ============================================================
+   HERO — mockup version, now with 4 category cards
+   ============================================================ */
+.hero{position:relative;z-index:2;padding:190px 48px 84px;max-width:1280px;margin:0 auto;display:grid;grid-template-columns:1.1fr 0.9fr;gap:56px;align-items:start}
+.hero > div:not(.section-flakes){position:relative;z-index:1;min-width:0}
+.section-flakes{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:0}
+.hero-pill{display:inline-flex;align-items:center;gap:8px;background:rgba(46,204,154,.08);border:1px solid rgba(46,204,154,.28);border-radius:24px;padding:6px 16px;margin-bottom:26px}
+.hero-dot{width:7px;height:7px;background:#2ECC9A;border-radius:50%;box-shadow:0 0 10px #2ECC9A}
+.hero-pt{font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#85ECD0}
+/* Hero shimmer: the highlight band sits mid-image and the sweep runs
+   background-position 130% -> -30%, carrying it from just off the start of
+   the heading, across every line, to just past the end. */
+.hero h1{font-family:'Plus Jakarta Sans';font-size:60px;font-weight:800;line-height:1.05;letter-spacing:-2.1px;margin-bottom:22px;overflow-wrap:break-word;background:linear-gradient(100deg,#fff 0%,#fff 42%,#8DCAF2 47%,#4A9FE0 50%,#8DCAF2 53%,#fff 58%,#fff 100%);background-size:200% 100%;background-position:130% 50%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.hero-sub{font-size:16.5px;color:#9BBFD8;max-width:440px;margin-bottom:34px;line-height:1.65}
+.hero-sb{display:flex;gap:8px;background:rgba(18,34,52,.72);backdrop-filter:blur(20px);border:1px solid rgba(74,159,224,.2);border-radius:14px;padding:8px;max-width:540px;margin-bottom:22px}
+.hero-si{flex:1;display:flex;align-items:center;gap:10px;padding:0 10px}
+.hero-si i{font-size:18px;color:#4A9FE0}
+.hero-in{background:transparent;border:none;outline:none;font-size:14px;color:#fff;font-family:'Inter';width:100%}
+.hero-in::placeholder{color:#3A5E75}
+.hero-btn{background:linear-gradient(135deg,#4A9FE0,#2D7FC4);color:#fff;border:none;padding:13px 26px;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;box-shadow:0 4px 18px rgba(74,159,224,.45);flex-shrink:0}
+.hero-ql{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+.hero-ql-l{font-size:12px;color:#3A5E75}
+.hero-chip{font-size:12px;color:#8DCAF2;background:rgba(74,159,224,.08);border:1px solid rgba(74,159,224,.18);padding:6px 15px;border-radius:20px;display:inline-flex;align-items:center;gap:6px}
+
+/* 4-card overlapping visual */
+.hero-visual{position:relative;height:470px}
+.hv-card{position:absolute;background:rgba(18,34,52,.55);backdrop-filter:blur(16px);border:1px solid rgba(74,159,224,.16);border-radius:20px;padding:20px;box-shadow:0 24px 60px rgba(0,0,0,.4);width:225px;transition:box-shadow .3s ease;will-change:transform}
+.hv-card:hover{box-shadow:0 34px 80px rgba(0,0,0,.5)}
+.hv-1{top:0;left:0;transform:rotate(-5deg);z-index:1}
+.hv-2{top:38px;right:0;transform:rotate(4deg);z-index:3}
+.hv-3{top:210px;left:30px;transform:rotate(-3deg);z-index:2}
+.hv-4{top:255px;right:14px;transform:rotate(3deg);z-index:4}
+.hv-icon{width:40px;height:40px;border-radius:11px;display:flex;align-items:center;justify-content:center;margin-bottom:12px}
+.hv-name{font-family:'Plus Jakarta Sans';font-size:14px;font-weight:700;margin-bottom:4px}
+.hv-meta{font-size:11px;color:#6B9DB7}
+
+/* ============================================================
+   MARQUEE — mockup version, relabeled
+   ============================================================ */
+.mq{position:relative;z-index:2;background:rgba(6,15,26,.85);backdrop-filter:blur(14px);border-top:1px solid rgba(74,159,224,.1);border-bottom:1px solid rgba(74,159,224,.1);padding:26px 0;overflow:hidden}
+.mq-lbl{text-align:center;font-size:11px;color:#3A5E75;letter-spacing:.08em;text-transform:uppercase;margin-bottom:16px}
+.mq-fl{position:absolute;left:0;top:0;bottom:0;width:140px;background:linear-gradient(90deg,#050D18,transparent);z-index:2;pointer-events:none}
+.mq-fr{position:absolute;right:0;top:0;bottom:0;width:140px;background:linear-gradient(270deg,#050D18,transparent);z-index:2;pointer-events:none}
+@keyframes mqscroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.mq-track{display:flex;gap:14px;width:max-content;animation:mqscroll 34s linear infinite}
+.mq-track:hover{animation-play-state:paused}
+.mq-chip{display:flex;align-items:center;gap:10px;background:rgba(18,34,52,.5);border:1px solid rgba(74,159,224,.14);border-radius:12px;padding:10px 18px;white-space:nowrap}
+.mq-badge{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'Plus Jakarta Sans';font-size:11px;font-weight:800;flex-shrink:0}
+.mq-cname{font-size:13px;font-weight:600;color:#e8f4fd}
+.mq-cloc{font-size:10.5px;color:#6B9DB7}
+
+/* ============================================================
+   CATEGORIES — mockup bento, unchanged
+   ============================================================ */
+.cats{position:relative;z-index:2;background:linear-gradient(160deg,#060F1A,#0A1628 55%,#0d1f30);padding:96px 48px 100px}
+.cats-inner{position:relative;z-index:1;max-width:1280px;margin:0 auto}
+.cats-h{font-family:'Plus Jakarta Sans';font-size:38px;font-weight:800;letter-spacing:-.8px;margin-bottom:12px;max-width:560px}
+.cats-h em{color:#4A9FE0;font-style:normal}
+.cats-sub{font-size:16px;color:#9BBFD8;line-height:1.6;margin-bottom:44px;max-width:480px}
+.bento{display:grid;grid-template-columns:1.4fr 1fr 1fr;grid-template-rows:auto auto;gap:16px}
+.bcard{position:relative;border-radius:20px;overflow:hidden;padding:28px;display:flex;flex-direction:column;justify-content:flex-end;min-height:200px;border:1px solid;transition:transform .3s cubic-bezier(.34,1.3,.64,1)}
+.bcard:hover{transform:translateY(-6px)}
+.bcard.big{grid-row:span 2;min-height:420px}
+.bicon{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;margin-bottom:16px}
+.bname{font-family:'Plus Jakarta Sans';font-size:21px;font-weight:700;letter-spacing:-.3px;margin-bottom:8px}
+.bdesc{font-size:13.5px;color:#9BBFD8;line-height:1.6;margin-bottom:16px}
+.bfoot{display:flex;align-items:center;justify-content:space-between}
+.bcount{font-size:12px;color:#6B9DB7}
+.bcount b{font-weight:600}
+.barr{width:32px;height:32px;border-radius:50%;border:1px solid;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+
+/* ============================================================
+   FEATURED SUPPLIERS — live-index version, verbatim
+   ============================================================ */
+.pu{position:relative;z-index:2;background:linear-gradient(180deg,#0d1f30,#0A1628);padding:88px 48px 96px}
+.pu-inner{position:relative;z-index:1;max-width:100%;margin:0}
+.sec-h{font-family:'Plus Jakarta Sans';font-size:40px;font-weight:800;letter-spacing:-.8px;margin-bottom:10px}
 .sec-h em{color:#4A9FE0;font-style:normal}
 .sec-sub{font-size:16px;color:#9BBFD8;line-height:1.6;margin-bottom:40px;max-width:520px}
-.cgrid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
-.cc{position:relative;background:rgba(18,34,52,.48);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(74,159,224,.11);border-radius:20px;overflow:hidden;cursor:pointer;transition:transform .28s cubic-bezier(.34,1.3,.64,1),border-color .25s,box-shadow .28s}
-.cc::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--ac),transparent);opacity:.65}
-.cc::after{content:'';position:absolute;bottom:-40%;left:50%;transform:translateX(-50%);width:280px;height:280px;border-radius:50%;background:radial-gradient(circle,var(--ac),transparent 68%);opacity:0;transition:opacity .4s;pointer-events:none}
-.cc:hover{transform:translateY(-7px);box-shadow:0 24px 65px rgba(0,0,0,.48),0 0 48px -16px var(--ac)}
-.cc:hover::after{opacity:.07}
-.cc-body{position:relative;z-index:1;padding:26px}
-.cc-icon{width:48px;height:48px;border-radius:13px;display:flex;align-items:center;justify-content:center;margin-bottom:14px;transition:background .25s,border-color .25s;border:1px solid rgba(74,159,224,.15);background:rgba(74,159,224,.1)}
-.cc:hover .cc-icon{background:color-mix(in srgb,var(--ac) 18%,transparent);border-color:color-mix(in srgb,var(--ac) 35%,transparent)}
-.cc-badge{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:600;padding:3px 10px;border-radius:12px;margin-bottom:10px;border:1px solid rgba(46,204,154,.28);background:rgba(46,204,154,.1);color:#52DEB5}
-.cc-sp{height:30px;margin-bottom:10px}
-.cc-name{font-family:'Plus Jakarta Sans',system-ui;font-size:19px;font-weight:700;letter-spacing:-.3px;margin-bottom:8px}
-.cc-desc{font-size:13px;color:#9BBFD8;line-height:1.6;margin-bottom:16px}
-.cc-foot{display:flex;align-items:center;justify-content:space-between}
-.cc-count{font-size:12px;color:#6B9DB7}
-.cc-count b{color:var(--ac);font-weight:600}
-.cc-arr{width:34px;height:34px;border-radius:50%;border:1px solid rgba(74,159,224,.22);display:flex;align-items:center;justify-content:center;color:var(--ac);transition:all .22s;flex-shrink:0}
-.cc:hover .cc-arr{background:var(--ac);color:#050D18;border-color:transparent;transform:translateX(3px)}
-.pw{position:relative;z-index:2;background:linear-gradient(180deg,#0A1628,#0D1B2A);padding:88px 32px 96px}
-.pw-inner{max-width:1200px;margin:0 auto}
-.hiw-row{display:flex;align-items:flex-start}
-.hiw-step{flex:1;text-align:center;padding:0 20px}
-.hiw-conn{flex:0 0 60px;display:flex;align-items:center;margin-top:28px}
-.hiw-cl{flex:1;height:1px;background:repeating-linear-gradient(90deg,rgba(74,159,224,.4) 0,rgba(74,159,224,.4) 6px,transparent 6px,transparent 14px);transform:scaleX(0);transform-origin:left}
-.snw{position:relative;width:60px;height:60px;margin:0 auto 18px}
-.sring{position:absolute;inset:-12px;border-radius:50%;border:1.5px solid rgba(74,159,224,.28)}
-.scirc{position:absolute;inset:0;border-radius:50%;background:linear-gradient(135deg,rgba(74,159,224,.22),rgba(30,107,171,.12));border:1.5px solid rgba(74,159,224,.4);display:flex;align-items:center;justify-content:center;font-family:'Plus Jakarta Sans',system-ui;font-size:22px;font-weight:800;color:#8DCAF2;transform:scale(0);opacity:0}
-.sico{width:38px;height:38px;border-radius:10px;background:rgba(74,159,224,.07);border:1px solid rgba(74,159,224,.14);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;transition:all .25s}
-.sico:hover{background:rgba(74,159,224,.15);border-color:rgba(74,159,224,.3)}
-.stitle{font-family:'Plus Jakarta Sans',system-ui;font-size:17px;font-weight:700;margin-bottom:10px;letter-spacing:-.2px}
-.sdesc{font-size:14px;color:#9BBFD8;line-height:1.65;max-width:220px;margin:0 auto}
-.pu{position:relative;z-index:2;background:linear-gradient(180deg,#0D1B2A,#0A1628);padding:88px 32px 96px}
-.pu-inner{max-width:100%;margin:0}
-.sfrow{display:flex;align-items:center;justify-content:space-between;margin-bottom:32px;gap:12px}
+.sfrow{display:flex;align-items:center;justify-content:space-between;margin-bottom:32px;gap:12px;flex-wrap:wrap}
 .sftabs{display:flex;gap:8px;flex-wrap:wrap}
-.sft{font-size:12px;padding:7px 16px;border-radius:20px;border:1px solid rgba(74,159,224,.18);background:transparent;color:#9BBFD8;cursor:pointer;font-family:'Inter',system-ui;transition:all .2s}
+.sft{font-size:12px;padding:7px 16px;border-radius:20px;border:1px solid rgba(74,159,224,.18);background:transparent;color:#9BBFD8;cursor:pointer;font-family:'Inter';transition:all .2s}
 .sft.on{background:rgba(74,159,224,.14);color:#4A9FE0;border-color:rgba(74,159,224,.38)}
 .sft:hover:not(.on){background:rgba(74,159,224,.07);color:#8DCAF2}
 .sfcount{font-size:12px;color:#6B9DB7}
 .sfcount b{color:#4A9FE0}
 .sgrid{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:18px;margin-bottom:36px}
-.sc{position:relative;background:rgba(18,34,52,.48);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(74,159,224,.1);border-radius:20px;padding:24px;overflow:hidden;transition:transform .28s cubic-bezier(.34,1.3,.64,1),border-color .25s,box-shadow .28s;cursor:pointer}
+.sc{position:relative;background:rgba(18,34,52,.48);backdrop-filter:blur(14px);border:1px solid rgba(74,159,224,.1);border-radius:20px;padding:24px;overflow:hidden;transition:transform .28s cubic-bezier(.34,1.3,.64,1),border-color .25s,box-shadow .28s;cursor:pointer}
 .sc::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--ac,#4A9FE0),transparent);opacity:.65}
 .sc::after{content:'';position:absolute;bottom:-40%;left:50%;transform:translateX(-50%);width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,var(--ac,#4A9FE0),transparent 70%);opacity:0;transition:opacity .4s;pointer-events:none}
 .sc:hover{transform:translateY(-6px);box-shadow:0 22px 60px rgba(0,0,0,.45),0 0 44px -18px var(--ac,#4A9FE0)}
 .sc:hover::after{opacity:.07}
 .sc-head{display:flex;align-items:flex-start;gap:12px;margin-bottom:14px}
-.sc-logo{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0;font-family:'Plus Jakarta Sans',system-ui;position:relative}
+.sc-logo{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0;font-family:'Plus Jakarta Sans';position:relative}
 .sc-li{position:absolute;inset:0;border-radius:12px;opacity:.15}
 .sc-lt{position:relative;z-index:1}
 .sc-ng{flex:1;min-width:0}
-.sc-name{font-size:14px;font-weight:600;color:#fff;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sc-name{font-size:14px;font-weight:600;color:#fff;margin-bottom:3px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;line-height:1.25}
 .sc-loc{font-size:11px;color:#9BBFD8;display:flex;align-items:center;gap:4px}
 .sc-bdgs{display:flex;flex-direction:column;gap:5px;flex-shrink:0}
-.sc-v{display:inline-flex;align-items:center;gap:3px;font-size:10px;font-weight:600;padding:3px 9px;border-radius:12px;background:rgba(46,204,154,.1);color:#52DEB5;border:1px solid rgba(46,204,154,.25);opacity:0}
+.sc-v{display:inline-flex;align-items:center;gap:3px;font-size:10px;font-weight:600;padding:3px 9px;border-radius:12px;background:rgba(46,204,154,.1);color:#52DEB5;border:1px solid rgba(46,204,154,.25)}
 .sc-f{display:inline-flex;align-items:center;gap:3px;font-size:10px;font-weight:600;padding:3px 9px;border-radius:12px;background:rgba(245,158,11,.12);color:#F59E0B;border:1px solid rgba(245,158,11,.28)}
 .sc-tags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:12px}
 .sc-tag{font-size:10.5px;padding:2.5px 8px;border-radius:5px;background:rgba(26,48,72,.8);border:1px solid rgba(74,159,224,.13);color:#9BBFD8}
@@ -117,616 +130,583 @@ get_header();
 .sc-stats{display:flex;margin-bottom:14px;background:rgba(10,22,40,.5);border:1px solid rgba(74,159,224,.1);border-radius:10px;overflow:hidden}
 .sc-stat{flex:1;padding:10px 8px;text-align:center}
 .sc-stat+.sc-stat{border-left:1px solid rgba(74,159,224,.1)}
-.sc-sv{display:block;font-family:'Plus Jakarta Sans',system-ui;font-size:15px;font-weight:700;color:#fff;line-height:1.2}
+.sc-sv{display:block;font-family:'Plus Jakarta Sans';font-size:15px;font-weight:700;color:#fff;line-height:1.2}
 .sc-sl{display:block;font-size:10px;color:#6B9DB7;letter-spacing:.04em;text-transform:uppercase;margin-top:2px}
 .sc-certs{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:16px}
 .sc-cert{font-size:10px;padding:2.5px 8px;border-radius:4px;background:rgba(74,159,224,.08);border:1px solid rgba(74,159,224,.16);color:#8DCAF2}
 .sc-foot{display:flex;align-items:center;justify-content:space-between;padding-top:12px;border-top:1px solid rgba(74,159,224,.08)}
 .sc-rate{font-size:12px;color:#F59E0B;display:flex;align-items:center;gap:4px}
 .sc-rate span{color:#6B9DB7;font-size:11px}
-.sc-cta{display:flex;align-items:center;gap:5px;font-size:12px;font-weight:500;color:var(--ac,#4A9FE0);background:transparent;border:1px solid rgba(74,159,224,.22);padding:7px 14px;border-radius:8px;cursor:pointer;font-family:'Inter',system-ui;transition:all .2s}
+.sc-cta{display:flex;align-items:center;gap:5px;font-size:12px;font-weight:500;color:var(--ac,#4A9FE0);background:transparent;border:1px solid rgba(74,159,224,.22);padding:7px 14px;border-radius:8px;cursor:pointer;font-family:'Inter';transition:all .2s}
 .sc:hover .sc-cta{background:var(--ac,#4A9FE0);color:#050D18}
-.sc:hover .sc-cta i{transform:translateX(3px)}
-.more-btn{display:block;margin:0 auto;background:transparent;border:1px solid rgba(74,159,224,.28);color:#8DCAF2;padding:13px 32px;border-radius:10px;font-size:13px;font-weight:500;cursor:pointer;font-family:'Inter',system-ui;transition:all .22s}
+.more-btn{display:block;margin:0 auto;background:transparent;border:1px solid rgba(74,159,224,.28);color:#8DCAF2;padding:13px 32px;border-radius:10px;font-size:13px;font-weight:500;cursor:pointer;font-family:'Inter';transition:all .22s}
 .more-btn:hover{background:rgba(74,159,224,.1);border-color:rgba(74,159,224,.5);color:#fff}
-.pr{position:relative;z-index:2;background:linear-gradient(180deg,#060F1A,#0A1628);padding:88px 32px 96px}
+
+/* ============================================================
+   HOW IT WORKS + TRUST STATS — live animation kept, stats merged in
+   ============================================================ */
+.pw{position:relative;z-index:2;background:linear-gradient(180deg,#0A1628,#0D1B2A);padding:88px 48px 0}
+.pw-inner{position:relative;z-index:1;max-width:1200px;margin:0 auto}
+.how-grid{display:grid;grid-template-columns:2fr 3fr;gap:56px;align-items:center;margin-bottom:64px}
+.how-steps{display:flex;flex-direction:column}
+.hstep{display:flex;gap:18px;align-items:flex-start}
+.hstep-conn{width:2px;height:34px;margin-left:29px;background:repeating-linear-gradient(180deg,rgba(74,159,224,.4) 0,rgba(74,159,224,.4) 5px,transparent 5px,transparent 12px);transform:scaleY(0);transform-origin:top}
+.snw{position:relative;width:60px;height:60px;flex-shrink:0}
+.sring{position:absolute;inset:-12px;border-radius:50%;border:1.5px solid rgba(74,159,224,.28)}
+.scirc{position:absolute;inset:0;border-radius:50%;background:linear-gradient(135deg,rgba(74,159,224,.22),rgba(30,107,171,.12));border:1.5px solid rgba(74,159,224,.4);display:flex;align-items:center;justify-content:center;font-family:'Plus Jakarta Sans';font-size:22px;font-weight:800;color:#8DCAF2;transform:scale(0);opacity:0}
+.hstep-body{flex:1;padding-top:8px}
+.sico{width:34px;height:34px;border-radius:10px;background:rgba(74,159,224,.07);border:1px solid rgba(74,159,224,.14);display:flex;align-items:center;justify-content:center;margin-bottom:10px}
+.stitle{font-family:'Plus Jakarta Sans';font-size:16px;font-weight:700;margin-bottom:8px;letter-spacing:-.2px}
+.sdesc{font-size:13.5px;color:#9BBFD8;line-height:1.6}
+
+/* Direct-connection network — right column. Real verified suppliers wired
+   straight to the buyer hub; the broker lane is struck through. */
+.how-net{position:relative;background:linear-gradient(165deg,rgba(18,34,52,.55),rgba(10,22,40,.42));border:1px solid rgba(74,159,224,.14);border-radius:24px;padding:14px 16px;backdrop-filter:blur(10px);box-shadow:0 24px 60px rgba(0,0,0,.32),inset 0 1px 0 rgba(255,255,255,.03);overflow:hidden}
+.how-net::before{content:'';position:absolute;inset:0;background:radial-gradient(120% 95% at 20% 52%,rgba(74,159,224,.12),transparent 62%);pointer-events:none}
+.how-net svg{width:100%;height:auto;display:block;position:relative;z-index:1;overflow:visible}
+.net-cap{position:relative;z-index:1;margin-top:8px;text-align:center;font-size:11.5px;color:#6B9DB7;line-height:1.5}
+.net-cap b{color:#8DCAF2;font-weight:600}
+.net-lane{stroke-width:1.4;stroke-dasharray:1 7;fill:none;stroke-linecap:round;opacity:0}
+.net-draw{stroke-width:1.7;fill:none;stroke-linecap:round;opacity:0}
+.net-chip-bg{fill:rgba(18,34,52,.74);stroke:rgba(74,159,224,.18);stroke-width:1}
+.net-chip-name{fill:#e8f4fd;font-family:'Plus Jakarta Sans';font-weight:600;font-size:11.5px}
+.net-chip-loc{fill:#6B9DB7;font-family:'Inter';font-size:9.5px}
+.net-badge-t{font-family:'Plus Jakarta Sans';font-weight:800;font-size:10px}
+.net-ring{fill:none;stroke:rgba(74,159,224,.32)}
+.net-broker-bg{fill:rgba(120,140,160,.05);stroke:rgba(150,168,186,.34);stroke-width:1;stroke-dasharray:4 3}
+.net-broker-t{fill:#8296a8;font-family:'Inter';font-size:9.5px;text-anchor:middle;font-weight:500}
+.net-strike{stroke:#F5726B;stroke-width:1.5;opacity:.75;stroke-linecap:round}
+.net-seal{fill:rgba(46,204,154,.1);stroke:rgba(46,204,154,.42);stroke-width:1}
+.net-seal-t{fill:#52DEB5;font-family:'Plus Jakarta Sans';font-weight:700;font-size:10px;text-anchor:middle}
+.net-tag{fill:rgba(74,159,224,.1);stroke:rgba(74,159,224,.3);stroke-width:1}
+.net-tag-t{fill:#8DCAF2;font-family:'Inter';font-size:9px;font-weight:600;letter-spacing:.03em}
+.net-eyebrow-t{fill:#6B9DB7;font-family:'Inter';font-size:8.5px;font-weight:600;letter-spacing:.16em}
+body.light-mode .how-net{background:linear-gradient(165deg,rgba(255,255,255,.78),rgba(232,243,252,.62));border-color:rgba(74,159,224,.22)}
+body.light-mode .net-cap{color:#5c7186}
+body.light-mode .net-cap b{color:#1E6BAB}
+body.light-mode .net-chip-bg{fill:rgba(255,255,255,.92);stroke:rgba(74,159,224,.24)}
+body.light-mode .net-chip-name{fill:#0A1628}
+body.light-mode .net-chip-loc{fill:#5c7186}
+body.light-mode .net-broker-t{fill:#6d8296}
+body.light-mode .net-eyebrow-t{fill:#5c7186}
+body.light-mode .net-tag{fill:rgba(74,159,224,.14);stroke:rgba(74,159,224,.42)}
+body.light-mode .net-tag-t{fill:#1E6BAB}
+body.light-mode .net-seal{fill:rgba(46,204,154,.14);stroke:rgba(24,150,110,.5)}
+body.light-mode .net-seal-t{fill:#12855F}
+
+/* Trust band — folded into the bottom of the same section, connected visually */
+.trust-wrap{position:relative;z-index:1;background:linear-gradient(180deg,rgba(74,159,224,.06),rgba(74,159,224,0));padding:44px 0 88px;margin-top:8px}
+.trust-wrap::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:1px;height:44px;background:linear-gradient(180deg,rgba(74,159,224,.35),transparent)}
+.trust-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;background:rgba(18,34,52,.42);border:1px solid rgba(74,159,224,.14);border-radius:24px;padding:8px;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.trust-item{flex:1;text-align:center;padding:26px 16px;position:relative}
+.trust-item:not(:last-child)::after{content:'';position:absolute;right:0;top:20%;bottom:20%;width:1px;background:rgba(74,159,224,.14)}
+.trust-n{font-family:'Plus Jakarta Sans';font-size:32px;font-weight:800;display:block;background:linear-gradient(135deg,#fff,#8DCAF2);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.trust-n.tl{background:linear-gradient(135deg,#85ECD0,#2ECC9A);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.trust-l{font-size:12px;font-weight:600;color:#fff;margin-top:6px;display:block}
+.trust-d{font-size:11px;color:#6B9DB7;margin-top:3px;display:block}
+
+/* ============================================================
+   TESTIMONIALS — live-index version, verbatim
+   ============================================================ */
+.pr{position:relative;z-index:2;background:linear-gradient(180deg,#0D1B2A,#060F1A);padding:88px 48px 96px}
 .pr-inner{max-width:100%;margin:0;position:relative;z-index:2}
-.pr-qbg{position:absolute;top:40px;left:40px;font-size:260px;font-family:'Plus Jakarta Sans',system-ui;font-weight:800;color:rgba(74,159,224,.04);line-height:1;user-select:none;pointer-events:none;z-index:0}
+.pr-qbg{position:absolute;top:40px;left:40px;font-size:260px;font-family:'Plus Jakarta Sans';font-weight:800;color:rgba(74,159,224,.04);line-height:1;user-select:none;pointer-events:none;z-index:0}
 .pr-agg{display:flex;align-items:center;gap:16px;margin-bottom:44px;padding:18px 24px;background:rgba(18,34,52,.4);border:1px solid rgba(74,159,224,.1);border-radius:14px;width:fit-content;backdrop-filter:blur(10px)}
 .pr-agg-stars{font-size:18px;color:#F59E0B;letter-spacing:3px}
-.pr-agg-score{font-family:'Plus Jakarta Sans',system-ui;font-size:28px;font-weight:800;color:#fff}
+.pr-agg-score{font-family:'Plus Jakarta Sans';font-size:28px;font-weight:800;color:#fff}
 .pr-agg-div{width:1px;height:38px;background:rgba(74,159,224,.2)}
 .pr-agg-lbl{font-size:13px;color:#9BBFD8;line-height:1.5}
 .pr-agg-lbl strong{color:#fff}
 .rgrid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px}
-.rcard{position:relative;background:rgba(18,34,52,.48);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(74,159,224,.1);border-radius:20px;padding:28px;overflow:hidden;transition:border-color .25s,box-shadow .25s,transform .25s cubic-bezier(.34,1.3,.64,1)}
+.rcard{position:relative;background:rgba(18,34,52,.48);backdrop-filter:blur(14px);border:1px solid rgba(74,159,224,.1);border-radius:20px;padding:28px;overflow:hidden;transition:border-color .25s,box-shadow .25s,transform .25s cubic-bezier(.34,1.3,.64,1)}
 .rcard:hover{border-color:rgba(74,159,224,.3);box-shadow:0 20px 56px rgba(0,0,0,.38);transform:translateY(-5px)}
 .rcard::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(74,159,224,.3),transparent)}
-.rcq{position:absolute;top:16px;right:20px;font-size:72px;font-family:'Plus Jakarta Sans',system-ui;font-weight:800;color:rgba(74,159,224,.07);line-height:1;user-select:none}
+.rcq{position:absolute;top:16px;right:20px;font-size:72px;font-family:'Plus Jakarta Sans';font-weight:800;color:rgba(74,159,224,.07);line-height:1;user-select:none}
 .rstars{display:flex;gap:3px;margin-bottom:16px}
 .rstar{display:inline-block;color:#F59E0B;font-size:15px;opacity:0}
 .rtext{font-size:14px;color:#E8F4FD;line-height:1.72;margin-bottom:22px;font-style:italic;position:relative;z-index:1}
 .rfoot{display:flex;align-items:center;gap:12px;padding-top:16px;border-top:1px solid rgba(74,159,224,.08)}
-.ravatar{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;flex-shrink:0;font-family:'Plus Jakarta Sans',system-ui}
+.ravatar{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;flex-shrink:0;font-family:'Plus Jakarta Sans'}
 .rname{font-size:13px;font-weight:600;color:#fff;margin-bottom:3px}
 .rrole{font-size:11px;color:#9BBFD8;line-height:1.4}
-.rtag{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:500;color:#52DEB5;background:rgba(46,204,154,.08);border:1px solid rgba(46,204,154,.2);border-radius:10px;padding:2px 9px;margin-top:5px}
+
+/* ============================================================
+   CTA — live content, fresh visual pass
+   ============================================================ */
 .pk{position:relative;z-index:2;background:#050D18}
-.pk-ring{position:absolute;border-radius:50%;pointer-events:none;top:50%;left:50%;transform:translate(-50%,-50%)}
-.pk-cta{position:relative;z-index:2;padding:96px 32px 72px}
-.pk-inner{max-width:1200px;margin:0 auto;display:flex;align-items:stretch;gap:32px}
-.cta-col{flex:1;padding:40px 36px;border-radius:20px;position:relative;overflow:hidden}
-.cta-col::before{content:'';position:absolute;inset:0;border-radius:20px;border:1px solid;pointer-events:none}
-.cta-col.buyers::before{border-color:rgba(74,159,224,.2);background:rgba(18,34,52,.45)}
-.cta-col.supps::before{border-color:rgba(46,204,154,.22);background:rgba(15,40,32,.45)}
-.cta-col::after{content:'';position:absolute;bottom:-30%;left:50%;transform:translateX(-50%);width:260px;height:260px;border-radius:50%;pointer-events:none}
-.cta-col.buyers::after{background:radial-gradient(circle,rgba(74,159,224,.14),transparent 68%)}
-.cta-col.supps::after{background:radial-gradient(circle,rgba(46,204,154,.14),transparent 68%)}
+.pk-cta{position:relative;z-index:2;padding:96px 48px 96px;overflow:hidden}
+.pk-glow{position:absolute;border-radius:50%;filter:blur(100px);pointer-events:none;z-index:0}
+.pk-inner{max-width:1200px;margin:0 auto;display:flex;align-items:stretch;gap:28px;position:relative;z-index:1}
+.cta-col{flex:1;padding:44px 40px;border-radius:24px;position:relative;overflow:hidden}
+.cta-col::before{content:'';position:absolute;inset:0;border-radius:24px;border:1px solid;pointer-events:none}
+.cta-col.buyers::before{border-color:rgba(74,159,224,.25);background:rgba(18,34,52,.5)}
+.cta-col.supps::before{border-color:rgba(46,204,154,.25);background:rgba(15,40,32,.5)}
+.cta-col::after{content:'';position:absolute;bottom:-30%;left:50%;transform:translateX(-50%);width:280px;height:280px;border-radius:50%;pointer-events:none}
+.cta-col.buyers::after{background:radial-gradient(circle,rgba(74,159,224,.18),transparent 68%)}
+.cta-col.supps::after{background:radial-gradient(circle,rgba(46,204,154,.18),transparent 68%)}
+.cta-icon{width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;margin-bottom:20px;position:relative;z-index:1}
 .cta-lbl{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:5px 14px;border-radius:20px;margin-bottom:18px}
 .cta-lbl.b{background:rgba(74,159,224,.1);border:1px solid rgba(74,159,224,.25);color:#8DCAF2}
 .cta-lbl.s{background:rgba(46,204,154,.1);border:1px solid rgba(46,204,154,.25);color:#52DEB5}
-.cta-h{font-family:'Plus Jakarta Sans',system-ui;font-size:34px;font-weight:800;letter-spacing:-.8px;margin-bottom:14px;line-height:1.15;position:relative;z-index:1}
+.cta-h{font-family:'Plus Jakarta Sans';font-size:32px;font-weight:800;letter-spacing:-.7px;margin-bottom:14px;line-height:1.15;position:relative;z-index:1}
+/* Blue half of the CTA blurb heading — tuned per theme for legibility */
+.cta-hl{color:#8DCAF2}
 .cta-p{font-size:15px;color:#9BBFD8;line-height:1.7;margin-bottom:22px;position:relative;z-index:1;max-width:360px}
-.cta-proof{font-size:12px;margin-bottom:24px;display:flex;align-items:center;gap:6px;position:relative;z-index:1}
+.cta-proof{font-size:12px;margin-bottom:26px;display:flex;align-items:center;gap:6px;position:relative;z-index:1}
 .cta-proof.b{color:#6B9DB7}
 .cta-proof.s{color:#52DEB5}
-.cta-btn{width:100%;padding:16px 24px;border-radius:12px;border:none;font-size:15px;font-weight:600;cursor:pointer;font-family:'Inter',system-ui;display:flex;align-items:center;justify-content:center;gap:8px;transition:transform .18s,box-shadow .18s;position:relative;z-index:1}
-.cta-btn i{transition:transform .2s}
-.cta-btn:hover i:last-child{transform:translateX(5px)}
+.cta-btn{padding:15px 26px;border-radius:12px;border:none;font-size:14.5px;font-weight:600;cursor:pointer;font-family:'Inter';display:inline-flex;align-items:center;gap:8px;position:relative;z-index:1;transition:transform .18s,box-shadow .18s}
 .cta-btn.b{background:linear-gradient(135deg,#4A9FE0,#2D7FC4);color:#fff;box-shadow:0 8px 28px rgba(74,159,224,.42)}
 .cta-btn.b:hover{transform:translateY(-2px);box-shadow:0 12px 36px rgba(74,159,224,.65)}
 .cta-btn.s{background:linear-gradient(135deg,#2ECC9A,#1DB89A);color:#04342C;box-shadow:0 8px 28px rgba(46,204,154,.4)}
 .cta-btn.s:hover{transform:translateY(-2px);box-shadow:0 12px 36px rgba(46,204,154,.62)}
-.cta-div{width:1px;background:linear-gradient(180deg,transparent 5%,rgba(74,159,224,.28) 30%,rgba(46,204,154,.28) 70%,transparent 95%);margin:36px 0;flex-shrink:0}
-.pk-mq{position:relative;z-index:2;border-top:1px solid rgba(74,159,224,.09);border-bottom:1px solid rgba(74,159,224,.09);padding:16px 0;overflow:hidden;background:rgba(4,12,20,.5)}
-.pk-mq-lbl{position:absolute;left:48px;top:50%;transform:translateY(-50%);font-size:10px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:#3A5E75;z-index:3;background:#050D18;padding:0 12px}
-.pk-mq-fl{position:absolute;left:0;top:0;bottom:0;width:160px;background:linear-gradient(90deg,#050D18,transparent);z-index:2;pointer-events:none}
-.pk-mq-fr{position:absolute;right:0;top:0;bottom:0;width:80px;background:linear-gradient(270deg,#050D18,transparent);z-index:2;pointer-events:none}
-@keyframes mqscroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
-.pk-mq-track{display:flex;animation:mqscroll 28s linear infinite;white-space:nowrap}
-.pk-mq-track:hover{animation-play-state:paused}
-.pk-mq-item{font-size:12px;color:#6B9DB7;padding:0 26px;display:inline-flex;align-items:center;gap:9px}
-.pk-mq-item::before{content:'';width:4px;height:4px;border-radius:50%;background:#243C58;flex-shrink:0}
-.pk-trust{position:relative;z-index:2;padding:48px 32px 72px}
-.pk-tinner{max-width:100%;margin:0}
-.tgrid{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:16px}
-.titem{background:rgba(18,34,52,.42);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(74,159,224,.1);border-radius:18px;padding:24px 16px;text-align:center;transition:border-color .25s,transform .25s;position:relative;overflow:hidden}
-.titem::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--ac,#4A9FE0),transparent);opacity:.5}
-.titem:hover{border-color:rgba(74,159,224,.28);transform:translateY(-4px)}
-.tic{width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;background:rgba(74,159,224,.09);border:1px solid rgba(74,159,224,.18)}
-.tic.tl{background:rgba(46,204,154,.09);border-color:rgba(46,204,154,.2)}
-.tic i{font-size:20px;color:#4A9FE0}
-.tic.tl i{color:#2ECC9A}
-.tnum{font-family:'Plus Jakarta Sans',system-ui;font-size:28px;font-weight:800;line-height:1.2;background:linear-gradient(135deg,#fff,#8DCAF2);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;display:block}
-.tnum.tl{background:linear-gradient(135deg,#85ECD0,#2ECC9A);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
-.tnum.am{background:linear-gradient(135deg,#fff,#FCD34D);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
-.tlab{font-size:12px;font-weight:500;color:#fff;margin:5px 0 4px;display:block}
-.tdesc{font-size:11px;color:#6B9DB7;line-height:1.5}
+.cta-div{width:1px;background:linear-gradient(180deg,transparent 5%,rgba(74,159,224,.28) 30%,rgba(46,204,154,.28) 70%,transparent 95%)}
 
-/* Homepage responsive — tablet/nav breakpoint */
+/* ============================================================
+   PREFOOTER — the buyers marquee, moved to sit right above footer
+   ============================================================ */
+.prefooter{position:relative;z-index:2;border-top:1px solid rgba(74,159,224,.09);border-bottom:1px solid rgba(74,159,224,.09);padding:20px 0;overflow:hidden;background:rgba(4,12,20,.6)}
+.pf-mq-lbl{position:absolute;left:48px;top:50%;transform:translateY(-50%);font-size:10px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:#3A5E75;z-index:3;background:#050D18;padding:0 12px}
+.pf-mq-fl{position:absolute;left:0;top:0;bottom:0;width:160px;background:linear-gradient(90deg,#050D18,transparent);z-index:2;pointer-events:none}
+.pf-mq-fr{position:absolute;right:0;top:0;bottom:0;width:80px;background:linear-gradient(270deg,#050D18,transparent);z-index:2;pointer-events:none}
+@keyframes pfscroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.pf-mq-track{display:flex;animation:pfscroll 28s linear infinite;white-space:nowrap}
+.pf-mq-track:hover{animation-play-state:paused}
+.pf-mq-item{font-size:12px;color:#6B9DB7;padding:0 26px;display:inline-flex;align-items:center;gap:9px}
+.pf-mq-item::before{content:'';width:4px;height:4px;border-radius:50%;background:#243C58;flex-shrink:0}
+
+/* ============================================================
+   LIGHT MODE — full-page overrides
+   ============================================================ */
+body.light-mode{background:#EEF6FF}
+body.light-mode .pg-grid{opacity:.5}
+
+body.light-mode .hero h1{background:linear-gradient(100deg,#050D18 0%,#050D18 42%,#4A9FE0 47%,#1E6BAB 50%,#4A9FE0 53%,#050D18 58%,#050D18 100%);background-size:200% 100%;background-position:130% 50%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+body.light-mode .hero-sub{color:#3A5E75}
+body.light-mode .hero-ql-l{color:#6B9DB7}
+body.light-mode .hero-sb{background:rgba(255,255,255,.68);border-color:rgba(74,159,224,.28);box-shadow:0 4px 20px rgba(74,159,224,.1),inset 0 1px 0 rgba(255,255,255,.95)}
+body.light-mode .hero-in{color:#050D18}
+body.light-mode .hero-in::placeholder{color:#9BBFD8}
+body.light-mode .hv-card{background:rgba(255,255,255,.72);border-color:rgba(74,159,224,.2);box-shadow:0 12px 40px rgba(74,159,224,.14)}
+body.light-mode .hv-name{color:#050D18}
+body.light-mode .hv-meta{color:#6B9DB7}
+body.light-mode .hero-chip.c-veg{color:#0F9B72!important;background:rgba(46,204,154,.12)!important}
+body.light-mode .hero-chip.c-poultry{color:#1E6BAB!important;background:rgba(74,159,224,.12)!important}
+body.light-mode .hero-chip.c-beef{color:#B45309!important;background:rgba(245,158,11,.12)!important}
+body.light-mode .hero-chip.c-seafood{color:#0D9488!important;background:rgba(82,222,181,.14)!important}
+body.light-mode .hero-chip.c-cold{color:#6D28D9!important;background:rgba(167,139,250,.12)!important}
+
+body.light-mode .mq{background:rgba(255,255,255,.55);border-top-color:rgba(74,159,224,.15);border-bottom-color:rgba(74,159,224,.15)}
+body.light-mode .mq-lbl{color:#6B9DB7}
+body.light-mode .mq-fl{background:linear-gradient(90deg,#EEF6FF,transparent)}
+body.light-mode .mq-fr{background:linear-gradient(270deg,#EEF6FF,transparent)}
+body.light-mode .mq-chip{background:rgba(255,255,255,.72);border-color:rgba(74,159,224,.18)}
+body.light-mode .mq-cname{color:#050D18}
+body.light-mode .mq-cloc{color:#6B9DB7}
+
+body.light-mode .cats{background:linear-gradient(160deg,#EEF6FF,#E4F0FF 55%,#EAF7F1)}
+body.light-mode .cats-h{color:#050D18}
+body.light-mode .cats-sub{color:#3A5E75}
+body.light-mode .bcard{background:rgba(255,255,255,.65)!important;box-shadow:0 4px 24px rgba(74,159,224,.1),inset 0 1px 0 rgba(255,255,255,.9)}
+body.light-mode .bname{color:#050D18}
+body.light-mode .bdesc{color:#3A5E75}
+body.light-mode .bcount{color:#6B9DB7}
+
+body.light-mode .pu{background:#EEF6FF}
+body.light-mode .sec-h{color:#050D18}
+body.light-mode .sec-sub{color:#3A5E75}
+body.light-mode .sft{border-color:rgba(74,159,224,.22);color:#3A5E75}
+body.light-mode .sft.on{background:rgba(74,159,224,.14);color:#1E6BAB;border-color:rgba(74,159,224,.38)}
+body.light-mode .sfcount{color:#6B9DB7}
+body.light-mode .sfcount b{color:#1E6BAB}
+body.light-mode .sc{background:rgba(255,255,255,.65);border-color:rgba(74,159,224,.2);box-shadow:0 4px 24px rgba(74,159,224,.1),inset 0 1px 0 rgba(255,255,255,.95)}
+body.light-mode .sc-name{color:#050D18}
+body.light-mode .sc-loc{color:#6B9DB7}
+body.light-mode .sc-desc{color:#3A5E75}
+body.light-mode .sc-sv{color:#050D18}
+body.light-mode .sc-sl{color:#6B9DB7}
+body.light-mode .sc-tag{background:rgba(74,159,224,.1);border-color:rgba(74,159,224,.22);color:#1E6BAB}
+body.light-mode .sc-cert{background:rgba(74,159,224,.08);border-color:rgba(74,159,224,.2);color:#1E6BAB}
+body.light-mode .sc-stats{background:rgba(238,246,255,.8);border-color:rgba(74,159,224,.18)}
+body.light-mode .more-btn{border-color:rgba(74,159,224,.3);color:#1E6BAB}
+
+body.light-mode .pw{background:linear-gradient(180deg,#EEF6FF,#E8F2FF)}
+body.light-mode .stitle{color:#050D18}
+body.light-mode .sdesc{color:#3A5E75}
+body.light-mode .trust-inner{background:rgba(255,255,255,.68);border-color:rgba(74,159,224,.2);box-shadow:0 20px 50px rgba(74,159,224,.12)}
+body.light-mode .trust-item:not(:last-child)::after{background:rgba(74,159,224,.18)}
+body.light-mode .trust-l{color:#050D18}
+body.light-mode .trust-d{color:#6B9DB7}
+body.light-mode .trust-n{background:linear-gradient(135deg,#050D18,#1E6BAB);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+
+body.light-mode .pr{background:linear-gradient(180deg,#E8F2FF,#EEF6FF)}
+body.light-mode .pr-qbg{color:rgba(74,159,224,.08)}
+body.light-mode .pr-agg{background:rgba(255,255,255,.68);border-color:rgba(74,159,224,.2);box-shadow:0 4px 20px rgba(74,159,224,.08)}
+body.light-mode .pr-agg-score{color:#050D18}
+body.light-mode .pr-agg-lbl{color:#3A5E75}
+body.light-mode .pr-agg-lbl strong{color:#050D18}
+body.light-mode .rcard{background:rgba(255,255,255,.68);border-color:rgba(74,159,224,.2);box-shadow:0 4px 24px rgba(74,159,224,.1),inset 0 1px 0 rgba(255,255,255,.95)}
+body.light-mode .rtext{color:#3A5E75}
+body.light-mode .rname{color:#050D18}
+body.light-mode .rrole{color:#6B9DB7}
+body.light-mode .rcq{color:rgba(74,159,224,.12)}
+
+body.light-mode .pk-cta{background:#EEF6FF}
+body.light-mode .pk-glow{opacity:.5}
+body.light-mode #ctaBlurb h2{color:#050D18}
+body.light-mode #ctaBlurb p{color:#3A5E75}
+
+/* CTA certification collage — generic, illustrated, not real trademarked marks */
+.cta-collage{position:relative;width:180px;height:104px;margin:0 auto 26px}
+.cc-card{position:absolute;width:76px;height:92px;border-radius:12px;background:rgba(18,34,52,.6);backdrop-filter:blur(8px);border:1px solid rgba(74,159,224,.14);border-top:3px solid var(--cc-ac);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;box-shadow:0 14px 30px rgba(0,0,0,.35)}
+.cc-card i{font-size:20px;color:var(--cc-ac)}
+.cc-card span{font-size:8px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#9BBFD8}
+body.light-mode .cc-card{background:rgba(255,255,255,.85);border-color:rgba(74,159,224,.18);box-shadow:0 10px 26px rgba(74,159,224,.18)}
+body.light-mode .cc-card span{color:#3A5E75}
+body.light-mode .cta-col.buyers::before{background:rgba(210,232,255,.65);border-color:rgba(74,159,224,.28)}
+body.light-mode .cta-col.supps::before{background:rgba(210,248,238,.65);border-color:rgba(46,204,154,.28)}
+body.light-mode .cta-h{color:#050D18}
+body.light-mode .cta-hl{color:#1E6BAB}
+body.light-mode .cta-p{color:#3A5E75}
+body.light-mode .cta-proof.b{color:#3A5E75}
+
+body.light-mode .prefooter{background:rgba(210,228,255,.5);border-color:rgba(74,159,224,.15)}
+body.light-mode .pf-mq-lbl{background:#EEF6FF;color:#9BBFD8}
+body.light-mode .pf-mq-fl{background:linear-gradient(90deg,#EEF6FF,transparent)}
+body.light-mode .pf-mq-fr{background:linear-gradient(270deg,#EEF6FF,transparent)}
+body.light-mode .pf-mq-item{color:#3A5E75}
+/* ---- Tablet + mobile shared layout collapse ---- */
 @media (max-width:900px){
-.pn{padding:0 20px}
-.pn-links{gap:14px}
-.pn-links a{display:none}
-.ph{padding:140px 20px 56px}
-.ph-h1{font-size:38px;letter-spacing:-1.2px}
-.ph-sub{font-size:15px}
-.ph-sb{flex-direction:column}
-.ps-row{flex-wrap:wrap}
-.ps-item{flex:1 1 45%;padding:10px 12px;border-right:none;border-bottom:1px solid rgba(74,159,224,.1)}
-.pc,.pw,.pu,.pr,.pk-cta,.pk-trust,.pf-main{padding-left:20px;padding-right:20px}
-.cgrid,.sgrid,.rgrid,.tgrid{grid-template-columns:1fr}
-.hiw-row{flex-direction:column;gap:24px}
-.hiw-conn{display:none}
+.hero{grid-template-columns:1fr;padding:130px 24px 56px}
+.hero-visual{display:none}
+.hero h1{font-size:46px;letter-spacing:-1.4px}
+.hero-sub{font-size:15.5px}
+.cats,.pu,.pw,.pr,.pk-cta{padding-left:24px;padding-right:24px}
+.cats-h,.sec-h{font-size:30px;letter-spacing:-.5px}
+.cats-sub{font-size:15px}
+.bento{grid-template-columns:1fr}
+.bento .bcard{grid-column:auto!important}
+.bcard.big{grid-row:auto;min-height:auto}
+.bento .bcard[style*="flex-direction:row"]{flex-direction:column!important;align-items:flex-start!important}
+.bento .bcard[style*="flex-direction:row"] > div[style*="text-align:right"]{text-align:left!important}
+.bento .bcard[style*="flex-direction:row"] .barr{margin-left:0!important}
+.how-grid{grid-template-columns:1fr;gap:36px}
+.sgrid{grid-template-columns:1fr 1fr}
+.sc{min-width:0}
+.rgrid{grid-template-columns:1fr}
+.trust-inner{flex-wrap:wrap}
+.trust-item{flex:1 1 50%}
+.trust-n{font-size:28px}
 .pk-inner{flex-direction:column}
 .cta-div{display:none}
-.pf-grid{grid-template-columns:1fr 1fr}
+.cta-h{font-size:28px}
 }
-
-/* Homepage light-mode — section backgrounds */
-body.light-mode .pc  { background: #EEF6FF !important; }
-body.light-mode .pw  { background: #EEF6FF !important; }
-body.light-mode .pu  { background: #EEF6FF !important; }
-body.light-mode .pr  { background: #EEF6FF !important; }
-body.light-mode .pk  { background: #EEF6FF !important; }
-body.light-mode .pk-cta   { background: #EEF6FF !important; }
-body.light-mode .pk-trust { background: #EEF6FF !important; }
-
-/* Homepage light-mode — content elements */
-/* ── Hero text ── */
-body.light-mode .ph-h1 { color: #050D18; }
-body.light-mode .ph-h1 .l1 { color: #050D18; }
-body.light-mode .ph-sub { color: #3A5E75; }
-body.light-mode .ph-ql-l { color: #6B9DB7; }
-
-/* ── Search bar ── */
-body.light-mode .ph-sb {
-  background: rgba(255,255,255,0.68) !important;
-  backdrop-filter: blur(20px) !important;
-  -webkit-backdrop-filter: blur(20px) !important;
-  border-color: rgba(74,159,224,0.28) !important;
-  box-shadow: 0 4px 20px rgba(74,159,224,0.1),
-              inset 0 1px 0 rgba(255,255,255,0.95) !important;
+/* ---- Phones: single-column cards + tighter type/padding ---- */
+@media (max-width:600px){
+.hero{padding:120px 20px 48px}
+.hero h1{font-size:34px;letter-spacing:-1px}
+.hero-sub{font-size:14.5px;margin-bottom:26px}
+.cats{padding:64px 18px 68px}
+.pu,.pr{padding:64px 18px 68px}
+.pw{padding:64px 18px 0}
+.pk-cta{padding:64px 18px 72px}
+.cats-h,.sec-h{font-size:25px}
+.cats-sub,.sec-sub{font-size:14.5px;margin-bottom:32px}
+.sgrid{grid-template-columns:1fr;gap:16px}
+.sc{padding:20px}
+.bento{gap:12px}
+.how-net{padding:12px}
+.net-cap{font-size:11px}
+.trust-inner{padding:6px}
+.trust-item{padding:20px 12px}
+.cta-col{padding:34px 24px}
+.cta-h{font-size:26px}
+.hero-sb{flex-wrap:wrap}
+.hero-btn{flex:1 1 100%;justify-content:center}
 }
-body.light-mode .ph-sb:focus-within {
-  border-color: rgba(74,159,224,0.55) !important;
-  box-shadow: 0 0 0 4px rgba(74,159,224,0.1),
-              0 4px 20px rgba(74,159,224,0.1) !important;
-}
-body.light-mode .ph-in { color: #050D18 !important; }
-body.light-mode .ph-in::placeholder { color: #9BBFD8 !important; }
-body.light-mode .ph-sel {
-  background: rgba(238,246,255,0.9) !important;
-  border-color: rgba(74,159,224,0.25) !important;
-  color: #3A5E75 !important;
-}
-body.light-mode .ph-chip {
-  background: rgba(255,255,255,0.65) !important;
-  border-color: rgba(74,159,224,0.25) !important;
-  color: #1E6BAB !important;
-  backdrop-filter: blur(8px) !important;
-}
-body.light-mode .ph-chip:hover {
-  background: rgba(74,159,224,0.15) !important;
-  color: #050D18 !important;
-}
-
-/* ── Stats strip ── */
-body.light-mode .ps {
-  background: rgba(255,255,255,0.6) !important;
-  backdrop-filter: blur(14px) !important;
-  border-top-color: rgba(74,159,224,0.18) !important;
-  border-bottom-color: rgba(74,159,224,0.18) !important;
-}
-body.light-mode .ps-item {
-  border-right-color: rgba(74,159,224,0.15) !important;
-}
-body.light-mode .ps-l { color: #6B9DB7 !important; }
-body.light-mode .ps-n {
-  background: linear-gradient(135deg,#050D18,#1E6BAB) !important;
-  -webkit-background-clip: text !important;
-  background-clip: text !important;
-  -webkit-text-fill-color: transparent !important;
-}
-
-/* ── Section headings + body text ── */
-body.light-mode .sec-h   { color: #050D18; }
-body.light-mode .sec-h em { color: #1E6BAB; }
-body.light-mode .sec-sub { color: #3A5E75; }
-body.light-mode .stitle  { color: #050D18; }
-body.light-mode .sdesc   { color: #3A5E75; }
-body.light-mode .cta-h   { color: #050D18 !important; }
-body.light-mode .cta-p   { color: #3A5E75 !important; }
-body.light-mode .cta-proof.b { color: #6B9DB7 !important; }
-
-/* ── Category cards ── */
-body.light-mode .cc {
-  background: rgba(255,255,255,0.62) !important;
-  backdrop-filter: blur(14px) !important;
-  -webkit-backdrop-filter: blur(14px) !important;
-  border-color: rgba(74,159,224,0.22) !important;
-  box-shadow: 0 4px 24px rgba(74,159,224,0.1),
-              inset 0 1px 0 rgba(255,255,255,0.95) !important;
-}
-body.light-mode .cc:hover {
-  box-shadow: 0 12px 40px rgba(74,159,224,0.18),
-              0 0 32px -12px var(--ac),
-              inset 0 1px 0 rgba(255,255,255,0.95) !important;
-}
-body.light-mode .cc-name  { color: #050D18; }
-body.light-mode .cc-desc  { color: #3A5E75; }
-body.light-mode .cc-count { color: #6B9DB7; }
-
-/* ── Supplier cards ── */
-body.light-mode .sc {
-  background: rgba(255,255,255,0.62) !important;
-  backdrop-filter: blur(14px) !important;
-  -webkit-backdrop-filter: blur(14px) !important;
-  border-color: rgba(74,159,224,0.2) !important;
-  box-shadow: 0 4px 24px rgba(74,159,224,0.1),
-              inset 0 1px 0 rgba(255,255,255,0.95) !important;
-}
-body.light-mode .sc:hover {
-  box-shadow: 0 12px 40px rgba(74,159,224,0.16),
-              0 0 36px -14px var(--ac,#4A9FE0),
-              inset 0 1px 0 rgba(255,255,255,0.95) !important;
-}
-body.light-mode .sc-name  { color: #050D18; }
-body.light-mode .sc-desc  { color: #3A5E75; }
-body.light-mode .sc-loc   { color: #6B9DB7; }
-body.light-mode .sc-sv    { color: #050D18; }
-body.light-mode .sc-sl    { color: #6B9DB7; }
-body.light-mode .sc-tag {
-  background: rgba(74,159,224,0.1) !important;
-  border-color: rgba(74,159,224,0.22) !important;
-  color: #1E6BAB !important;
-}
-body.light-mode .sc-cert {
-  background: rgba(74,159,224,0.08) !important;
-  border-color: rgba(74,159,224,0.2) !important;
-  color: #1E6BAB !important;
-}
-body.light-mode .sc-stats {
-  background: rgba(238,246,255,0.8) !important;
-  border-color: rgba(74,159,224,0.18) !important;
-}
-body.light-mode .sc-stat + .sc-stat {
-  border-left-color: rgba(74,159,224,0.18) !important;
-}
-body.light-mode .sc-foot {
-  border-top-color: rgba(74,159,224,0.15) !important;
-}
-
-/* ── Testimonial cards ── */
-body.light-mode .rcard {
-  background: rgba(255,255,255,0.62) !important;
-  backdrop-filter: blur(14px) !important;
-  -webkit-backdrop-filter: blur(14px) !important;
-  border-color: rgba(74,159,224,0.2) !important;
-  box-shadow: 0 4px 24px rgba(74,159,224,0.1),
-              inset 0 1px 0 rgba(255,255,255,0.95) !important;
-}
-body.light-mode .rcard:hover {
-  box-shadow: 0 12px 40px rgba(74,159,224,0.16),
-              inset 0 1px 0 rgba(255,255,255,0.95) !important;
-}
-body.light-mode .rtext { color: #3A5E75 !important; }
-body.light-mode .rname { color: #050D18 !important; }
-body.light-mode .rrole { color: #6B9DB7 !important; }
-body.light-mode .rcq   { color: rgba(74,159,224,0.15) !important; }
-body.light-mode .rfoot {
-  border-top-color: rgba(74,159,224,0.15) !important;
-}
-
-/* ── Aggregate rating bar ── */
-body.light-mode .pr-agg {
-  background: rgba(255,255,255,0.62) !important;
-  backdrop-filter: blur(14px) !important;
-  -webkit-backdrop-filter: blur(14px) !important;
-  border-color: rgba(74,159,224,0.2) !important;
-  box-shadow: 0 4px 20px rgba(74,159,224,0.08) !important;
-}
-body.light-mode .pr-agg-score { color: #050D18 !important; }
-body.light-mode .pr-agg-lbl   { color: #3A5E75 !important; }
-body.light-mode .pr-agg-lbl strong { color: #050D18 !important; }
-body.light-mode .pr-agg-div {
-  background: rgba(74,159,224,0.2) !important;
-}
-
-/* ── Trust stat cards ── */
-body.light-mode .titem {
-  background: rgba(255,255,255,0.62) !important;
-  backdrop-filter: blur(14px) !important;
-  -webkit-backdrop-filter: blur(14px) !important;
-  border-color: rgba(74,159,224,0.2) !important;
-  box-shadow: 0 4px 20px rgba(74,159,224,0.08),
-              inset 0 1px 0 rgba(255,255,255,0.95) !important;
-}
-body.light-mode .titem:hover {
-  box-shadow: 0 8px 32px rgba(74,159,224,0.14),
-              inset 0 1px 0 rgba(255,255,255,0.95) !important;
-}
-body.light-mode .tlab  { color: #050D18 !important; }
-body.light-mode .tdesc { color: #3A5E75 !important; }
-
-/* ── CTA columns ── */
-body.light-mode .cta-col.buyers::before {
-  background: rgba(210,232,255,0.65) !important;
-  border-color: rgba(74,159,224,0.28) !important;
-}
-body.light-mode .cta-col.supps::before {
-  background: rgba(210,248,238,0.65) !important;
-  border-color: rgba(46,204,154,0.28) !important;
-}
-
-/* ── Marquee ── */
-body.light-mode .pk-mq {
-  background: rgba(200,225,255,0.5) !important;
-  border-top-color: rgba(74,159,224,0.15) !important;
-  border-bottom-color: rgba(74,159,224,0.15) !important;
-}
-body.light-mode .pk-mq-item { color: #3A5E75 !important; }
-body.light-mode .pk-mq-lbl  { color: #9BBFD8 !important; }
-
-/* ── Filter tabs + counts ── */
-body.light-mode .sft {
-  border-color: rgba(74,159,224,0.22) !important;
-  color: #3A5E75 !important;
-}
-body.light-mode .sft.on {
-  background: rgba(74,159,224,0.14) !important;
-  color: #1E6BAB !important;
-  border-color: rgba(74,159,224,0.38) !important;
-}
-body.light-mode .sfcount   { color: #6B9DB7 !important; }
-body.light-mode .sfcount b { color: #1E6BAB !important; }
-
-/* Homepage responsive — phones & tablets */
-/* ── Very small phones: up to 480px ── */
-@media (max-width: 480px) {
-
-  /* Aurora: shrink to prevent overflow */
-  #pa1 { width: 260px !important; height: 260px !important; top: -100px !important; left: -80px !important; }
-  #pa2 { width: 220px !important; height: 220px !important; top: -60px !important; right: -80px !important; }
-  #pa3 { width: 180px !important; height: 180px !important; }
-
-  /* Fruit layer: hide on very small screens for performance */
-  #fruit-layer { display: none; }
-
-  /* Nav */
-  .pn { padding: 0 16px; height: 56px; }
-  .pn-links { gap: 6px; }
-  .pn-links a { display: none; }
-  .pn-div { display: none; }
-  .pn-cta { padding: 7px 12px; font-size: 11px; }
-  #mode-toggle { width: 30px; height: 30px; }
-  #mode-toggle i { font-size: 13px; }
-
-  /* Hero */
-  .ph { padding: 110px 16px 44px; }
-  .ph-h1 { font-size: 26px; letter-spacing: -0.8px; }
-  .ph-sub { font-size: 13px; margin-bottom: 28px; }
-  .ph-sb { flex-direction: column; gap: 8px; padding: 10px; }
-  .ph-si { padding: 0 6px; }
-  .ph-sel { width: 100%; border-radius: 8px; }
-  .ph-btn { width: 100%; border-radius: 8px; padding: 12px; justify-content: center; }
-  .ph-chip { font-size: 10px; padding: 4px 10px; }
-
-  /* Stats: 2x2 grid */
-  .ps-row { flex-wrap: wrap; }
-  .ps-item {
-    flex: 1 1 50%;
-    border-right: none !important;
-    border-bottom: 1px solid rgba(74,159,224,.1);
-    padding: 12px 8px;
-  }
-  .ps-item:nth-child(odd) {
-    border-right: 1px solid rgba(74,159,224,.1) !important;
-  }
-  .ps-n { font-size: 22px; }
-
-  /* Sections */
-  .pc, .pw, .pu, .pr { padding: 52px 16px 60px; }
-  .pk-cta { padding: 52px 16px 44px; }
-  .pk-trust { padding: 32px 16px 52px; }
-  .pf-main { padding: 44px 16px 28px; }
-  .pf-bot { padding: 14px 16px; flex-direction: column; gap: 8px; text-align: center; }
-  .pf-status { justify-content: center; }
-  .pf-legal { justify-content: center; }
-
-  /* Section headings */
-  .sec-h { font-size: 22px; }
-  .sec-sub { font-size: 13px; }
-
-  /* All card grids: 1 column */
-  .cgrid { grid-template-columns: 1fr; gap: 12px; }
-  .sgrid { grid-template-columns: 1fr; gap: 12px; }
-  .rgrid { grid-template-columns: 1fr; gap: 12px; }
-  .tgrid { grid-template-columns: 1fr 1fr; gap: 10px; }
-
-  /* How it works */
-  .hiw-row { flex-direction: column; align-items: center; gap: 24px; }
-  .hiw-conn { display: none; }
-  .hiw-step { padding: 0 8px; max-width: 280px; }
-
-  /* Supplier filter row */
-  .sfrow { flex-direction: column; align-items: flex-start; gap: 10px; }
-  .sftabs { flex-wrap: wrap; gap: 6px; }
-  .sft { font-size: 11px; padding: 5px 12px; }
-
-  /* CTA */
-  .pk-inner { flex-direction: column; gap: 16px; }
-  .cta-div { display: none; }
-  .cta-col { padding: 24px 18px; }
-  .cta-h { font-size: 20px; }
-  .cta-btn { padding: 13px 18px; font-size: 13px; }
-
-  /* Marquee */
-  .pk-mq-lbl { left: 16px; font-size: 9px; }
-  .pk-mq-fl { width: 80px; }
-
-  /* Trust cards */
-  .titem { padding: 16px 8px; }
-  .tnum { font-size: 20px; }
-  .tlab { font-size: 10px; }
-  .tdesc { font-size: 9.5px; }
-  .tic { width: 34px; height: 34px; border-radius: 9px; }
-  .tic i { font-size: 16px; }
-
-  /* Footer */
-  .pf-grid { grid-template-columns: 1fr; gap: 20px; }
-  .pf-desc { max-width: 100%; }
-}
-
-/* ── Medium phones and small tablets: 481px–768px ── */
-@media (min-width: 481px) and (max-width: 768px) {
-
-  /* Aurora: reduce size */
-  #pa1 { width: 340px !important; height: 340px !important; }
-  #pa2 { width: 280px !important; height: 280px !important; }
-  #pa3 { width: 220px !important; height: 220px !important; }
-
-  /* Fruit layer: reduce opacity */
-  #fruit-layer { opacity: 0.5; }
-
-  /* Nav */
-  .pn { padding: 0 20px; }
-  .pn-links a { display: none; }
-  .pn-div { display: none; }
-
-  /* Hero */
-  .ph { padding: 130px 20px 56px; }
-  .ph-h1 { font-size: 32px; letter-spacing: -1px; }
-  .ph-sub { font-size: 15px; }
-  .ph-sb { flex-direction: column; }
-  .ph-sel, .ph-btn { width: 100%; }
-
-  /* Sections */
-  .pc, .pw, .pu, .pr { padding: 64px 24px 72px; }
-  .pk-cta { padding: 64px 24px 52px; }
-  .pk-trust { padding: 40px 24px 64px; }
-  .pf-main { padding: 56px 24px 36px; }
-  .pf-bot { padding: 16px 24px; flex-direction: column; gap: 10px; text-align: center; }
-
-  /* Grids */
-  .cgrid { grid-template-columns: 1fr; gap: 14px; }
-  .sgrid { grid-template-columns: 1fr 1fr; gap: 14px; }
-  .rgrid { grid-template-columns: 1fr 1fr; gap: 14px; }
-  .tgrid { grid-template-columns: 1fr 1fr; gap: 12px; }
-
-  /* How it works */
-  .hiw-row { flex-direction: column; align-items: center; gap: 28px; }
-  .hiw-conn { display: none; }
-
-  /* Supplier filter */
-  .sfrow { flex-direction: column; align-items: flex-start; gap: 12px; }
-  .sftabs { flex-wrap: wrap; }
-
-  /* CTA */
-  .pk-inner { flex-direction: column; gap: 20px; }
-  .cta-div { display: none; }
-
-  /* Footer */
-  .pf-grid { grid-template-columns: 1fr 1fr; gap: 24px; }
-  .pf-bot { flex-direction: column; gap: 10px; text-align: center; }
-  .pf-legal { justify-content: center; }
-}
-
-/* ── Tablets: 769px–900px (update existing query) ── */
-@media (min-width: 769px) and (max-width: 900px) {
-
-  .pn { padding: 0 24px; }
-  .ph { padding: 140px 24px 64px; }
-  .ph-h1 { font-size: 42px; }
-  .pc, .pw, .pu, .pr { padding: 72px 28px 80px; }
-  .pk-cta { padding: 72px 28px 60px; }
-  .pk-trust { padding: 44px 28px 68px; }
-  .pf-main { padding: 60px 28px 36px; }
-
-  /* Grids */
-  .cgrid { grid-template-columns: 1fr 1fr; gap: 14px; }
-  .sgrid { grid-template-columns: 1fr 1fr; gap: 14px; }
-  .rgrid { grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
-  .tgrid { grid-template-columns: 1fr 1fr; gap: 14px; }
-
-  /* How it works */
-  .hiw-row { flex-direction: column; align-items: center; gap: 28px; }
-  .hiw-conn { display: none; }
-
-  /* CTA */
-  .pk-inner { flex-direction: column; gap: 24px; }
-  .cta-div { display: none; }
-
-  /* Footer */
-  .pf-grid { grid-template-columns: 1fr 1fr; gap: 28px; }
+/* ---- Narrow phones ---- */
+@media (max-width:400px){
+.hero h1{font-size:30px;letter-spacing:-.8px}
+.cats-h,.sec-h{font-size:23px}
+.trust-item{flex:1 1 100%}
 }
 </style>
 
-<!-- Page background layers (particle canvas + aurora animated by main.js) -->
+<!-- Page background layers (grid + aurora blobs; aurora drift animated by main.js). -->
 <div class="pg-grid"></div>
 <div class="pg-aura" id="pa1" style="width:700px;height:700px;background:radial-gradient(circle,rgba(74,159,224,.22),transparent 65%);top:-260px;left:-200px"></div>
 <div class="pg-aura" id="pa2" style="width:600px;height:600px;background:radial-gradient(circle,rgba(46,204,154,.14),transparent 65%);top:-120px;right:-180px"></div>
 <div class="pg-aura" id="pa3" style="width:500px;height:500px;background:radial-gradient(circle,rgba(74,159,224,.1),transparent 65%);bottom:-150px;left:35%"></div>
-<canvas id="pg-canvas" aria-hidden="true"></canvas>
-<div id="fruit-layer" aria-hidden="true"></div>
 
-<section aria-label="Hero">
-<div class="ph" id="ph">
-<div class="ph-pill" id="ph-pill"><div class="ph-dot" id="ph-dot"></div><span class="ph-pt">Live · Global B2B Database</span></div>
-<h1 class="ph-h1" id="ph-h1"><span class="l1">The Global Wholesale</span><span class="ph-gt" id="ph-gt">Frozen Food</span> Database</h1>
-<p class="ph-sub" id="ph-sub">Search the world's most comprehensive database of verified frozen food suppliers — manufacturers, distributors &amp; cold chain providers across 50+ countries.</p>
-<div class="ph-sw" id="ph-sw"><div class="ph-sb"><div class="ph-si"><i class="ti ti-search" aria-hidden="true"></i><input class="ph-in" placeholder="Search frozen food suppliers, products, regions..." aria-label="Search suppliers"></div><select class="ph-sel" aria-label="Category"><option>All Categories</option><option>Fruits &amp; Veg</option><option>Poultry</option><option>Beef &amp; Meat</option><option>Seafood</option></select><button class="ph-btn"><i class="ti ti-search" style="font-size:13px;margin-right:5px" aria-hidden="true"></i>Search</button></div></div>
-<div class="ph-ql" id="ph-ql"><span class="ph-ql-l">Browse by:</span><span class="ph-chip"><i class="ti ti-leaf" aria-hidden="true"></i>Fruits &amp; Veg</span><span class="ph-sep">·</span><span class="ph-chip">Poultry</span><span class="ph-sep">·</span><span class="ph-chip">Beef &amp; Meat</span><span class="ph-sep">·</span><span class="ph-chip">Seafood</span><span class="ph-sep">·</span><span class="ph-chip"><i class="ti ti-truck" aria-hidden="true"></i>Cold Chain</span></div>
+<!-- ============ HERO — 4 category cards ============ -->
+<section class="hero">
+<div class="section-flakes" id="fl-hero"></div>
+<div>
+<div class="hero-pill"><div class="hero-dot"></div><span class="hero-pt">Live · Global B2B Database</span></div>
+<h1>The Global Wholesale Frozen Food Database</h1>
+<p class="hero-sub">Search the world's most comprehensive database of verified frozen food suppliers — manufacturers, distributors &amp; cold chain providers across 50+ countries.</p>
+<div class="hero-sb">
+<div class="hero-si"><i class="ti ti-search"></i><input class="hero-in" placeholder="Search suppliers, products, regions..."></div>
+<button class="hero-btn"><i class="ti ti-search" style="font-size:13px;margin-right:5px"></i>Search</button>
+</div>
+<div class="hero-ql"><span class="hero-ql-l">Browse by:</span>
+<span class="hero-chip c-veg" style="color:#2ECC9A;background:rgba(46,204,154,.09);border-color:rgba(46,204,154,.24)"><i class="ti ti-leaf"></i>Fruits &amp; Veg</span>
+<span class="hero-chip c-poultry" style="color:#4A9FE0;background:rgba(74,159,224,.09);border-color:rgba(74,159,224,.24)">Poultry</span>
+<span class="hero-chip c-beef" style="color:#F59E0B;background:rgba(245,158,11,.09);border-color:rgba(245,158,11,.24)">Beef &amp; Meat</span>
+<span class="hero-chip c-seafood" style="color:#52DEB5;background:rgba(82,222,181,.09);border-color:rgba(82,222,181,.24)">Seafood</span>
+<span class="hero-chip c-cold" style="color:#A78BFA;background:rgba(167,139,250,.09);border-color:rgba(167,139,250,.24)"><i class="ti ti-truck"></i>Cold Chain</span>
+</div>
+</div>
+<div class="hero-visual">
+<div class="hv-card hv-1" data-rot="-5"><div class="hv-icon" style="background:rgba(74,159,224,.12);border:1px solid rgba(74,159,224,.3)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#4A9FE0" stroke-width="1.6"><path d="M9 21c0-5 1-8 1-11a2 2 0 114 0c0 3 1 6 1 11"/><path d="M8 21h8"/></svg></div><div class="hv-name">Frozen Poultry</div><div class="hv-meta">Halal-certified · 180+ suppliers</div></div>
+<div class="hv-card hv-2" data-rot="4"><div class="hv-icon" style="background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.3)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="1.6"><ellipse cx="12" cy="12" rx="8" ry="5.5" transform="rotate(-18 12 12)"/><path d="M7 10.5c3 1.5 7 1.5 10 0M6.5 13.5c3.5 1.5 7.5 1.5 11 0" opacity=".6"/></svg></div><div class="hv-name">Beef &amp; Meat</div><div class="hv-meta">USDA-inspected exporters</div></div>
+<div class="hv-card hv-3" data-rot="-3"><div class="hv-icon" style="background:rgba(46,204,154,.12);border:1px solid rgba(46,204,154,.3)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2ECC9A" stroke-width="1.6"><path d="M6 20c8 0 12-4 12-12 0-1-.1-2-.3-3-6 0-10 2-11 6"/><path d="M6 20c0-4 1-7 3-9"/></svg></div><div class="hv-name">Fruits &amp; Veg</div><div class="hv-meta">Fastest-growing · 6.2% CAGR</div></div>
+<div class="hv-card hv-4" data-rot="3"><div class="hv-icon" style="background:rgba(82,222,181,.12);border:1px solid rgba(82,222,181,.3)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#52DEB5" stroke-width="1.6"><path d="M12 3c-3 2-5 5-5 9a5 5 0 0010 0c0-4-2-7-5-9z"/><path d="M12 3v14"/></svg></div><div class="hv-name">Frozen Seafood</div><div class="hv-meta">MSC-certified · IQF processed</div></div>
 </div>
 </section>
-<div class="ps" id="ph-stats"><div class="ps-row"><div class="ps-item"><span class="ps-n" id="sn1">0+</span><span class="ps-l">Verified Suppliers</span></div><div class="ps-item"><span class="ps-n" id="sn2">0+</span><span class="ps-l">Countries</span></div><div class="ps-item"><span class="ps-n" id="sn3">0</span><span class="ps-l">Core Categories</span></div><div class="ps-item"><span class="ps-n tl" id="sn4">0%</span><span class="ps-l">Commission</span></div></div></div>
 
-<section class="pc" id="pc-sec" aria-label="Category database">
-<div class="pc-inner">
-<div class="sec-lbl" id="pc-lbl"><span class="sec-lbl-t">Search the database</span></div>
-<h2 class="sec-h" id="pc-h">Wholesale Frozen <em>Categories</em></h2>
-<p class="sec-sub" id="pc-sub">Four core categories. Hundreds of verified suppliers. Zero middlemen.</p>
-<div class="cgrid">
-<div class="cc" id="cc1" style="--ac:#2ECC9A"><div class="cc-body"><div class="cc-icon"><i class="ti ti-leaf" style="font-size:22px;color:#2ECC9A" aria-hidden="true"></i></div><div class="cc-badge"><i class="ti ti-trending-up" style="font-size:10px" aria-hidden="true"></i>Fastest growing · 6.2% CAGR</div><div class="cc-name">Frozen Fruits &amp; Vegetables</div><div class="cc-desc">IQF berries, tropical fruits, mixed veg and organic produce from certified global producers.</div><div class="cc-foot"><span class="cc-count">Launching — <b>be first listed</b></span><div class="cc-arr"><i class="ti ti-arrow-right" style="font-size:15px" aria-hidden="true"></i></div></div></div></div>
-<div class="cc" id="cc2" style="--ac:#4A9FE0"><div class="cc-body"><div class="cc-icon"><i class="ti ti-feather" style="font-size:22px;color:#4A9FE0" aria-hidden="true"></i></div><div class="cc-sp"></div><div class="cc-name">Frozen Poultry</div><div class="cc-desc">Whole chicken, drumsticks, paws and processed poultry from halal-certified global exporters.</div><div class="cc-foot"><span class="cc-count"><b>180+</b> suppliers</span><div class="cc-arr"><i class="ti ti-arrow-right" style="font-size:15px" aria-hidden="true"></i></div></div></div></div>
-<div class="cc" id="cc3" style="--ac:#F59E0B"><div class="cc-body"><div class="cc-icon"><i class="ti ti-flame" style="font-size:22px;color:#F59E0B" aria-hidden="true"></i></div><div class="cc-sp"></div><div class="cc-name">Frozen Beef &amp; Meat</div><div class="cc-desc">Prime cuts, ground beef, pork and specialty meats from USDA-inspected global exporters.</div><div class="cc-foot"><span class="cc-count"><b>210+</b> suppliers</span><div class="cc-arr"><i class="ti ti-arrow-right" style="font-size:15px" aria-hidden="true"></i></div></div></div></div>
-<div class="cc" id="cc4" style="--ac:#52DEB5"><div class="cc-body"><div class="cc-icon"><i class="ti ti-fish" style="font-size:22px;color:#52DEB5" aria-hidden="true"></i></div><div class="cc-sp"></div><div class="cc-name">Frozen Seafood</div><div class="cc-desc">Fish fillets, shrimp, shellfish and processed seafood from MSC-certified sustainable suppliers.</div><div class="cc-foot"><span class="cc-count"><b>165+</b> suppliers</span><div class="cc-arr"><i class="ti ti-arrow-right" style="font-size:15px" aria-hidden="true"></i></div></div></div></div>
-</div></div></section>
-
-<section class="pu" id="pu-sec" aria-label="Featured suppliers">
-<div class="pu-inner">
-<div class="sec-lbl" id="pu-lbl"><span class="sec-lbl-t">Featured listings</span></div>
-<h2 class="sec-h" id="pu-h">Verified suppliers <em>taking enquiries</em></h2>
-<p class="sec-sub" id="pu-sub">Browse a selection of our verified wholesale frozen food suppliers — contact directly, zero commission.</p>
-<div class="sfrow" id="sfrow"><div class="sftabs"><button class="sft on" onclick="setTab(this)">All Suppliers</button><button class="sft" onclick="setTab(this)">Fruits &amp; Veg</button><button class="sft" onclick="setTab(this)">Poultry</button><button class="sft" onclick="setTab(this)">Beef &amp; Meat</button><button class="sft" onclick="setTab(this)">Seafood</button></div><span class="sfcount">Showing <b>4</b> of <b>750+</b></span></div>
-<div class="sgrid">
-<div class="sc" id="sc1c" style="--ac:#2ECC9A"><div class="sc-head"><div class="sc-logo" style="border:1px solid rgba(46,204,154,.3)"><div class="sc-li" style="background:#2ECC9A"></div><span class="sc-lt" style="color:#2ECC9A">GF</span></div><div class="sc-ng"><div class="sc-name">GlobalFresh Produce Ltd</div><div class="sc-loc"><i class="ti ti-map-pin" style="font-size:11px;color:#2ECC9A" aria-hidden="true"></i>Netherlands · Est. 2008</div></div><div class="sc-bdgs"><span class="sc-f"><i class="ti ti-star" style="font-size:9.5px" aria-hidden="true"></i>Featured</span><span class="sc-v" id="scv1"><i class="ti ti-circle-check" style="font-size:9.5px" aria-hidden="true"></i>Verified</span></div></div><div class="sc-tags"><span class="sc-tag">IQF Berries</span><span class="sc-tag">Tropical Fruits</span><span class="sc-tag">Mixed Veg</span><span class="sc-tag">Organic</span></div><p class="sc-desc">Specialist IQF producer supplying bulk frozen fruits and vegetables to food service and manufacturing clients across 38 countries.</p><div class="sc-stats"><div class="sc-stat"><span class="sc-sv">1 Pallet</span><span class="sc-sl">Min. Order</span></div><div class="sc-stat"><span class="sc-sv">38</span><span class="sc-sl">Countries</span></div><div class="sc-stat"><span class="sc-sv">&lt;24h</span><span class="sc-sl">Response</span></div></div><div class="sc-certs"><span class="sc-cert">GlobalGAP</span><span class="sc-cert">Organic EU</span><span class="sc-cert">IQF Certified</span></div><div class="sc-foot"><div class="sc-rate">★★★★★ <span>4.9 · 12 reviews</span></div><button class="sc-cta">View Profile <i class="ti ti-arrow-right" style="font-size:12px" aria-hidden="true"></i></button></div></div>
-<div class="sc" id="sc2c" style="--ac:#4A9FE0"><div class="sc-head"><div class="sc-logo" style="border:1px solid rgba(74,159,224,.3)"><div class="sc-li" style="background:#4A9FE0"></div><span class="sc-lt" style="color:#4A9FE0">BF</span></div><div class="sc-ng"><div class="sc-name">BrasilFrango Export</div><div class="sc-loc"><i class="ti ti-map-pin" style="font-size:11px;color:#4A9FE0" aria-hidden="true"></i>Brazil · Est. 2001</div></div><div class="sc-bdgs"><span class="sc-v" id="scv2"><i class="ti ti-circle-check" style="font-size:9.5px" aria-hidden="true"></i>Verified</span></div></div><div class="sc-tags"><span class="sc-tag">Whole Chicken</span><span class="sc-tag">Drumsticks</span><span class="sc-tag">Paws</span><span class="sc-tag">Halal</span></div><p class="sc-desc">Brazil's leading halal poultry exporter with MAPA certification — supplying wholesale frozen chicken to 50+ countries globally.</p><div class="sc-stats"><div class="sc-stat"><span class="sc-sv">1×20ft</span><span class="sc-sl">Min. Order</span></div><div class="sc-stat"><span class="sc-sv">50+</span><span class="sc-sl">Countries</span></div><div class="sc-stat"><span class="sc-sv">&lt;12h</span><span class="sc-sl">Response</span></div></div><div class="sc-certs"><span class="sc-cert">Halal Certified</span><span class="sc-cert">MAPA</span><span class="sc-cert">Brazil Origin</span></div><div class="sc-foot"><div class="sc-rate">★★★★★ <span>4.8 · 31 reviews</span></div><button class="sc-cta">View Profile <i class="ti ti-arrow-right" style="font-size:12px" aria-hidden="true"></i></button></div></div>
-<div class="sc" id="sc3c" style="--ac:#52DEB5"><div class="sc-head"><div class="sc-logo" style="border:1px solid rgba(82,222,181,.3)"><div class="sc-li" style="background:#52DEB5"></div><span class="sc-lt" style="color:#52DEB5">NS</span></div><div class="sc-ng"><div class="sc-name">Nordic Seafood Group</div><div class="sc-loc"><i class="ti ti-map-pin" style="font-size:11px;color:#52DEB5" aria-hidden="true"></i>Norway · Est. 1998</div></div><div class="sc-bdgs"><span class="sc-v" id="scv3"><i class="ti ti-circle-check" style="font-size:9.5px" aria-hidden="true"></i>Verified</span></div></div><div class="sc-tags"><span class="sc-tag">Salmon Fillets</span><span class="sc-tag">Cod</span><span class="sc-tag">Haddock</span><span class="sc-tag">MSC</span></div><p class="sc-desc">Premium MSC-certified frozen seafood from Norwegian Arctic waters — IQF processed and packed for wholesale distribution worldwide.</p><div class="sc-stats"><div class="sc-stat"><span class="sc-sv">500kg</span><span class="sc-sl">Min. Order</span></div><div class="sc-stat"><span class="sc-sv">42</span><span class="sc-sl">Countries</span></div><div class="sc-stat"><span class="sc-sv">&lt;8h</span><span class="sc-sl">Response</span></div></div><div class="sc-certs"><span class="sc-cert">MSC Certified</span><span class="sc-cert">BRC Grade A</span><span class="sc-cert">IQF</span></div><div class="sc-foot"><div class="sc-rate">★★★★☆ <span>4.7 · 19 reviews</span></div><button class="sc-cta">View Profile <i class="ti ti-arrow-right" style="font-size:12px" aria-hidden="true"></i></button></div></div>
-<div class="sc" id="sc4c" style="--ac:#F59E0B"><div class="sc-head"><div class="sc-logo" style="border:1px solid rgba(245,158,11,.3)"><div class="sc-li" style="background:#F59E0B"></div><span class="sc-lt" style="color:#F59E0B">PP</span></div><div class="sc-ng"><div class="sc-name">Pampa Prime Exports</div><div class="sc-loc"><i class="ti ti-map-pin" style="font-size:11px;color:#F59E0B" aria-hidden="true"></i>Argentina · Est. 1994</div></div><div class="sc-bdgs"><span class="sc-v" id="scv4"><i class="ti ti-circle-check" style="font-size:9.5px" aria-hidden="true"></i>Verified</span></div></div><div class="sc-tags"><span class="sc-tag">Ribeye</span><span class="sc-tag">Tenderloin</span><span class="sc-tag">Ground Beef</span><span class="sc-tag">Halal</span></div><p class="sc-desc">Premium grass-fed Argentinian beef exported wholesale to food service, retail and manufacturing clients across 45+ countries.</p><div class="sc-stats"><div class="sc-stat"><span class="sc-sv">5T</span><span class="sc-sl">Min. Order</span></div><div class="sc-stat"><span class="sc-sv">45+</span><span class="sc-sl">Countries</span></div><div class="sc-stat"><span class="sc-sv">&lt;6h</span><span class="sc-sl">Response</span></div></div><div class="sc-certs"><span class="sc-cert">Halal Certified</span><span class="sc-cert">SENASA</span><span class="sc-cert">Origin AR</span></div><div class="sc-foot"><div class="sc-rate">★★★★★ <span>4.9 · 24 reviews</span></div><button class="sc-cta">View Profile <i class="ti ti-arrow-right" style="font-size:12px" aria-hidden="true"></i></button></div></div>
+<!-- ============ MARQUEE — relabeled ============ -->
+<div class="mq">
+<div class="mq-lbl">Verified Suppliers &amp; End-to-End Cold Chain Solutions</div>
+<div class="mq-fl"></div><div class="mq-fr"></div>
+<div class="mq-track" id="mqTrack">
+<?php
+$ffhome_mq = new WP_Query(array(
+    'post_type'      => array('gd_supplier','gd_services'),
+    'post_status'    => 'publish',
+    'posts_per_page' => 60,
+    'orderby'        => 'date',
+    'order'          => 'DESC',
+    'no_found_rows'  => true,
+));
+$ffhome_items = array();
+if ($ffhome_mq->have_posts()) {
+    while ($ffhome_mq->have_posts()) { $ffhome_mq->the_post();
+        $m_id   = get_the_ID();
+        $m_name = get_the_title();
+        $m_ac   = (get_post_type($m_id) === 'gd_services') ? '#A78BFA' : '#4A9FE0';
+        $m_city = function_exists('geodir_get_post_meta') ? geodir_get_post_meta($m_id, 'city', true) : '';
+        $m_ctry = function_exists('geodir_get_post_meta') ? geodir_get_post_meta($m_id, 'country', true) : '';
+        $m_loc  = trim($m_city . (($m_city && $m_ctry) ? ', ' : '') . $m_ctry);
+        if ($m_loc === '') { $m_loc = $m_ctry ? $m_ctry : ($m_city ? $m_city : ''); }
+        $ffhome_items[] = array('n' => $m_name, 'loc' => $m_loc, 'ac' => $m_ac);
+    }
+    wp_reset_postdata();
+}
+if (!function_exists('ffinc2_home_initials')) {
+    function ffinc2_home_initials($n) {
+        $parts = array_values(array_filter(explode(' ', $n), function ($w) { return strlen($w) > 2; }));
+        $parts = array_slice($parts, 0, 2);
+        $o = '';
+        foreach ($parts as $w) { $o .= strtoupper(substr($w, 0, 1)); }
+        return $o !== '' ? $o : strtoupper(substr($n, 0, 2));
+    }
+}
+if (!empty($ffhome_items)) {
+    $fill = $ffhome_items;
+    while (count($fill) < 10) { $fill = array_merge($fill, $ffhome_items); }
+    $loop = array_merge($fill, $fill);
+    foreach ($loop as $c) {
+        echo '<div class="mq-chip"><div class="mq-badge" style="background:' . esc_attr($c['ac']) . '22;color:' . esc_attr($c['ac']) . '">' . esc_html(ffinc2_home_initials($c['n'])) . '</div><div><div class="mq-cname">' . esc_html($c['n']) . '</div>' . ($c['loc'] !== '' ? '<div class="mq-cloc">' . esc_html($c['loc']) . '</div>' : '') . '</div></div>';
+    }
+}
+?>
 </div>
-<div style="text-align:center"><button class="more-btn">Browse all 750+ verified suppliers <i class="ti ti-arrow-right" style="font-size:13px;margin-left:4px" aria-hidden="true"></i></button></div>
-</div></section>
+</div>
 
-<section class="pw" id="pw-sec" aria-label="How it works">
+<!-- ============ CATEGORIES — bento, unchanged ============ -->
+<section class="cats">
+<div class="section-flakes" id="fl-cats"></div>
+<div class="cats-inner">
+<h2 class="cats-h">Wholesale frozen categories, <em>built for sourcing</em></h2>
+<p class="cats-sub">Four core categories, one cold chain layer connecting all of them. Zero middlemen, direct contact with every listing.</p>
+<div class="bento">
+<div class="bcard big" style="border-color:rgba(74,159,224,.22);background:linear-gradient(155deg,rgba(74,159,224,.1),rgba(18,34,52,.55) 60%)">
+<div class="bicon" style="background:rgba(74,159,224,.16);border:1px solid rgba(74,159,224,.35)"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#4A9FE0" stroke-width="1.6"><path d="M9 21c0-6 1-10 1-13.5a2 2 0 114 0c0 3.5 1 7.5 1 13.5"/><path d="M8 21h8"/><path d="M10.2 10c1.2.6 2.4.6 3.6 0"/></svg></div>
+<div class="bname">Frozen Poultry</div>
+<div class="bdesc">Whole birds, portioned cuts and value-added lines from halal-certified exporters across 38+ countries.</div>
+<div class="bfoot"><span class="bcount"><b>180+</b> suppliers</span><div class="barr" style="border-color:rgba(74,159,224,.3);color:#4A9FE0"><i class="ti ti-arrow-right" style="font-size:14px"></i></div></div>
+</div>
+<div class="bcard" style="border-color:rgba(46,204,154,.22);background:linear-gradient(155deg,rgba(46,204,154,.1),rgba(18,34,52,.55) 65%)">
+<div class="bicon" style="background:rgba(46,204,154,.16);border:1px solid rgba(46,204,154,.35)"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2ECC9A" stroke-width="1.6"><path d="M6 20c8 0 12-4 12-12 0-1-.1-2-.3-3-6 0-10 2-11 6"/><path d="M6 20c0-4 1-7 3-9"/></svg></div>
+<div class="bname">Fruits &amp; Vegetables</div>
+<div class="bdesc">IQF berries, tropical fruit and organic produce. Fastest-growing category — 6.2% CAGR.</div>
+<div class="bfoot"><span class="bcount">Launching — <b>be first listed</b></span><div class="barr" style="border-color:rgba(46,204,154,.3);color:#2ECC9A"><i class="ti ti-arrow-right" style="font-size:14px"></i></div></div>
+</div>
+<div class="bcard" style="border-color:rgba(245,158,11,.22);background:linear-gradient(155deg,rgba(245,158,11,.1),rgba(18,34,52,.55) 65%)">
+<div class="bicon" style="background:rgba(245,158,11,.16);border:1px solid rgba(245,158,11,.35)"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="1.6"><ellipse cx="12" cy="12" rx="8.5" ry="5.5" transform="rotate(-18 12 12)"/><path d="M6.8 10.2c3.2 1.6 7.2 1.6 10.4 0M6.3 13.6c3.7 1.6 7.7 1.6 11.4 0" opacity=".55"/></svg></div>
+<div class="bname">Beef &amp; Meat</div>
+<div class="bdesc">Prime cuts and specialty meats, USDA-inspected across 48+ countries.</div>
+<div class="bfoot"><span class="bcount"><b>210+</b> suppliers</span><div class="barr" style="border-color:rgba(245,158,11,.3);color:#F59E0B"><i class="ti ti-arrow-right" style="font-size:14px"></i></div></div>
+</div>
+<div class="bcard" style="grid-column:span 2;border-color:rgba(82,222,181,.22);background:linear-gradient(155deg,rgba(82,222,181,.1),rgba(18,34,52,.55) 65%);flex-direction:row;align-items:center;justify-content:space-between;gap:24px">
+<div><div class="bicon" style="background:rgba(82,222,181,.16);border:1px solid rgba(82,222,181,.35)"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#52DEB5" stroke-width="1.6"><path d="M12 3c-3.2 2.2-5.2 5.4-5.2 9a5.2 5.2 0 0010.4 0c0-3.6-2-6.8-5.2-9z"/><path d="M12 4v13"/></svg></div>
+<div class="bname">Frozen Seafood</div>
+<div class="bdesc">Fillets, shrimp and shellfish from MSC-certified sustainable sources.</div></div>
+<div style="text-align:right"><span class="bcount" style="display:block;margin-bottom:10px"><b>165+</b> suppliers</span><div class="barr" style="border-color:rgba(82,222,181,.3);color:#52DEB5;margin-left:auto"><i class="ti ti-arrow-right" style="font-size:14px"></i></div></div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- ============ FEATURED SUPPLIERS — live version verbatim ============ -->
+<section class="pu">
+<div class="section-flakes" id="fl-pu"></div>
+<div class="pu-inner">
+<h2 class="sec-h">Verified suppliers <em>taking enquiries</em></h2>
+<p class="sec-sub">Browse a selection of our verified wholesale frozen food suppliers — contact directly, zero commission.</p>
+<div class="sfrow"><div class="sftabs"><button class="sft on" onclick="setTab(this)">All Suppliers</button><button class="sft" onclick="setTab(this)">Fruits &amp; Veg</button><button class="sft" onclick="setTab(this)">Poultry</button><button class="sft" onclick="setTab(this)">Beef &amp; Meat</button><button class="sft" onclick="setTab(this)">Seafood</button></div><span class="sfcount">Showing <b>8</b> of <b>750+</b></span></div>
+<div class="sgrid">
+<div class="sc" style="--ac:#2ECC9A"><div class="sc-head"><div class="sc-logo" style="border:1px solid rgba(46,204,154,.3)"><div class="sc-li" style="background:#2ECC9A"></div><span class="sc-lt" style="color:#2ECC9A">GF</span></div><div class="sc-ng"><div class="sc-name">GlobalFresh Produce Ltd</div><div class="sc-loc"><i class="ti ti-map-pin" style="font-size:11px;color:#2ECC9A"></i>Netherlands · Est. 2008</div></div><div class="sc-bdgs"><span class="sc-f"><i class="ti ti-star" style="font-size:9.5px"></i>Featured</span><span class="sc-v"><i class="ti ti-circle-check" style="font-size:9.5px"></i>Verified</span></div></div><div class="sc-tags"><span class="sc-tag">IQF Berries</span><span class="sc-tag">Tropical Fruits</span><span class="sc-tag">Organic</span></div><p class="sc-desc">Specialist IQF producer supplying bulk frozen fruits and vegetables to food service and manufacturing clients across 38 countries.</p><div class="sc-stats"><div class="sc-stat"><span class="sc-sv">1 Pallet</span><span class="sc-sl">Min. Order</span></div><div class="sc-stat"><span class="sc-sv">38</span><span class="sc-sl">Countries</span></div><div class="sc-stat"><span class="sc-sv">&lt;24h</span><span class="sc-sl">Response</span></div></div><div class="sc-certs"><span class="sc-cert">GlobalGAP</span><span class="sc-cert">Organic EU</span></div><div class="sc-foot"><div class="sc-rate">★★★★★ <span>4.9 · 12 reviews</span></div><button class="sc-cta">View Profile <i class="ti ti-arrow-right" style="font-size:12px"></i></button></div></div>
+<div class="sc" style="--ac:#4A9FE0"><div class="sc-head"><div class="sc-logo" style="border:1px solid rgba(74,159,224,.3)"><div class="sc-li" style="background:#4A9FE0"></div><span class="sc-lt" style="color:#4A9FE0">BF</span></div><div class="sc-ng"><div class="sc-name">BrasilFrango Export</div><div class="sc-loc"><i class="ti ti-map-pin" style="font-size:11px;color:#4A9FE0"></i>Brazil · Est. 2001</div></div><div class="sc-bdgs"><span class="sc-v"><i class="ti ti-circle-check" style="font-size:9.5px"></i>Verified</span></div></div><div class="sc-tags"><span class="sc-tag">Whole Chicken</span><span class="sc-tag">Halal</span></div><p class="sc-desc">Brazil's leading halal poultry exporter with MAPA certification — supplying wholesale frozen chicken to 50+ countries.</p><div class="sc-stats"><div class="sc-stat"><span class="sc-sv">1×20ft</span><span class="sc-sl">Min. Order</span></div><div class="sc-stat"><span class="sc-sv">50+</span><span class="sc-sl">Countries</span></div><div class="sc-stat"><span class="sc-sv">&lt;12h</span><span class="sc-sl">Response</span></div></div><div class="sc-certs"><span class="sc-cert">Halal Certified</span><span class="sc-cert">MAPA</span></div><div class="sc-foot"><div class="sc-rate">★★★★★ <span>4.8 · 31 reviews</span></div><button class="sc-cta">View Profile <i class="ti ti-arrow-right" style="font-size:12px"></i></button></div></div>
+<div class="sc" style="--ac:#52DEB5"><div class="sc-head"><div class="sc-logo" style="border:1px solid rgba(82,222,181,.3)"><div class="sc-li" style="background:#52DEB5"></div><span class="sc-lt" style="color:#52DEB5">NS</span></div><div class="sc-ng"><div class="sc-name">Nordic Seafood Group</div><div class="sc-loc"><i class="ti ti-map-pin" style="font-size:11px;color:#52DEB5"></i>Norway · Est. 1998</div></div><div class="sc-bdgs"><span class="sc-v"><i class="ti ti-circle-check" style="font-size:9.5px"></i>Verified</span></div></div><div class="sc-tags"><span class="sc-tag">Salmon</span><span class="sc-tag">MSC</span></div><p class="sc-desc">Premium MSC-certified frozen seafood from Norwegian Arctic waters — IQF processed and packed for wholesale distribution.</p><div class="sc-stats"><div class="sc-stat"><span class="sc-sv">500kg</span><span class="sc-sl">Min. Order</span></div><div class="sc-stat"><span class="sc-sv">42</span><span class="sc-sl">Countries</span></div><div class="sc-stat"><span class="sc-sv">&lt;8h</span><span class="sc-sl">Response</span></div></div><div class="sc-certs"><span class="sc-cert">MSC Certified</span><span class="sc-cert">BRC Grade A</span></div><div class="sc-foot"><div class="sc-rate">★★★★☆ <span>4.7 · 19 reviews</span></div><button class="sc-cta">View Profile <i class="ti ti-arrow-right" style="font-size:12px"></i></button></div></div>
+<div class="sc" style="--ac:#F59E0B"><div class="sc-head"><div class="sc-logo" style="border:1px solid rgba(245,158,11,.3)"><div class="sc-li" style="background:#F59E0B"></div><span class="sc-lt" style="color:#F59E0B">PP</span></div><div class="sc-ng"><div class="sc-name">Pampa Prime Exports</div><div class="sc-loc"><i class="ti ti-map-pin" style="font-size:11px;color:#F59E0B"></i>Argentina · Est. 1994</div></div><div class="sc-bdgs"><span class="sc-v"><i class="ti ti-circle-check" style="font-size:9.5px"></i>Verified</span></div></div><div class="sc-tags"><span class="sc-tag">Ribeye</span><span class="sc-tag">Halal</span></div><p class="sc-desc">Premium grass-fed Argentinian beef exported wholesale to food service, retail and manufacturing clients across 45+ countries.</p><div class="sc-stats"><div class="sc-stat"><span class="sc-sv">5T</span><span class="sc-sl">Min. Order</span></div><div class="sc-stat"><span class="sc-sv">45+</span><span class="sc-sl">Countries</span></div><div class="sc-stat"><span class="sc-sv">&lt;6h</span><span class="sc-sl">Response</span></div></div><div class="sc-certs"><span class="sc-cert">Halal Certified</span><span class="sc-cert">SENASA</span></div><div class="sc-foot"><div class="sc-rate">★★★★★ <span>4.9 · 24 reviews</span></div><button class="sc-cta">View Profile <i class="ti ti-arrow-right" style="font-size:12px"></i></button></div></div>
+<div class="sc" style="--ac:#2ECC9A"><div class="sc-head"><div class="sc-logo" style="border:1px solid rgba(46,204,154,.3)"><div class="sc-li" style="background:#2ECC9A"></div><span class="sc-lt" style="color:#2ECC9A">AO</span></div><div class="sc-ng"><div class="sc-name">Andean Organic Farms</div><div class="sc-loc"><i class="ti ti-map-pin" style="font-size:11px;color:#2ECC9A"></i>Peru · Est. 2011</div></div><div class="sc-bdgs"><span class="sc-v"><i class="ti ti-circle-check" style="font-size:9.5px"></i>Verified</span></div></div><div class="sc-tags"><span class="sc-tag">Organic Berries</span><span class="sc-tag">Mango</span></div><p class="sc-desc">High-altitude organic fruit farms exporting IQF berries and tropical fruit across the Americas and EU.</p><div class="sc-stats"><div class="sc-stat"><span class="sc-sv">1 Pallet</span><span class="sc-sl">Min. Order</span></div><div class="sc-stat"><span class="sc-sv">22</span><span class="sc-sl">Countries</span></div><div class="sc-stat"><span class="sc-sv">&lt;24h</span><span class="sc-sl">Response</span></div></div><div class="sc-certs"><span class="sc-cert">Organic EU</span><span class="sc-cert">Fair Trade</span></div><div class="sc-foot"><div class="sc-rate">★★★★☆ <span>4.6 · 9 reviews</span></div><button class="sc-cta">View Profile <i class="ti ti-arrow-right" style="font-size:12px"></i></button></div></div>
+<div class="sc" style="--ac:#4A9FE0"><div class="sc-head"><div class="sc-logo" style="border:1px solid rgba(74,159,224,.3)"><div class="sc-li" style="background:#4A9FE0"></div><span class="sc-lt" style="color:#4A9FE0">EP</span></div><div class="sc-ng"><div class="sc-name">Emerald Poultry Exports</div><div class="sc-loc"><i class="ti ti-map-pin" style="font-size:11px;color:#4A9FE0"></i>Thailand · Est. 2005</div></div><div class="sc-bdgs"><span class="sc-v"><i class="ti ti-circle-check" style="font-size:9.5px"></i>Verified</span></div></div><div class="sc-tags"><span class="sc-tag">Drumsticks</span><span class="sc-tag">Halal</span></div><p class="sc-desc">Export-grade processed poultry with full cold chain traceability, serving Asia-Pacific and Middle East markets.</p><div class="sc-stats"><div class="sc-stat"><span class="sc-sv">1×20ft</span><span class="sc-sl">Min. Order</span></div><div class="sc-stat"><span class="sc-sv">28</span><span class="sc-sl">Countries</span></div><div class="sc-stat"><span class="sc-sv">&lt;18h</span><span class="sc-sl">Response</span></div></div><div class="sc-certs"><span class="sc-cert">Halal Certified</span><span class="sc-cert">HACCP</span></div><div class="sc-foot"><div class="sc-rate">★★★★★ <span>4.8 · 16 reviews</span></div><button class="sc-cta">View Profile <i class="ti ti-arrow-right" style="font-size:12px"></i></button></div></div>
+<div class="sc" style="--ac:#F59E0B"><div class="sc-head"><div class="sc-logo" style="border:1px solid rgba(245,158,11,.3)"><div class="sc-li" style="background:#F59E0B"></div><span class="sc-lt" style="color:#F59E0B">HB</span></div><div class="sc-ng"><div class="sc-name">Highland Beef Co</div><div class="sc-loc"><i class="ti ti-map-pin" style="font-size:11px;color:#F59E0B"></i>Ireland · Est. 1987</div></div><div class="sc-bdgs"><span class="sc-f"><i class="ti ti-star" style="font-size:9.5px"></i>Featured</span><span class="sc-v"><i class="ti ti-circle-check" style="font-size:9.5px"></i>Verified</span></div></div><div class="sc-tags"><span class="sc-tag">Grass-Fed</span><span class="sc-tag">EU Origin</span></div><p class="sc-desc">Grass-fed beef from EU-inspected facilities, supplying retail and foodservice clients across 30+ countries.</p><div class="sc-stats"><div class="sc-stat"><span class="sc-sv">3T</span><span class="sc-sl">Min. Order</span></div><div class="sc-stat"><span class="sc-sv">30+</span><span class="sc-sl">Countries</span></div><div class="sc-stat"><span class="sc-sv">&lt;10h</span><span class="sc-sl">Response</span></div></div><div class="sc-certs"><span class="sc-cert">EU Organic</span><span class="sc-cert">BRC Grade A</span></div><div class="sc-foot"><div class="sc-rate">★★★★★ <span>4.9 · 21 reviews</span></div><button class="sc-cta">View Profile <i class="ti ti-arrow-right" style="font-size:12px"></i></button></div></div>
+<div class="sc" style="--ac:#52DEB5"><div class="sc-head"><div class="sc-logo" style="border:1px solid rgba(82,222,181,.3)"><div class="sc-li" style="background:#52DEB5"></div><span class="sc-lt" style="color:#52DEB5">PD</span></div><div class="sc-ng"><div class="sc-name">Pacific Deep Seafoods</div><div class="sc-loc"><i class="ti ti-map-pin" style="font-size:11px;color:#52DEB5"></i>Vietnam · Est. 2009</div></div><div class="sc-bdgs"><span class="sc-v"><i class="ti ti-circle-check" style="font-size:9.5px"></i>Verified</span></div></div><div class="sc-tags"><span class="sc-tag">Shrimp</span><span class="sc-tag">Squid</span></div><p class="sc-desc">Vertically integrated shrimp and cephalopod processor, BAP-certified farms through to export packing.</p><div class="sc-stats"><div class="sc-stat"><span class="sc-sv">1T</span><span class="sc-sl">Min. Order</span></div><div class="sc-stat"><span class="sc-sv">33</span><span class="sc-sl">Countries</span></div><div class="sc-stat"><span class="sc-sv">&lt;14h</span><span class="sc-sl">Response</span></div></div><div class="sc-certs"><span class="sc-cert">BAP Certified</span><span class="sc-cert">HACCP</span></div><div class="sc-foot"><div class="sc-rate">★★★★☆ <span>4.5 · 13 reviews</span></div><button class="sc-cta">View Profile <i class="ti ti-arrow-right" style="font-size:12px"></i></button></div></div>
+</div>
+<div style="text-align:center"><button class="more-btn">Browse all 750+ verified suppliers <i class="ti ti-arrow-right" style="font-size:13px;margin-left:4px"></i></button></div>
+</div>
+</section>
+
+<!-- ============ HOW IT WORKS (animated, live version) + TRUST STATS merged in ============ -->
+<section class="pw" id="pw-sec">
+<div class="section-flakes" id="fl-pw" style="height:100%"></div>
 <div class="pw-inner">
-<div class="sec-lbl" id="pw-lbl"><span class="sec-lbl-t">Simple process</span></div>
-<h2 class="sec-h" id="pw-h">How FrozenFood<em>Inc</em> Works</h2>
-<p class="sec-sub" id="pw-sub" style="margin-bottom:52px">Three steps from search to sourcing deal — no middlemen, no commission.</p>
-<div class="hiw-row">
-<div class="hiw-step" id="hs1"><div class="snw"><div class="sring" id="sr1"></div><div class="scirc" id="sc1i">1</div></div><div class="sico"><i class="ti ti-search" style="font-size:18px;color:#4A9FE0" aria-hidden="true"></i></div><div class="stitle">Search the database</div><div class="sdesc">Search by category, region, certification and MOQ to find the right supplier match.</div></div>
-<div class="hiw-conn"><div class="hiw-cl" id="hc1"></div></div>
-<div class="hiw-step" id="hs2"><div class="snw"><div class="sring" id="sr2"></div><div class="scirc" id="sc2i">2</div></div><div class="sico"><i class="ti ti-send" style="font-size:18px;color:#4A9FE0" aria-hidden="true"></i></div><div class="stitle">Contact directly</div><div class="sdesc">Send enquiries straight to verified suppliers — no brokers, zero commission.</div></div>
-<div class="hiw-conn"><div class="hiw-cl" id="hc2"></div></div>
-<div class="hiw-step" id="hs3"><div class="snw"><div class="sring" id="sr3"></div><div class="scirc" id="sc3i">3</div></div><div class="sico"><i class="ti ti-shield-check" style="font-size:18px;color:#4A9FE0" aria-hidden="true"></i></div><div class="stitle">Source with confidence</div><div class="sdesc">Every listing is verified and rated. Review credentials before committing.</div></div>
-</div></div></section>
+<h2 class="sec-h" style="text-align:center" id="pw-h">How FrozenFood<em>Inc</em> Works</h2>
+<p class="sec-sub" style="text-align:center;margin:0 auto 52px" id="pw-sub">Three steps from search to sourcing deal — no middlemen, no commission.</p>
+<div class="how-grid">
+<div class="how-steps">
+<div class="hstep" id="hs1"><div class="snw"><div class="sring" id="sr1"></div><div class="scirc" id="sc1i">1</div></div><div class="hstep-body"><div class="sico"><i class="ti ti-search" style="font-size:18px;color:#4A9FE0"></i></div><div class="stitle">Search the database</div><div class="sdesc">Search by category, region, certification and MOQ to find the right supplier match.</div></div></div>
+<div class="hstep-conn" id="hc1"></div>
+<div class="hstep" id="hs2"><div class="snw"><div class="sring" id="sr2"></div><div class="scirc" id="sc2i">2</div></div><div class="hstep-body"><div class="sico"><i class="ti ti-send" style="font-size:18px;color:#4A9FE0"></i></div><div class="stitle">Contact directly</div><div class="sdesc">Send enquiries straight to verified suppliers — no brokers, zero commission.</div></div></div>
+<div class="hstep-conn" id="hc2"></div>
+<div class="hstep" id="hs3"><div class="snw"><div class="sring" id="sr3"></div><div class="scirc" id="sc3i">3</div></div><div class="hstep-body"><div class="sico"><i class="ti ti-shield-check" style="font-size:18px;color:#4A9FE0"></i></div><div class="stitle">Source with confidence</div><div class="sdesc">Every listing is verified and rated. Review credentials before committing.</div></div></div>
+</div>
+<div>
+<div class="how-net">
+<svg viewBox="0 0 600 384" id="ffnet" xmlns="http://www.w3.org/2000/svg" aria-label="Direct buyer to verified supplier connections, bypassing brokers">
+<defs>
+<radialGradient id="hubgrad" cx="38%" cy="34%" r="72%">
+<stop offset="0%" stop-color="#6FB6EE"/><stop offset="55%" stop-color="#2D7FC4"/><stop offset="100%" stop-color="#1E5C96"/>
+</radialGradient>
+<filter id="softglow" x="-60%" y="-60%" width="220%" height="220%">
+<feGaussianBlur stdDeviation="3.2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+</filter>
+</defs>
+<g id="net-frame"></g><g id="net-broker"></g><g id="net-lanes"></g><g id="net-pulses"></g><g id="net-hub"></g><g id="net-chips"></g>
+</svg>
+<div class="net-cap">Every line is a <b>direct</b> buyer&ndash;supplier connection. Brokers and their fees, removed.</div>
+</div>
+</div>
+<?php
+/* Feed the network the same real listings the marquee uses (first 5), plus the
+   site icon for the hub. Falls back to a static set if no listings exist yet. */
+$ffnet_src = array();
+if (!empty($ffhome_items)) {
+    foreach (array_slice($ffhome_items, 0, 5) as $ffn) {
+        $ffnet_src[] = array('n' => $ffn['n'], 'loc' => $ffn['loc'], 'ac' => $ffn['ac']);
+    }
+}
+if (empty($ffnet_src)) {
+    $ffnet_src = array(
+        array('n' => 'Verified Supplier', 'loc' => '', 'ac' => '#4A9FE0'),
+    );
+}
+$ffnet_icon = function_exists('get_site_icon_url') ? get_site_icon_url(180) : '';
+?>
+<script>
+window.FF_NET = <?php echo wp_json_encode($ffnet_src); ?>;
+window.FF_ICON = <?php echo wp_json_encode($ffnet_icon); ?>;
+</script>
+</div>
+</div>
+<div class="trust-wrap">
+<div class="trust-inner" id="trustInner">
+<div class="trust-item"><span class="trust-n" id="tn1">0</span><span class="trust-l">Verified Suppliers</span><span class="trust-d">Vetted for quality &amp; export capability</span></div>
+<div class="trust-item"><span class="trust-n" id="tn2">0</span><span class="trust-l">Countries Covered</span><span class="trust-d">Global reach across major markets</span></div>
+<div class="trust-item"><span class="trust-n tl" id="tn3">0%</span><span class="trust-l">Commission</span><span class="trust-d">Direct contact, no broker fees ever</span></div>
+<div class="trust-item"><div style="display:flex;align-items:center;justify-content:center;gap:6px"><span class="trust-n" id="tn4">0</span><i class="ti ti-star-filled" style="font-size:20px;color:#F59E0B"></i></div><span class="trust-l">Avg. Rating</span><span class="trust-d">Based on 340+ verified buyer reviews</span></div>
+</div>
+</div>
+</section>
 
-<section class="pr" id="pr-sec" aria-label="Customer testimonials">
+<!-- ============ TESTIMONIALS — live version verbatim ============ -->
+<section class="pr" id="pr-sec">
+<div class="section-flakes" id="fl-pr"></div>
 <div class="pr-qbg">"</div>
-<div class="pr-inner" style="position:relative;z-index:2">
-<div class="sec-lbl" id="pr-lbl"><span class="sec-lbl-t">What buyers say</span></div>
+<div class="pr-inner">
 <h2 class="sec-h" id="pr-h">Trusted by wholesale buyers <em>worldwide</em></h2>
 <p class="sec-sub" id="pr-sub">Real buyers. Real shipments. Real results — no commission paid on any of them.</p>
-<div class="pr-agg" id="pr-agg"><div><div class="pr-agg-stars">★★★★★</div><div style="font-size:11px;color:#6B9DB7;letter-spacing:.05em;text-transform:uppercase;margin-top:3px">Avg rating</div></div><div class="pr-agg-score">4.9</div><div class="pr-agg-div"></div><div class="pr-agg-lbl">Based on <strong>340+</strong><br>verified buyer reviews</div><div class="pr-agg-div"></div><div style="font-size:13px;color:#9BBFD8;display:flex;align-items:center;gap:6px"><i class="ti ti-shield-check" style="font-size:15px;color:#2ECC9A" aria-hidden="true"></i>All reviews from verified buyers</div></div>
+<div class="pr-agg" id="pr-agg"><div><div class="pr-agg-stars">★★★★★</div><div style="font-size:11px;color:#6B9DB7;letter-spacing:.05em;text-transform:uppercase;margin-top:3px">Avg rating</div></div><div class="pr-agg-score">4.9</div><div class="pr-agg-div"></div><div class="pr-agg-lbl">Based on <strong>340+</strong><br>verified buyer reviews</div><div class="pr-agg-div"></div><div style="font-size:13px;color:#9BBFD8;display:flex;align-items:center;gap:6px"><i class="ti ti-shield-check" style="font-size:15px;color:#2ECC9A"></i>All reviews from verified buyers</div></div>
 <div class="rgrid">
-<div class="rcard" id="rc1"><div class="rcq">"</div><div class="rstars"><span class="rstar">★</span><span class="rstar">★</span><span class="rstar">★</span><span class="rstar">★</span><span class="rstar">★</span></div><p class="rtext">"FrozenFoodInc cut our supplier search from weeks to hours. Three verified poultry partners found in a single session — something that used to require months of cold outreach."</p><div class="rfoot"><div class="ravatar" style="background:linear-gradient(135deg,#4A9FE0,#1E6BAB)">JM</div><div><div class="rname">Javier M.</div><div class="rrole">Head of Procurement · Restaurantes Unidos, Spain</div><div class="rtag"><i class="ti ti-feather" style="font-size:9px" aria-hidden="true"></i>Sources: Frozen Poultry</div></div></div></div>
-<div class="rcard" id="rc2"><div class="rcq">"</div><div class="rstars"><span class="rstar">★</span><span class="rstar">★</span><span class="rstar">★</span><span class="rstar">★</span><span class="rstar">★</span></div><p class="rtext">"The verification system is the standout feature. Every supplier we've engaged has been professional, responsive, and delivered on spec. Zero bad experiences across six shipments."</p><div class="rfoot"><div class="ravatar" style="background:linear-gradient(135deg,#2ECC9A,#0F9B72)">FA</div><div><div class="rname">Fatima A.</div><div class="rrole">Import Director · Gulf Food Trading, UAE</div><div class="rtag"><i class="ti ti-fish" style="font-size:9px" aria-hidden="true"></i>Sources: Frozen Seafood</div></div></div></div>
-<div class="rcard" id="rc3"><div class="rcq">"</div><div class="rstars"><span class="rstar">★</span><span class="rstar">★</span><span class="rstar">★</span><span class="rstar">★</span><span class="rstar">★</span></div><p class="rtext">"As a buyer cutting brokers for the first time, I needed real confidence. The supplier profiles, certifications, and review scores made that easy. Saving on every shipment now."</p><div class="rfoot"><div class="ravatar" style="background:linear-gradient(135deg,#F59E0B,#D97706)">DC</div><div><div class="rname">David C.</div><div class="rrole">Supply Chain Manager · Pacific Foods, Australia</div><div class="rtag"><i class="ti ti-flame" style="font-size:9px" aria-hidden="true"></i>Sources: Beef &amp; Meat</div></div></div></div>
-<div class="rcard" id="rc4"><div class="rcq">"</div><div class="rstars"><span class="rstar">★</span><span class="rstar">★</span><span class="rstar">★</span><span class="rstar">★</span><span class="rstar">★</span></div><p class="rtext">"We needed halal-certified beef at scale across three European markets. Found two qualified suppliers in a single afternoon. The certification filtering alone saved us weeks of vetting."</p><div class="rfoot"><div class="ravatar" style="background:linear-gradient(135deg,#F59E0B,#D97706)">MB</div><div><div class="rname">Marcus B.</div><div class="rrole">Category Buyer · Retail Chain HQ, Germany</div><div class="rtag"><i class="ti ti-flame" style="font-size:9px" aria-hidden="true"></i>Sources: Beef &amp; Meat</div></div></div></div>
-<div class="rcard" id="rc5"><div class="rcq">"</div><div class="rstars"><span class="rstar">★</span><span class="rstar">★</span><span class="rstar">★</span><span class="rstar">★</span><span class="rstar">★</span></div><p class="rtext">"The database depth is genuinely impressive. We sourced IQF mango from three origins and compared specs side by side. No other platform comes close for frozen produce sourcing at this scale."</p><div class="rfoot"><div class="ravatar" style="background:linear-gradient(135deg,#2ECC9A,#0F9B72)">PS</div><div><div class="rname">Priya S.</div><div class="rrole">Procurement Lead · Fresh Direct Asia, Singapore</div><div class="rtag"><i class="ti ti-leaf" style="font-size:9px" aria-hidden="true"></i>Sources: Fruits &amp; Veg</div></div></div></div>
-<div class="rcard" id="rc6"><div class="rcq">"</div><div class="rstars"><span class="rstar">★</span><span class="rstar">★</span><span class="rstar">★</span><span class="rstar">★</span><span class="rstar">★</span></div><p class="rtext">"Halal certification visibility is critical for our market. Every supplier profile is clear on certifications upfront. Four completed shipments across two suppliers — zero compliance issues."</p><div class="rfoot"><div class="ravatar" style="background:linear-gradient(135deg,#4A9FE0,#1E6BAB)">AK</div><div><div class="rname">Ahmed K.</div><div class="rrole">Import Manager · Al Baraka Foods, UAE</div><div class="rtag"><i class="ti ti-feather" style="font-size:9px" aria-hidden="true"></i>Sources: Frozen Poultry</div></div></div></div>
-</div></div></section>
-
-<section class="pk" id="pk-sec" aria-label="Call to action">
-<div class="pk-ring" style="width:600px;height:600px;border:1px solid rgba(74,159,224,.04)"></div>
-<div class="pk-ring" style="width:420px;height:420px;border:1px solid rgba(74,159,224,.06)"></div>
-<div class="pk-ring" style="width:260px;height:260px;border:1px solid rgba(74,159,224,.09)"></div>
-<div class="pk-cta"><div class="pk-inner">
-<div class="cta-col buyers" id="ctaL"><div class="cta-lbl b"><i class="ti ti-shopping-cart" style="font-size:11px" aria-hidden="true"></i>For Buyers</div><div class="cta-h">Ready to source<br>smarter?</div><p class="cta-p">Find verified wholesale frozen food suppliers worldwide — direct contact, no brokers, zero commission on every order.</p><div class="cta-proof b"><i class="ti ti-check" style="font-size:12px" aria-hidden="true"></i>750+ verified suppliers across 50+ countries</div><button class="cta-btn b"><i class="ti ti-search" style="font-size:16px" aria-hidden="true"></i>Browse Suppliers <i class="ti ti-arrow-right" style="font-size:15px" aria-hidden="true"></i></button></div>
-<div class="cta-div" id="ctadiv"></div>
-<div class="cta-col supps" id="ctaR"><div class="cta-lbl s"><i class="ti ti-building-store" style="font-size:11px" aria-hidden="true"></i>For Suppliers</div><div class="cta-h">Reach global wholesale<br>buyers directly.</div><p class="cta-p">List your frozen food business for free and start receiving direct purchase enquiries from wholesale buyers worldwide.</p><div class="cta-proof s"><i class="ti ti-users" style="font-size:12px" aria-hidden="true"></i>Join 340+ businesses already listed on FFInc</div><button class="cta-btn s"><i class="ti ti-plus" style="font-size:16px" aria-hidden="true"></i>Create Free Listing <i class="ti ti-arrow-right" style="font-size:15px" aria-hidden="true"></i></button></div>
-</div></div>
-<div class="pk-mq"><div class="pk-mq-lbl">Buyers include</div><div class="pk-mq-fl"></div><div class="pk-mq-fr"></div><div class="pk-mq-track"><span class="pk-mq-item">Restaurantes Unidos · Spain</span><span class="pk-mq-item">Gulf Food Trading · UAE</span><span class="pk-mq-item">Pacific Foods Ltd · Australia</span><span class="pk-mq-item">Nordic Import Co · Norway</span><span class="pk-mq-item">Delta Provisions · UK</span><span class="pk-mq-item">Eastern Trade Group · Singapore</span><span class="pk-mq-item">Meridian Foods · Canada</span><span class="pk-mq-item">AlNoor Distribution · Saudi Arabia</span><span class="pk-mq-item">Restaurantes Unidos · Spain</span><span class="pk-mq-item">Gulf Food Trading · UAE</span><span class="pk-mq-item">Pacific Foods Ltd · Australia</span><span class="pk-mq-item">Nordic Import Co · Norway</span><span class="pk-mq-item">Delta Provisions · UK</span><span class="pk-mq-item">Eastern Trade Group · Singapore</span><span class="pk-mq-item">Meridian Foods · Canada</span><span class="pk-mq-item">AlNoor Distribution · Saudi Arabia</span></div></div>
-<div class="pk-trust"><div class="pk-tinner"><div class="sec-lbl" style="justify-content:center;margin-bottom:32px" id="pt-lbl"><span class="sec-lbl-t">Why FrozenFoodInc</span></div><div class="tgrid" id="tgrid">
-<div class="titem" style="--ac:#4A9FE0"><div class="tic"><i class="ti ti-shield-check" aria-hidden="true"></i></div><span class="tnum" id="tn1">0</span><span class="tlab">Verified Suppliers</span><span class="tdesc">Vetted for quality, certs &amp; export capability</span></div>
-<div class="titem" style="--ac:#4A9FE0"><div class="tic"><i class="ti ti-world" aria-hidden="true"></i></div><span class="tnum" id="tn2">0</span><span class="tlab">Countries Covered</span><span class="tdesc">Global reach across all major markets</span></div>
-<div class="titem" style="--ac:#2ECC9A"><div class="tic tl"><i class="ti ti-ban" aria-hidden="true"></i></div><span class="tnum tl" id="tn3">0%</span><span class="tlab">Commission</span><span class="tdesc">Direct contact, no broker fees ever</span></div>
-<div class="titem" style="--ac:#F59E0B"><div class="tic" style="background:rgba(245,158,11,.09);border-color:rgba(245,158,11,.22)"><i class="ti ti-star" style="color:#F59E0B" aria-hidden="true"></i></div><span class="tnum am" id="tn4">0</span><span class="tlab">Avg. Rating</span><span class="tdesc">Based on 340+ verified buyer reviews</span></div>
-</div></div></div>
+<div class="rcard" id="rc1"><div class="rcq">"</div><div class="rstars"><span class="rstar">★</span><span class="rstar">★</span><span class="rstar">★</span><span class="rstar">★</span><span class="rstar">★</span></div><p class="rtext">"FrozenFoodInc cut our supplier search from weeks to hours. Three verified poultry partners found in a single session."</p><div class="rfoot"><div class="ravatar" style="background:linear-gradient(135deg,#4A9FE0,#1E6BAB)">JM</div><div><div class="rname">Javier M.</div><div class="rrole">Head of Procurement · Restaurantes Unidos, Spain</div></div></div></div>
+<div class="rcard" id="rc2"><div class="rcq">"</div><div class="rstars"><span class="rstar">★</span><span class="rstar">★</span><span class="rstar">★</span><span class="rstar">★</span><span class="rstar">★</span></div><p class="rtext">"The verification system is the standout feature. Zero bad experiences across six shipments."</p><div class="rfoot"><div class="ravatar" style="background:linear-gradient(135deg,#2ECC9A,#0F9B72)">FA</div><div><div class="rname">Fatima A.</div><div class="rrole">Import Director · Gulf Food Trading, UAE</div></div></div></div>
+<div class="rcard" id="rc3"><div class="rcq">"</div><div class="rstars"><span class="rstar">★</span><span class="rstar">★</span><span class="rstar">★</span><span class="rstar">★</span><span class="rstar">★</span></div><p class="rtext">"As a buyer cutting brokers for the first time, the supplier profiles and certifications made that easy."</p><div class="rfoot"><div class="ravatar" style="background:linear-gradient(135deg,#F59E0B,#D97706)">DC</div><div><div class="rname">David C.</div><div class="rrole">Supply Chain Manager · Pacific Foods, Australia</div></div></div></div>
+<div class="rcard" id="rc4"><div class="rcq">"</div><div class="rstars"><span class="rstar">★</span><span class="rstar">★</span><span class="rstar">★</span><span class="rstar">★</span><span class="rstar">★</span></div><p class="rtext">"We needed halal-certified beef at scale across three European markets. Found two qualified suppliers in a single afternoon."</p><div class="rfoot"><div class="ravatar" style="background:linear-gradient(135deg,#F59E0B,#D97706)">MB</div><div><div class="rname">Marcus B.</div><div class="rrole">Category Buyer · Retail Chain HQ, Germany</div></div></div></div>
+<div class="rcard" id="rc5"><div class="rcq">"</div><div class="rstars"><span class="rstar">★</span><span class="rstar">★</span><span class="rstar">★</span><span class="rstar">★</span><span class="rstar">★</span></div><p class="rtext">"The database depth is genuinely impressive. We sourced IQF mango from three origins and compared specs side by side."</p><div class="rfoot"><div class="ravatar" style="background:linear-gradient(135deg,#2ECC9A,#0F9B72)">PS</div><div><div class="rname">Priya S.</div><div class="rrole">Procurement Lead · Fresh Direct Asia, Singapore</div></div></div></div>
+<div class="rcard" id="rc6"><div class="rcq">"</div><div class="rstars"><span class="rstar">★</span><span class="rstar">★</span><span class="rstar">★</span><span class="rstar">★</span><span class="rstar">★</span></div><p class="rtext">"Halal certification visibility is critical for our market. Four completed shipments across two suppliers — zero compliance issues."</p><div class="rfoot"><div class="ravatar" style="background:linear-gradient(135deg,#4A9FE0,#1E6BAB)">AK</div><div><div class="rname">Ahmed K.</div><div class="rrole">Import Manager · Al Baraka Foods, UAE</div></div></div></div>
+</div>
+</div>
 </section>
+
+<!-- ============ CTA — live content, fresh visual pass ============ -->
+<section class="pk-cta" id="pk-sec">
+<div class="pk-glow" style="width:500px;height:500px;background:radial-gradient(circle,rgba(74,159,224,.14),transparent 70%);top:-100px;left:-100px"></div>
+<div class="pk-glow" style="width:500px;height:500px;background:radial-gradient(circle,rgba(46,204,154,.14),transparent 70%);bottom:-100px;right:-100px"></div>
+<div style="position:relative;z-index:1;max-width:620px;margin:0 auto 56px;text-align:center" id="ctaBlurb">
+<div class="cta-collage" id="ctaCollage">
+<div class="cc-card" style="--cc-ac:#2ECC9A;left:0;top:10px;transform:rotate(-9deg);z-index:1"><i class="ti ti-rosette-discount-check"></i><span>Verified</span></div>
+<div class="cc-card" style="--cc-ac:#4A9FE0;left:52px;top:0;transform:rotate(3deg);z-index:3"><i class="ti ti-certificate"></i><span>Certified</span></div>
+<div class="cc-card" style="--cc-ac:#F59E0B;left:104px;top:12px;transform:rotate(9deg);z-index:2"><i class="ti ti-clipboard-check"></i><span>Inspected</span></div>
+</div>
+<h2 style="font-family:'Plus Jakarta Sans';font-size:30px;font-weight:800;letter-spacing:-.6px;margin-bottom:14px;line-height:1.25">Skip the scams. <span class="cta-hl">Source with confidence.</span></h2>
+<p style="font-size:15px;color:#9BBFD8;line-height:1.7">Ghost suppliers, unverifiable certifications and middlemen padding every invoice — that's the old way of sourcing frozen food. Every listing on FrozenFoodInc is verified before it goes live, so every enquiry you send goes to someone real.</p>
+</div>
+<div class="pk-inner">
+<div class="cta-col buyers" id="ctaL">
+<div class="cta-icon" style="background:rgba(74,159,224,.14);border:1px solid rgba(74,159,224,.3)"><i class="ti ti-shopping-cart" style="font-size:20px;color:#4A9FE0"></i></div>
+<div class="cta-lbl b">For Buyers</div>
+<div class="cta-h">Ready to source<br>smarter?</div>
+<p class="cta-p">Find verified wholesale frozen food suppliers worldwide — direct contact, no brokers, zero commission on every order.</p>
+<div class="cta-proof b"><i class="ti ti-check" style="font-size:12px"></i>750+ verified suppliers across 50+ countries</div>
+<button class="cta-btn b"><i class="ti ti-search" style="font-size:16px"></i>Browse Suppliers <i class="ti ti-arrow-right" style="font-size:15px"></i></button>
+</div>
+<div class="cta-div" id="ctadiv"></div>
+<div class="cta-col supps" id="ctaR">
+<div class="cta-icon" style="background:rgba(46,204,154,.14);border:1px solid rgba(46,204,154,.3)"><i class="ti ti-building-store" style="font-size:20px;color:#2ECC9A"></i></div>
+<div class="cta-lbl s">For Suppliers</div>
+<div class="cta-h">Reach global wholesale<br>buyers directly.</div>
+<p class="cta-p">List your frozen food business for free and start receiving direct purchase enquiries from wholesale buyers worldwide.</p>
+<div class="cta-proof s"><i class="ti ti-users" style="font-size:12px"></i>Join 340+ businesses already listed on FFInc</div>
+<button class="cta-btn s"><i class="ti ti-plus" style="font-size:16px"></i>Create Free Listing <i class="ti ti-arrow-right" style="font-size:15px"></i></button>
+</div>
+</div>
+</section>
+
+<!-- ============ PREFOOTER — buyers marquee, moved here ============ -->
+<div class="prefooter">
+<div class="pf-mq-lbl">Buyers include</div>
+<div class="pf-mq-fl"></div><div class="pf-mq-fr"></div>
+<div class="pf-mq-track">
+<span class="pf-mq-item">Restaurantes Unidos · Spain</span><span class="pf-mq-item">Gulf Food Trading · UAE</span><span class="pf-mq-item">Pacific Foods Ltd · Australia</span><span class="pf-mq-item">Nordic Import Co · Norway</span><span class="pf-mq-item">Delta Provisions · UK</span><span class="pf-mq-item">Eastern Trade Group · Singapore</span><span class="pf-mq-item">Meridian Foods · Canada</span><span class="pf-mq-item">AlNoor Distribution · Saudi Arabia</span>
+<span class="pf-mq-item">Restaurantes Unidos · Spain</span><span class="pf-mq-item">Gulf Food Trading · UAE</span><span class="pf-mq-item">Pacific Foods Ltd · Australia</span><span class="pf-mq-item">Nordic Import Co · Norway</span><span class="pf-mq-item">Delta Provisions · UK</span><span class="pf-mq-item">Eastern Trade Group · Singapore</span><span class="pf-mq-item">Meridian Foods · Canada</span><span class="pf-mq-item">AlNoor Distribution · Saudi Arabia</span>
+</div>
+</div>
 
 <?php get_footer(); ?>
 
-<!-- ============================================================
-     Homepage-specific JavaScript.
-     Shared behaviour (particle canvas, aurora drift, footer dot
-     pulse, dark/light toggle) lives in assets/js/main.js.
-     GSAP is already loaded (enqueued) by the time this runs.
-     ============================================================ -->
+<!-- Homepage JS: page-wide flake drift, hero shimmer + card motion,
+     count-ups, section reveals, procedural world map, tab toggle.
+     Shared behaviour (aurora drift, real toggle) is in main.js. -->
 <script>
+// Flake/fruit drift layer — genuinely page-wide now: one contained instance
+// per section, each scoped to that section's own height (not the viewport),
+// so as you scroll the whole page top-to-bottom you pass through a
+// continuous drift rather than one layer stuck behind opaque backgrounds.
 (function(){
-var fruitLayer = document.getElementById('fruit-layer');
-var fruitPool = [
+var poolDark  = [
   {type:'icon', cls:'ti ti-leaf',      color:'#2ECC9A'},
   {type:'icon', cls:'ti ti-snowflake', color:'#8DCAF2'},
   {type:'icon', cls:'ti ti-leaf',      color:'#52DEB5'},
@@ -735,101 +715,277 @@ var fruitPool = [
   {type:'berry', color:'#4A9FE0'},
   {type:'berry', color:'#85ECD0'}
 ];
+var poolLight = [
+  {type:'icon', cls:'ti ti-leaf',      color:'#0F9B72'},
+  {type:'icon', cls:'ti ti-snowflake', color:'#1E6BAB'},
+  {type:'icon', cls:'ti ti-leaf',      color:'#0D8A6E'},
+  {type:'icon', cls:'ti ti-snowflake', color:'#2D7FC4'},
+  {type:'berry', color:'#0F9B72'},
+  {type:'berry', color:'#1E6BAB'},
+  {type:'berry', color:'#0D8A6E'}
+];
 
-function spawnFruit() {
-  var f = fruitPool[Math.floor(Math.random() * fruitPool.length)];
-  var size     = 10 + Math.random() * 12;
+function spawnInto(container){
+  var isLight = document.body.classList.contains('light-mode');
+  var pool = isLight ? poolLight : poolDark;
+  var f = pool[Math.floor(Math.random() * pool.length)];
+  var size     = 9 + Math.random() * 10;
   var startX   = 3  + Math.random() * 94;
-  var driftX   = (Math.random() - 0.5) * 120;
-  var duration = 10 + Math.random() * 8;
+  var driftX   = (Math.random() - 0.5) * 90;
+  var h        = Math.max(container.offsetHeight, 300);
+  var duration = 9 + Math.random() * 7;
   var rotation = (Math.random() - 0.5) * 30;
   var el;
 
   if (f.type === 'icon') {
     el = document.createElement('i');
     el.className = f.cls;
-    el.style.cssText = 'position:absolute;font-size:' + size + 'px;color:' + f.color + ';opacity:0;bottom:0;left:' + startX + '%;pointer-events:none;filter:blur(0.4px)';
+    el.style.cssText = 'position:absolute;font-size:' + size + 'px;color:' + f.color + ';opacity:0;bottom:0;left:' + startX + '%;filter:blur(0.4px)';
   } else {
     el = document.createElement('div');
-    el.style.cssText = 'position:absolute;width:' + (size * 0.65) + 'px;height:' + (size * 0.65) + 'px;border-radius:50%;background:' + f.color + ';opacity:0;bottom:0;left:' + startX + '%;pointer-events:none';
+    el.style.cssText = 'position:absolute;width:' + (size * 0.65) + 'px;height:' + (size * 0.65) + 'px;border-radius:50%;background:' + f.color + ';opacity:0;bottom:0;left:' + startX + '%';
   }
+  container.appendChild(el);
 
-  fruitLayer.appendChild(el);
-
-  var travelY     = -(window.innerHeight + 80);
-  var peakOpacity = 0.16 + Math.random() * 0.14;
-
+  var peakOpacity = 0.14 + Math.random() * 0.12;
   gsap.to(el, {
-    y: travelY, x: driftX, rotation: rotation,
+    y: -(h + 60), x: driftX, rotation: rotation,
     duration: duration, ease: 'none',
-    onComplete: function() { if (el.parentNode) el.parentNode.removeChild(el); }
+    onComplete: function(){ if (el.parentNode) el.parentNode.removeChild(el); }
   });
-  gsap.to(el, {
-    opacity: peakOpacity,
-    duration: duration * 0.18,
-    ease: 'power2.out'
-  });
-  gsap.to(el, {
-    opacity: 0,
-    duration: duration * 0.28,
-    delay: duration * 0.72,
-    ease: 'power2.in'
-  });
+  gsap.to(el, { opacity: peakOpacity, duration: duration * 0.18, ease: 'power2.out' });
+  gsap.to(el, { opacity: 0, duration: duration * 0.28, delay: duration * 0.72, ease: 'power2.in' });
 }
 
-var spawnIntervals = [1800, 2400, 1600, 2800, 2100, 3200, 2600];
-spawnIntervals.forEach(function(ms, i) {
-  setTimeout(function() {
-    spawnFruit();
-    setInterval(spawnFruit, ms);
-  }, i * 500);
+// One drift instance per section, staggered so they don't all pulse in sync
+var sections = ['fl-hero','fl-cats','fl-pu','fl-pw','fl-pr'];
+sections.forEach(function(id, i){
+  var el = document.getElementById(id);
+  if (!el) return;
+  var interval = 2200 + (i % 3) * 500;
+  setTimeout(function(){
+    spawnInto(el);
+    setInterval(function(){ spawnInto(el); }, interval);
+  }, i * 400);
 });
-gsap.to('#ph-dot',{opacity:.35,scale:.7,duration:1.2,repeat:-1,yoyo:true,ease:'sine.inOut'});
-gsap.to('#ph-gt',{backgroundPosition:'200% center',duration:4,repeat:-1,ease:'none'});
-var htl=gsap.timeline({defaults:{ease:'power3.out'}});
-htl.from('.pn',{y:-80,opacity:0,duration:.8}).from('#ph-pill',{y:32,opacity:0,duration:.7},'-=.3').from('#ph-h1',{y:42,opacity:0,duration:.8},'-=.45').from('#ph-sub',{y:28,opacity:0,duration:.7},'-=.5').from('#ph-sw',{y:28,opacity:0,scale:.97,duration:.7},'-=.4').from('.ph-chip',{y:20,opacity:0,duration:.5,stagger:.08},'-=.3').from('#ph-stats',{y:20,opacity:0,duration:.6},'-=.2');
-var sc=[{el:'#sn1',v:750,s:'+'},{el:'#sn2',v:50,s:'+'},{el:'#sn3',v:4,s:''},{el:'#sn4',v:0,s:'%'}];
-setTimeout(function(){sc.forEach(function(c){if(c.v===0){document.querySelector(c.el).textContent='0%';return;}var o={n:0},el=document.querySelector(c.el);gsap.to(o,{n:c.v,duration:2,ease:'power2.out',delay:.5,onUpdate:function(){el.textContent=Math.round(o.n)+c.s;}});});},800);
-gsap.to('#sr1',{opacity:.1,scale:1.55,duration:1.8,repeat:-1,yoyo:true,ease:'sine.inOut'});
-gsap.to('#sr2',{opacity:.1,scale:1.55,duration:1.8,repeat:-1,yoyo:true,ease:'sine.inOut',delay:.6});
-gsap.to('#sr3',{opacity:.1,scale:1.55,duration:1.8,repeat:-1,yoyo:true,ease:'sine.inOut',delay:1.2});
-window.setTab=function(t){document.querySelectorAll('.sft').forEach(function(x){x.classList.remove('on');});t.classList.add('on');};
+})();
+
+
+// Ambient aura drift — the "moving gradient for character" pass
+gsap.to('.hero-dot',{opacity:.35,scale:.7,duration:1.2,repeat:-1,yoyo:true,ease:'sine.inOut'});
+gsap.fromTo('.hero h1',{backgroundPosition:'130% 50%'},{backgroundPosition:'-30% 50%',duration:4.6,repeat:-1,repeatDelay:.4,ease:'none'});
+
+// Hero visual cards — idle float (y) + hover tilt (rotation/scale) as
+// separate tweens on separate properties, so they compose instead of fight
+document.querySelectorAll('.hv-card').forEach(function(card, i){
+  var baseRot = parseFloat(card.dataset.rot || 0);
+  gsap.set(card, {rotation: baseRot, transformOrigin:'50% 50%'});
+  gsap.to(card, {y:'+=9', duration: 3.2 + i * 0.35, repeat: -1, yoyo: true, ease: 'sine.inOut', delay: i * 0.25});
+  card.addEventListener('mouseenter', function(){
+    gsap.to(card, {rotation: baseRot + (baseRot >= 0 ? 8 : -8), scale: 1.045, duration: .35, ease: 'power2.out', overwrite: 'auto'});
+  });
+  card.addEventListener('mouseleave', function(){
+    gsap.to(card, {rotation: baseRot, scale: 1, duration: .4, ease: 'power2.out', overwrite: 'auto'});
+  });
+});
+
 function io(selector,fn,thresh){
 var obs=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){fn(e.target);obs.unobserve(e.target);}});},{threshold:thresh||.15});
 document.querySelectorAll(selector).forEach(function(el){obs.observe(el);});
 }
-io('#pc-sec',function(){
-gsap.fromTo(['#pc-lbl','#pc-h','#pc-sub'],{opacity:0,y:28},{opacity:1,y:0,duration:.7,stagger:.1,ease:'power3.out'});
-gsap.fromTo(['#cc1','#cc2','#cc3','#cc4'],{opacity:0,y:36,scale:.97},{opacity:1,y:0,scale:1,duration:.7,stagger:.1,ease:'power3.out',delay:.3});
-},.1);
+window.setTab=function(t){document.querySelectorAll('.sft').forEach(function(x){x.classList.remove('on');});t.classList.add('on');};
+
+// How It Works — original animation, kept as requested (connector now
+// animates scaleY since the steps are vertical instead of horizontal)
 io('#pw-sec',function(){
-gsap.fromTo(['#pw-lbl','#pw-h','#pw-sub'],{opacity:0,y:28},{opacity:1,y:0,duration:.7,stagger:.1,ease:'power3.out'});
-gsap.fromTo(['#hs1','#hs2','#hs3'],{opacity:0,y:30},{opacity:1,y:0,duration:.65,stagger:.18,ease:'power3.out',delay:.35});
-gsap.to(['#sc1i','#sc2i','#sc3i'],{scale:1,opacity:1,duration:.62,stagger:.18,ease:'back.out(2.2)',delay:.5});
-gsap.to(['#hc1','#hc2'],{scaleX:1,duration:.9,stagger:.3,ease:'power2.out',delay:.85});
+gsap.fromTo(['#pw-h','#pw-sub'],{opacity:0,y:28},{opacity:1,y:0,duration:.7,stagger:.1,ease:'power3.out'});
+gsap.fromTo(['#hs1','#hs2','#hs3'],{opacity:0,y:30},{opacity:1,y:0,duration:.65,stagger:.18,ease:'power3.out',delay:.25});
+gsap.to(['#sc1i','#sc2i','#sc3i'],{scale:1,opacity:1,duration:.62,stagger:.18,ease:'back.out(2.2)',delay:.4});
+gsap.to(['#hc1','#hc2'],{scaleY:1,duration:.7,stagger:.3,ease:'power2.out',delay:.75});
+gsap.to(['#sr1','#sr2','#sr3'],{opacity:.1,scale:1.55,duration:1.8,repeat:-1,yoyo:true,ease:'sine.inOut',stagger:.6});
+buildNetwork();
 },.1);
-io('#pu-sec',function(){
-gsap.fromTo(['#pu-lbl','#pu-h','#pu-sub'],{opacity:0,y:28},{opacity:1,y:0,duration:.7,stagger:.1,ease:'power3.out'});
-gsap.fromTo('#sfrow',{opacity:0,y:16},{opacity:1,y:0,duration:.55,ease:'power3.out',delay:.28});
-gsap.fromTo(['#sc1c','#sc2c','#sc3c','#sc4c'],{opacity:0,y:32},{opacity:1,y:0,duration:.7,stagger:.12,ease:'power3.out',delay:.38});
-gsap.fromTo(['#scv1','#scv2','#scv3','#scv4'],{opacity:0,scale:0},{opacity:1,scale:1,duration:.45,stagger:.18,ease:'back.out(2.5)',delay:.75});
-},.1);
+
+// Direct-connection network — real verified suppliers wired straight to the
+// buyer hub, with the broker lane struck through. Rebuilds on breakpoint
+// change (wide fan on desktop, portrait stack on phones).
+function ffInitials(n){
+var p=n.split(' ').filter(function(w){return w.length>2;}).slice(0,2);
+var o=p.map(function(w){return w[0].toUpperCase();}).join('');
+return o||n.slice(0,2).toUpperCase();
+}
+function ffTrunc(s,m){return s.length>m?s.slice(0,m-1).trim()+'…':s;}
+var FF_NS='http://www.w3.org/2000/svg';
+function ffMk(t,a){var e=document.createElementNS(FF_NS,t);for(var k in a)e.setAttribute(k,a[k]);return e;}
+var ffNetMode=null, ffNetRAF=null, ffBuildToken=0;
+
+function ffBuildNet(mode){
+var svg=document.getElementById('ffnet'); if(!svg) return;
+var myToken=++ffBuildToken;
+var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+var G={frame:svg.querySelector('#net-frame'),broker:svg.querySelector('#net-broker'),
+lanes:svg.querySelector('#net-lanes'),pulses:svg.querySelector('#net-pulses'),
+hub:svg.querySelector('#net-hub'),chips:svg.querySelector('#net-chips')};
+if(window.gsap){try{gsap.killTweensOf(svg.querySelectorAll('*'));}catch(e){}}
+Object.keys(G).forEach(function(k){var g=G[k];while(g&&g.firstChild)g.removeChild(g.firstChild);});
+
+var data=(window.FF_NET||[]).slice(0,5);
+if(!data.length)return;
+var tall=(mode==='tall');
+svg.setAttribute('viewBox', tall?'0 0 384 520':'0 0 600 384');
+var hub=tall?{x:192,y:96}:{x:150,y:196};
+var rings=tall?[52,40,30]:[64,50,38];
+var core=tall?26:30;
+
+var ebX=tall?30:31, tagX=tall?300:508, tagW=tall?70:80;
+G.frame.appendChild(ffMk('circle',{cx:tall?19:20,cy:22,r:3.4,fill:'#2ECC9A',id:'net-livedot'}));
+var eb=ffMk('text',{x:ebX,y:26,'class':'net-eyebrow-t'}); eb.textContent=tall?'DIRECT NETWORK':'LIVE · DIRECT NETWORK'; G.frame.appendChild(eb);
+G.frame.appendChild(ffMk('rect',{x:tagX,y:11,width:tagW,height:23,rx:11.5,'class':'net-tag'}));
+var tg=ffMk('text',{x:tagX+tagW/2,y:26,'class':'net-tag-t','text-anchor':'middle'}); tg.textContent='−18°C chain'; G.frame.appendChild(tg);
+
+var defs=svg.querySelector('defs');
+var oldClip=defs.querySelector('#hubclip'); if(oldClip)defs.removeChild(oldClip);
+var clip=ffMk('clipPath',{id:'hubclip'}); clip.appendChild(ffMk('circle',{cx:hub.x,cy:hub.y,r:core-2})); defs.appendChild(clip);
+rings.forEach(function(r,i){G.hub.appendChild(ffMk('circle',{cx:hub.x,cy:hub.y,r:r,'class':'net-ring',id:'net-ring'+i}));});
+G.hub.appendChild(ffMk('circle',{cx:hub.x,cy:hub.y,r:core+7,fill:'#8DCAF2',opacity:0,id:'net-halo'}));
+G.hub.appendChild(ffMk('circle',{cx:hub.x,cy:hub.y,r:core,fill:'url(#hubgrad)',filter:'url(#softglow)',id:'net-core'}));
+if(window.FF_ICON){
+var img=ffMk('image',{x:hub.x-core*0.58,y:hub.y-core*0.58,width:core*1.16,height:core*1.16,'clip-path':'url(#hubclip)',preserveAspectRatio:'xMidYMid meet',id:'net-icon'});
+img.setAttributeNS('http://www.w3.org/1999/xlink','href',window.FF_ICON); img.setAttribute('href',window.FF_ICON);
+// if the icon can't load, drop it and leave the clean gradient core
+img.addEventListener('error',function(){if(img.parentNode)img.parentNode.removeChild(img);});
+G.hub.appendChild(img);
+}
+var sealY=tall?497:298;
+G.hub.appendChild(ffMk('rect',{x:hub.x-58,y:sealY-13,width:116,height:24,rx:12,'class':'net-seal'}));
+var sl=ffMk('text',{x:hub.x,y:sealY+3,'class':'net-seal-t'}); sl.textContent='0% commission'; G.hub.appendChild(sl);
+
+if(!tall){
+G.broker.appendChild(ffMk('rect',{x:250,y:181,width:118,height:28,rx:14,'class':'net-broker-bg'}));
+var bt=ffMk('text',{x:309,y:199,'class':'net-broker-t'}); bt.textContent='Brokers · +15% fees'; G.broker.appendChild(bt);
+G.broker.appendChild(ffMk('line',{x1:258,y1:205,x2:360,y2:185,'class':'net-strike'}));
+}
+
+var chipH=tall?46:40;
+var wideChip={left:372,w:214,ys:[58,127,196,265,334]};
+var tallChip={left:26,w:332,ys:[180,246,312,378,444]};
+var netItems=[];
+data.forEach(function(d,i){
+var col=d.ac||'#4A9FE0';
+var cL=tall?tallChip.left:wideChip.left, cW=tall?tallChip.w:wideChip.w, cy=(tall?tallChip.ys:wideChip.ys)[i];
+var aX,aY,dd;
+if(tall){
+aX=cL+cW/2; aY=cy-chipH/2;
+dd='M'+aX+','+aY+' Q'+aX+','+((aY+hub.y)/2)+' '+hub.x+','+(hub.y+core-2);
+}else{
+aX=cL-2; aY=cy;
+var mX=(aX+hub.x)/2, mY=(aY+hub.y)/2+(cy===196?0:(cy<196?-14:14));
+dd='M'+aX+','+aY+' Q'+mX+','+mY+' '+hub.x+','+hub.y;
+}
+var lane=ffMk('path',{d:dd,'class':'net-lane',stroke:col}); G.lanes.appendChild(lane);
+var draw=ffMk('path',{d:dd,'class':'net-draw',stroke:'#8DCAF2'}); G.lanes.appendChild(draw);
+var g=ffMk('g',{}); G.chips.appendChild(g);
+var bg=ffMk('rect',{x:cL-2,y:cy-chipH/2,width:cW,height:chipH,rx:10,'class':'net-chip-bg'}); g.appendChild(bg);
+g.appendChild(ffMk('rect',{x:cL+8,y:cy-13,width:26,height:26,rx:7,fill:col+'22',stroke:col+'55','stroke-width':1}));
+var bdg=ffMk('text',{x:cL+21,y:cy+4,'class':'net-badge-t',fill:col,'text-anchor':'middle'}); bdg.textContent=ffInitials(d.n); g.appendChild(bdg);
+var nm=ffMk('text',{x:cL+44,y:cy-1,'class':'net-chip-name'}); nm.textContent=ffTrunc(d.n,tall?30:25); g.appendChild(nm);
+if(d.loc){var lc=ffMk('text',{x:cL+44,y:cy+12,'class':'net-chip-loc'}); lc.textContent=d.loc; g.appendChild(lc);}
+var chkX=cL+cW-18;
+g.appendChild(ffMk('circle',{cx:chkX,cy:cy,r:8,fill:'rgba(46,204,154,.14)',stroke:'rgba(46,204,154,.5)','stroke-width':1}));
+g.appendChild(ffMk('path',{d:'M'+(chkX-4)+','+cy+' l3,3 l5,-6',fill:'none',stroke:'#2ECC9A','stroke-width':1.6,'stroke-linecap':'round','stroke-linejoin':'round'}));
+netItems.push({path:lane,chip:bg,group:g,cx:(cL-2+cW/2),cy:cy,col:col});
+});
+
+var lanes=Array.prototype.slice.call(G.lanes.querySelectorAll('.net-lane'));
+var draws=Array.prototype.slice.call(G.lanes.querySelectorAll('.net-draw'));
+if(reduce||!window.gsap){lanes.forEach(function(l){l.style.opacity='.5';});draws.forEach(function(d){d.style.opacity='0';});return;}
+draws.forEach(function(dp,i){
+var len=dp.getTotalLength();
+dp.style.strokeDasharray=len; dp.style.strokeDashoffset=len; dp.style.opacity=1;
+gsap.to(dp,{strokeDashoffset:0,duration:.62,ease:'power2.inOut',delay:.15+i*0.16});
+gsap.to(dp,{opacity:0,duration:.4,delay:.15+i*0.16+.5});
+gsap.to(lanes[i],{opacity:.5,duration:.5,delay:.15+i*0.16+.35});
+});
+gsap.set(G.chips.children,{opacity:0});
+gsap.to(G.chips.children,{opacity:1,duration:.5,stagger:.14,delay:.35,ease:'power2.out'});
+gsap.fromTo('#net-core',{scale:0,transformOrigin:'center'},{scale:1,duration:.7,ease:'back.out(2)'});
+if(window.FF_ICON){gsap.fromTo('#net-icon',{opacity:0,scale:0,transformOrigin:'center'},{opacity:1,scale:1,duration:.6,ease:'back.out(2)',delay:.15});}
+['#net-ring0','#net-ring1','#net-ring2'].forEach(function(r,i){
+gsap.fromTo(r,{opacity:0},{opacity:1,duration:.5,delay:.2+i*.08});
+gsap.to(r,{scale:1.16,opacity:.05,transformOrigin:'center',duration:2.4+i*.4,repeat:-1,yoyo:true,ease:'sine.inOut',delay:.8+i*.3});
+});
+gsap.to('#net-livedot',{opacity:.25,scale:1.4,transformOrigin:'center',duration:1,repeat:-1,yoyo:true,ease:'sine.inOut'});
+
+// Sequential dispatch: the hub sends an enquiry down one lane at a time and
+// the receiving supplier chip lights up as the pulse lands.
+var GAP=1.15, TRAVEL=1.0;
+function dispatch(k){
+if(myToken!==ffBuildToken)return;
+var it=netItems[k%netItems.length];
+var path=it.path, len=path.getTotalLength(), col=it.col;
+var dot=ffMk('circle',{r:3,fill:'#8DCAF2',opacity:0,filter:'url(#softglow)'});
+var glow=ffMk('circle',{r:7,fill:col,opacity:0});
+G.pulses.appendChild(glow); G.pulses.appendChild(dot);
+var setPos=function(t){var p=path.getPointAtLength(t*len);dot.setAttribute('cx',p.x);dot.setAttribute('cy',p.y);glow.setAttribute('cx',p.x);glow.setAttribute('cy',p.y);};
+setPos(1);
+gsap.fromTo('#net-halo',{opacity:.4,scale:.7,transformOrigin:'center'},{opacity:0,scale:1.35,duration:.5,ease:'power2.out'});
+gsap.fromTo('#net-core',{scale:1.1,transformOrigin:'center'},{scale:1,duration:.4,ease:'power2.out'});
+gsap.to([dot,glow],{opacity:1,duration:.16});
+var st={t:1};
+gsap.to(st,{t:0,duration:TRAVEL,ease:'power1.inOut',
+onUpdate:function(){setPos(st.t);},
+onComplete:function(){
+gsap.to([dot,glow],{opacity:0,duration:.28,onComplete:function(){
+if(dot.parentNode)dot.parentNode.removeChild(dot); if(glow.parentNode)glow.parentNode.removeChild(glow);
+}});
+gsap.timeline()
+.to(it.chip,{stroke:col,strokeWidth:2,duration:.2,ease:'power2.out'})
+.to(it.group,{scale:1.05,svgOrigin:it.cx+' '+it.cy,duration:.2,ease:'power2.out'},'<')
+.to(it.chip,{stroke:'rgba(74,159,224,.18)',strokeWidth:1,duration:.7,ease:'power1.inOut'},'+=.35')
+.to(it.group,{scale:1,svgOrigin:it.cx+' '+it.cy,duration:.5,ease:'power1.inOut'},'<');
+}});
+gsap.delayedCall(GAP,function(){dispatch(k+1);});
+}
+gsap.delayedCall(1.5,function(){dispatch(0);});
+}
+
+function buildNetwork(){
+var m=(window.innerWidth<=600)?'tall':'wide';
+if(m===ffNetMode)return; ffNetMode=m;
+ffBuildNet(m);
+}
+window.addEventListener('resize',function(){
+if(ffNetRAF)cancelAnimationFrame(ffNetRAF);
+ffNetRAF=requestAnimationFrame(buildNetwork);
+});
+
+// Trust stats — reveal + count up, now triggered as part of the merged section
+io('#trustInner',function(){
+gsap.fromTo('#trustInner',{opacity:0,y:24},{opacity:1,y:0,duration:.7,ease:'power3.out'});
+var tc=[{el:'#tn1',t:750,s:'+'},{el:'#tn2',t:50,s:'+'},{el:'#tn3',t:0,s:'%'},{el:'#tn4',t:4.8,s:'',d:true}];
+tc.forEach(function(x,i){
+  if(x.t===0){document.querySelector(x.el).textContent='0%';return;}
+  var o={n:0},el=document.querySelector(x.el);
+  gsap.to(o,{n:x.t,duration:1.8,ease:'power2.out',delay:.3+(i*.12),onUpdate:function(){el.textContent=x.d?o.n.toFixed(1)+x.s:Math.round(o.n)+x.s;}});
+});
+},.2);
+
+// Testimonials — original stagger + star reveal, kept
 io('#pr-sec',function(){
-gsap.fromTo(['#pr-lbl','#pr-h','#pr-sub'],{opacity:0,y:28},{opacity:1,y:0,duration:.7,stagger:.1,ease:'power3.out'});
-gsap.fromTo('#pr-agg',{opacity:0,y:18},{opacity:1,y:0,duration:.6,ease:'power3.out',delay:.28});
-gsap.fromTo(['#rc1','#rc2','#rc3','#rc4','#rc5','#rc6'],{opacity:0,y:30},{opacity:1,y:0,duration:.68,stagger:.1,ease:'power3.out',delay:.4});
+gsap.fromTo('#pr-agg',{opacity:0,y:18},{opacity:1,y:0,duration:.6,ease:'power3.out'});
+gsap.fromTo(['#rc1','#rc2','#rc3','#rc4','#rc5','#rc6'],{opacity:0,y:30},{opacity:1,y:0,duration:.68,stagger:.08,ease:'power3.out',delay:.2});
 ['#rc1','#rc2','#rc3','#rc4','#rc5','#rc6'].forEach(function(id,ci){
 var stars=document.querySelectorAll(id+' .rstar');
-gsap.to(stars,{opacity:1,scale:1,duration:.22,stagger:.08,ease:'back.out(2)',delay:.65+(ci*.1)});
+gsap.to(stars,{opacity:1,scale:1,duration:.22,stagger:.08,ease:'back.out(2)',delay:.45+(ci*.1)});
 });
 },.1);
+
+// CTA reveal
 io('#pk-sec',function(){
-gsap.fromTo('#ctaL',{opacity:0,x:-40},{opacity:1,x:0,duration:.8,ease:'power3.out',delay:.2});
-gsap.fromTo('#ctaR',{opacity:0,x:40},{opacity:1,x:0,duration:.8,ease:'power3.out',delay:.35});
-gsap.fromTo('#ctadiv',{opacity:0,scaleY:0},{opacity:1,scaleY:1,duration:.9,ease:'power2.out',delay:.55});
-gsap.fromTo('#tgrid .titem',{opacity:0,y:28,scale:.97},{opacity:1,y:0,scale:1,duration:.68,stagger:.12,ease:'power3.out',delay:.5});
-var tc=[{el:'#tn1',t:750,s:'+'},{el:'#tn2',t:50,s:'+'},{el:'#tn3',t:0,s:'%'},{el:'#tn4',t:4.8,s:'',d:true}];
-tc.forEach(function(x,i){if(x.t===0){document.querySelector(x.el).textContent='0%';return;}var o={n:0},el=document.querySelector(x.el);gsap.to(o,{n:x.t,duration:2,ease:'power2.out',delay:.8+(i*.12),onUpdate:function(){el.textContent=x.d?o.n.toFixed(1)+x.s:Math.round(o.n)+x.s;}});});
+gsap.fromTo('#ctaBlurb',{opacity:0,y:20},{opacity:1,y:0,duration:.7,ease:'power3.out'});
+gsap.fromTo('.cc-card',{opacity:0,y:16,scale:.85},{opacity:1,y:0,scale:1,duration:.55,stagger:.12,ease:'back.out(2)',delay:.15});
+gsap.fromTo('#ctaL',{opacity:0,x:-40},{opacity:1,x:0,duration:.8,ease:'power3.out',delay:.1});
+gsap.fromTo('#ctaR',{opacity:0,x:40},{opacity:1,x:0,duration:.8,ease:'power3.out',delay:.25});
+gsap.fromTo('#ctadiv',{opacity:0,scaleY:0},{opacity:1,scaleY:1,duration:.9,ease:'power2.out',delay:.4});
 },.1);
-})();
 </script>
