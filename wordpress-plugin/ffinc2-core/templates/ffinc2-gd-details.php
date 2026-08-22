@@ -387,7 +387,7 @@ $cat_link   = ($cat_term && !is_wp_error(get_term_link($cat_term))) ? get_term_l
    for suppliers, services for providers), so this is branch-agnostic. */
 $product_names = array();
 foreach ($catalog as $ci) { if (!empty($ci['name'])) $product_names[] = $ci['name']; }
-$qattr_self = 'data-supplier-id="' . esc_attr($pid) . '" data-supplier-name="' . esc_attr($name) . '" data-supplier-logo="' . esc_attr($initials) . '" data-supplier-location="' . esc_attr($loc) . '" data-supplier-products="' . esc_attr(implode(',', $product_names)) . '"';
+$qattr_self = 'data-supplier-id="' . esc_attr($pid) . '" data-supplier-name="' . esc_attr($name) . '" data-supplier-logo="' . esc_attr($initials) . '" data-supplier-location="' . esc_attr($loc) . '" data-supplier-products="' . esc_attr(implode(',', $product_names)) . '" data-supplier-url="' . esc_url(get_permalink($pid)) . '"';
 ?>
 
 <!-- ============================================================
@@ -807,6 +807,17 @@ body.light-mode .ffdt-svc .dt-prod-tag{color:#6D28D9 !important}
    included); going lower would slide the breadcrumb under the logo. */
 .ffdt .dt-hero{padding-top:74px}
 }
+/* RFQ submit feedback. The modal itself is styled by design-system.css; these
+   are the states added when the form was given a real backend. */
+.qm-msg{margin-top:12px;font-size:13px;line-height:1.55;border-radius:10px;padding:0;max-height:0;overflow:hidden;transition:max-height .25s ease,padding .25s ease}
+.qm-msg.ok,.qm-msg.err{padding:11px 14px;max-height:260px}
+.qm-msg.ok{background:rgba(46,204,154,.1);border:1px solid rgba(46,204,154,.38);color:#52DEB5}
+.qm-msg.err{background:rgba(245,114,107,.1);border:1px solid rgba(245,114,107,.4);color:#F5726B}
+body.light-mode .qm-msg.ok{background:rgba(46,204,154,.14);border-color:rgba(24,150,110,.5);color:#12855F}
+body.light-mode .qm-msg.err{background:rgba(214,60,52,.09);border-color:rgba(214,60,52,.4);color:#B3241C}
+.qm-sub-btn[disabled]{opacity:.6;cursor:default}
+/* On success the fields are done with — collapse them and leave the receipt. */
+#qm-form.qm-done .qm-grid,#qm-form.qm-done .qm-sub-btn{display:none}
 </style>
 
 <div class="ffdt <?php echo $is_service ? 'ffdt-svc' : 'ffdt-sup'; ?>">
@@ -1199,7 +1210,7 @@ if ($em_rest > 0) { echo '<span class="dt-mkt dt-mkt-more">+' . (int) $em_rest .
     $sprods = array();
     if ($is_service) { for ($spn = 1; $spn <= 4; $spn++) { $spv = trim((string) ffinc2_gd_meta($spid, "service_{$spn}_name")); if ($spv !== '') $sprods[] = $spv; } }
     else { for ($spn = 1; $spn <= 5; $spn++) { $spv = trim((string) ffinc2_gd_meta($spid, "product_{$spn}_name")); if ($spv !== '') $sprods[] = $spv; } }
-    $sqattr = 'data-supplier-id="' . esc_attr($spid) . '" data-supplier-name="' . esc_attr($sname) . '" data-supplier-logo="' . esc_attr($sini) . '" data-supplier-location="' . esc_attr($sloc) . '" data-supplier-products="' . esc_attr(implode(',', $sprods)) . '"';
+    $sqattr = 'data-supplier-id="' . esc_attr($spid) . '" data-supplier-name="' . esc_attr($sname) . '" data-supplier-logo="' . esc_attr($sini) . '" data-supplier-location="' . esc_attr($sloc) . '" data-supplier-products="' . esc_attr(implode(',', $sprods)) . '"'. ' data-supplier-url="' . esc_url(get_permalink($spid)) . '"';
     ?>
 <div class="dt-sim-card">
 <div class="dt-sim-top">
@@ -1230,28 +1241,47 @@ if ($em_rest > 0) { echo '<span class="dt-mkt dt-mkt-more">+' . (int) $em_rest .
 </div>
 <div class="qm-h">Request a Quote</div>
 <div class="qm-sub">Complete the form below — the <?php echo esc_html($noun_lc); ?> will respond directly to your email. FFInc charges zero commission.</div>
-<form id="qm-form" onsubmit="return false">
+<form id="qm-form" novalidate
+      data-form-id="<?php echo $is_service ? 11 : 10; ?>"
+      data-ajax="<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>"
+      data-post-id="<?php echo esc_attr($pid); ?>">
+<input type="hidden" name="listing_id" id="qm-listing-id" value="<?php echo esc_attr($pid); ?>">
+<input type="hidden" name="listing_name" id="qm-listing-name" value="<?php echo esc_attr($name); ?>">
+<input type="hidden" name="listing_email" id="qm-listing-email" value="">
+<input type="hidden" name="listing_url" id="qm-listing-url" value="<?php echo esc_url(get_permalink($pid)); ?>">
+<?php
+/* Fluent Forms' honeypot + protection token. FF's own renderer emits these;
+   this modal is hand-built, so it supplies them itself. They are refreshed
+   just before submit because the token only lives an hour. */
+if (function_exists('ffinc2_rfq_spam_inputs')) {
+    foreach (ffinc2_rfq_spam_inputs($is_service ? 11 : 10) as $sp_name => $sp_val) {
+        printf('<input type="hidden" class="qm-spam-in" name="%s" value="%s">' . "\n",
+            esc_attr($sp_name), esc_attr($sp_val));
+    }
+}
+?>
 <div class="qm-grid">
-<div class="qm-f"><label class="qm-lb">Your Name</label><input class="qm-in" type="text" placeholder="Jane Doe"></div>
-<div class="qm-f"><label class="qm-lb">Company Name</label><input class="qm-in" type="text" placeholder="Acme Foods Ltd"></div>
-<div class="qm-f"><label class="qm-lb">Email Address</label><input class="qm-in" type="email" placeholder="you@company.com"></div>
-<div class="qm-f"><label class="qm-lb">Country</label><input class="qm-in" type="text" placeholder="United Kingdom"></div>
+<div class="qm-f"><label class="qm-lb" for="qm-your-name">Your Name</label><input class="qm-in" id="qm-your-name" name="your_name" type="text" required placeholder="Jane Doe"></div>
+<div class="qm-f"><label class="qm-lb" for="qm-company">Company Name</label><input class="qm-in" id="qm-company" name="company_name" type="text" placeholder="Acme Foods Ltd"></div>
+<div class="qm-f"><label class="qm-lb" for="qm-email">Email Address</label><input class="qm-in" id="qm-email" name="email" type="email" required placeholder="you@company.com"></div>
+<div class="qm-f"><label class="qm-lb" for="qm-country">Country</label><input class="qm-in" id="qm-country" name="country" type="text" placeholder="United Kingdom"></div>
 <?php if ($is_service) { /* Service branch — extended RFQ fields. */ ?>
-<div class="qm-f"><label class="qm-lb">Service Required</label><select class="qm-se" id="qm-products"><?php foreach ($product_names as $pn) { echo '<option>' . esc_html($pn) . '</option>'; } ?><option>Other</option></select></div>
-<div class="qm-f"><label class="qm-lb">Estimated Volume / Throughput</label><input class="qm-in" type="text" placeholder="e.g. 500 pallets/month or 10 containers/week"></div>
-<div class="qm-f"><label class="qm-lb">Frequency</label><select class="qm-se"><option>One-off</option><option>Weekly</option><option>Monthly</option><option>Ongoing Contract</option></select></div>
-<div class="qm-f"><label class="qm-lb">Preferred Start Date</label><input class="qm-in" type="text" placeholder="e.g. Within 30 days"></div>
-<div class="qm-f full"><label class="qm-lb">Additional Requirements</label><textarea class="qm-ta" rows="4" placeholder="Certifications needed, temperature range, coverage regions, special handling requirements..."></textarea></div>
+<div class="qm-f"><label class="qm-lb" for="qm-products">Service Required</label><select class="qm-se" id="qm-products" name="service_required"><?php foreach ($product_names as $pn) { echo '<option>' . esc_html($pn) . '</option>'; } ?><option>Other</option></select></div>
+<div class="qm-f"><label class="qm-lb" for="qm-volume">Estimated Volume / Throughput</label><input class="qm-in" id="qm-volume" name="estimated_volume" type="text" placeholder="e.g. 500 pallets/month or 10 containers/week"></div>
+<div class="qm-f"><label class="qm-lb" for="qm-frequency">Frequency</label><select class="qm-se" id="qm-frequency" name="frequency"><option>One-off</option><option>Weekly</option><option>Monthly</option><option>Ongoing Contract</option></select></div>
+<div class="qm-f"><label class="qm-lb" for="qm-start">Preferred Start Date</label><input class="qm-in" id="qm-start" name="preferred_start_date" type="text" placeholder="e.g. Within 30 days"></div>
+<div class="qm-f full"><label class="qm-lb">Additional Requirements</label><textarea class="qm-ta" name="additional_requirements" rows="4" placeholder="Certifications needed, temperature range, coverage regions, special handling requirements..."></textarea></div>
 <?php } else { /* Supplier branch — extended RFQ fields. */ ?>
-<div class="qm-f"><label class="qm-lb">Product Required</label><select class="qm-se" id="qm-products"><?php foreach ($product_names as $pn) { echo '<option>' . esc_html($pn) . '</option>'; } ?><option>Other</option></select></div>
-<div class="qm-f"><label class="qm-lb">Quantity / MOQ Required</label><input class="qm-in" type="text" placeholder="e.g. 5 Metric Tonnes"></div>
-<div class="qm-f"><label class="qm-lb">Delivery Terms</label><select class="qm-se"><option>FOB</option><option>CIF</option><option>CFR</option><option>EXW</option><option>DDP</option></select></div>
-<div class="qm-f"><label class="qm-lb">Target Price per MT</label><input class="qm-in" type="text" placeholder="e.g. $1,200/MT"></div>
-<div class="qm-f full"><label class="qm-lb">Additional Requirements</label><textarea class="qm-ta" rows="4" placeholder="Certifications needed, packaging specs, delivery timeline, labelling requirements..."></textarea></div>
+<div class="qm-f"><label class="qm-lb" for="qm-products">Product Required</label><select class="qm-se" id="qm-products" name="product_required"><?php foreach ($product_names as $pn) { echo '<option>' . esc_html($pn) . '</option>'; } ?><option>Other</option></select></div>
+<div class="qm-f"><label class="qm-lb" for="qm-qty">Quantity / MOQ Required</label><input class="qm-in" id="qm-qty" name="quantity_moq" type="text" placeholder="e.g. 5 Metric Tonnes"></div>
+<div class="qm-f"><label class="qm-lb" for="qm-terms">Delivery Terms</label><select class="qm-se" id="qm-terms" name="delivery_terms"><option>FOB</option><option>CIF</option><option>CFR</option><option>EXW</option><option>DDP</option></select></div>
+<div class="qm-f"><label class="qm-lb" for="qm-price">Target Price per MT</label><input class="qm-in" id="qm-price" name="target_price" type="text" placeholder="e.g. $1,200/MT"></div>
+<div class="qm-f full"><label class="qm-lb">Additional Requirements</label><textarea class="qm-ta" name="additional_requirements" rows="4" placeholder="Certifications needed, packaging specs, delivery timeline, labelling requirements..."></textarea></div>
 <?php } ?>
 </div>
-<button class="qm-sub-btn" type="submit"><i class="ti ti-send" aria-hidden="true"></i>Send Quote Request</button>
-<div class="qm-priv">Your details are sent directly to the <?php echo esc_html($noun_lc); ?>. FrozenFoodInc does not store quote request data or charge any commission.</div>
+<button class="qm-sub-btn" type="submit"><i class="ti ti-send" aria-hidden="true"></i><span class="qm-btn-t">Send Quote Request</span></button>
+<div class="qm-msg" id="qm-msg" role="status" aria-live="polite"></div>
+<div class="qm-priv">Your enquiry goes straight to the <?php echo esc_html($noun_lc); ?>, who replies to you directly. FrozenFoodInc records the request to operate and improve the marketplace, and never charges commission on it.</div>
 </form>
 </div>
 </div>
@@ -1283,11 +1313,20 @@ if ($em_rest > 0) { echo '<span class="dt-mkt dt-mkt-more">+' . (int) $em_rest .
   });
   /* Quote modal */
   var ov=document.getElementById('qm-ov'),card=document.getElementById('qm-card');
-  function openModal(name,logo,loc,products){
+  function openModal(name,logo,loc,products,lid,lurl){
     var sn=document.getElementById('qm-sn'),lg=document.getElementById('qm-logo'),sl=document.getElementById('qm-sl');
     if(name&&sn)sn.textContent=name;
     if(logo&&lg)lg.textContent=logo;
     if(loc!=null&&sl)sl.textContent=loc;
+    /* Carry the listing this modal was opened for into the hidden fields, so a
+       quote raised from a similar-listing card is attributed to that listing
+       and not to the page we happen to be on. The recipient address is not set
+       here on purpose — the server resolves it from listing_id. */
+    var hId=document.getElementById('qm-listing-id'),hNm=document.getElementById('qm-listing-name'),hUrl=document.getElementById('qm-listing-url');
+    if(hId&&lid)hId.value=lid;
+    if(hNm&&name)hNm.value=name;
+    if(hUrl&&lurl)hUrl.value=lurl;
+    resetQuoteForm();
     /* Rebuild the Product/Service Required options from the trigger (both branches). */
     var psel=document.getElementById('qm-products');
     if(psel&&products!=null){
@@ -1307,8 +1346,123 @@ if ($em_rest > 0) { echo '<span class="dt-mkt dt-mkt-more">+' . (int) $em_rest .
   }
   document.addEventListener('click',function(e){
     var t=e.target.closest?e.target.closest('[data-supplier-name]'):null;
-    if(t){openModal(t.getAttribute('data-supplier-name'),t.getAttribute('data-supplier-logo'),t.getAttribute('data-supplier-location'),t.getAttribute('data-supplier-products'));}
+    if(t){openModal(t.getAttribute('data-supplier-name'),t.getAttribute('data-supplier-logo'),t.getAttribute('data-supplier-location'),t.getAttribute('data-supplier-products'),t.getAttribute('data-supplier-id'),t.getAttribute('data-supplier-url'));}
   });
+
+  /* ---- RFQ submission -----------------------------------------------------
+     Posts through Fluent Forms' own handler (admin-ajax action
+     fluentform_submit), which stores the entry in wp_fluentform_submissions
+     and fires the notifications as a downstream effect of that storage. The
+     controller expects `data` as a urlencoded query string, so the collected
+     FormData is serialised into that single parameter. */
+  var qform=document.getElementById('qm-form');
+  function resetQuoteForm(){
+    if(!qform)return;
+    qform.classList.remove('qm-done');
+    var m=document.getElementById('qm-msg'); if(m){m.textContent='';m.className='qm-msg';}
+    var b=qform.querySelector('.qm-sub-btn'); if(b){b.disabled=false;}
+    var bt=qform.querySelector('.qm-btn-t'); if(bt)bt.textContent='Send Quote Request';
+  }
+  if(qform){
+    qform.addEventListener('submit',function(e){
+      e.preventDefault();
+      if(qform.dataset.busy==='1')return;
+      var btn=qform.querySelector('.qm-sub-btn'),
+          btnT=qform.querySelector('.qm-btn-t'),
+          msg=document.getElementById('qm-msg');
+      function say(text,kind){ if(!msg)return; msg.textContent=text; msg.className='qm-msg '+(kind||''); }
+
+      /* Let the browser surface required/format problems first. */
+      if(typeof qform.checkValidity==='function'&&!qform.checkValidity()){
+        var bad=qform.querySelector(':invalid');
+        if(bad&&bad.focus)bad.focus();
+        say('Please add your name and a valid email address.','err');
+        return;
+      }
+
+      var ajax=qform.getAttribute('data-ajax'),
+          formId=qform.getAttribute('data-form-id');
+      if(!ajax||!formId){say('This form is not configured correctly. Please email us instead.','err');return;}
+
+      /* Refresh the honeypot/token pair first — the token expires after an
+         hour and the page may have been open longer than that. If the refresh
+         fails for any reason we fall back to the ones rendered with the page. */
+      function freshSpamInputs(){
+        return fetch(ajax+'?action=ffinc2_rfq_token&form_id='+encodeURIComponent(formId),
+                     {credentials:'same-origin',headers:{'X-Requested-With':'XMLHttpRequest'}})
+          .then(function(r){return r.ok?r.json():null;})
+          .then(function(j){
+            if(j&&j.success&&j.data){
+              Object.keys(j.data).forEach(function(k){
+                var el=qform.querySelector('input[name="'+k+'"]');
+                if(el){el.value=j.data[k];}
+                else{
+                  var n=document.createElement('input');
+                  n.type='hidden';n.className='qm-spam-in';n.name=k;n.value=j.data[k];
+                  qform.appendChild(n);
+                }
+              });
+            }
+          })
+          .catch(function(){});
+      }
+
+      freshSpamInputs().then(function(){ sendQuote(); });
+
+      function sendQuote(){
+      var inner=new URLSearchParams();
+      new FormData(qform).forEach(function(v,k){inner.append(k,v);});
+      inner.append('__fluent_form_embded_post_id',qform.getAttribute('data-post-id')||'0');
+      inner.append('_wp_http_referer',location.pathname+location.search);
+
+      var body=new URLSearchParams();
+      body.append('action','fluentform_submit');
+      body.append('form_id',formId);
+      body.append('data',inner.toString());
+
+      qform.dataset.busy='1';
+      if(btn)btn.disabled=true;
+      if(btnT)btnT.textContent='Sending…';
+      say('','');
+
+      fetch(ajax,{method:'POST',credentials:'same-origin',
+        headers:{'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8','X-Requested-With':'XMLHttpRequest'},
+        body:body.toString()})
+        .then(function(r){return r.text().then(function(t){
+          var j=null; try{j=JSON.parse(t);}catch(_){}
+          return {ok:r.ok,status:r.status,json:j,text:t};
+        });})
+        .then(function(res){
+          if(res.ok){
+            var conf=res.json&&res.json.result&&res.json.result.message;
+            qform.classList.add('qm-done');
+            say(conf?String(conf).replace(/<[^>]*>/g,''):'Thank you — your quote request has been sent. The listing will reply to your email directly.','ok');
+            if(btnT)btnT.textContent='Request sent';
+            qform.reset();
+            return;
+          }
+          /* FF returns 422 with an errors map on validation failure. */
+          var first='';
+          if(res.json&&res.json.errors){
+            var errs=res.json.errors;
+            for(var k in errs){ if(Object.prototype.hasOwnProperty.call(errs,k)){
+              first=Array.isArray(errs[k])?errs[k][0]:(typeof errs[k]==='string'?errs[k]:'');
+              if(first)break;
+            }}
+          }
+          say(first||('Sorry — the request could not be sent (error '+res.status+'). Please try again.'),'err');
+          if(btn)btn.disabled=false;
+          if(btnT)btnT.textContent='Send Quote Request';
+        })
+        .catch(function(){
+          say('Network problem — your request was not sent. Please check your connection and try again.','err');
+          if(btn)btn.disabled=false;
+          if(btnT)btnT.textContent='Send Quote Request';
+        })
+        .then(function(){ qform.dataset.busy=''; });
+      }
+    });
+  }
   var x=document.getElementById('qm-x'); if(x)x.addEventListener('click',closeModal);
   if(ov)ov.addEventListener('click',function(e){if(e.target===ov)closeModal();});
   document.addEventListener('keydown',function(e){if(e.key==='Escape'&&ov&&ov.classList.contains('open'))closeModal();});

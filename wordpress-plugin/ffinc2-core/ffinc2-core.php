@@ -100,3 +100,112 @@ function ffinc2_load_gd_details_template($template) {
     }
     return $template;
 }
+
+/**
+ * RFQ forms: resolve the listing fields server-side from listing_id.
+ *
+ * The RFQ modal deliberately sends only the listing_id. The recipient address
+ * is never placed in the page markup and never accepted from the request:
+ *
+ *   - keeping contact_email out of the DOM stops address harvesting, and
+ *   - deriving the recipient here stops the endpoint being used as an open
+ *     relay by POSTing an arbitrary listing_email.
+ *
+ * Runs on fluentform/insert_response_data, which fires before the entry is
+ * stored, so the stored submission and the notifications built from it both
+ * see the resolved values.
+ *
+ * @param array $formData     Submitted data, about to be stored.
+ * @param int   $formId       Fluent Forms form id.
+ * @param array $inputConfigs Parsed field config (unused).
+ * @return array
+ */
+add_filter('fluentform/insert_response_data', 'ffinc2_rfq_resolve_listing', 10, 3);
+function ffinc2_rfq_resolve_listing($formData, $formId, $inputConfigs = array()) {
+    $rfq_forms = apply_filters('ffinc2_rfq_form_ids', array(10, 11));
+    if (!in_array((int) $formId, array_map('intval', $rfq_forms), true)) {
+        return $formData;
+    }
+
+    $listing_id = isset($formData['listing_id']) ? absint($formData['listing_id']) : 0;
+    // Never let a submitted address through, even if the id is unusable.
+    $formData['listing_email'] = '';
+    if (!$listing_id) {
+        return $formData;
+    }
+
+    $post = get_post($listing_id);
+    if (!$post || !in_array($post->post_type, array('gd_supplier', 'gd_services'), true)
+        || $post->post_status !== 'publish') {
+        return $formData;
+    }
+
+    $email = '';
+    if (function_exists('geodir_get_post_meta')) {
+        $email = (string) geodir_get_post_meta($listing_id, 'contact_email', true);
+    }
+    $email = sanitize_email($email);
+
+    $formData['listing_email'] = is_email($email) ? $email : '';
+    $formData['listing_name']  = get_the_title($listing_id);
+    $formData['listing_url']   = get_permalink($listing_id);
+
+    return $formData;
+}
+
+/**
+ * Anti-spam inputs Fluent Forms expects on an RFQ submission.
+ *
+ * FF's own renderer emits these; the RFQ modal is hand-built, so it has to
+ * supply them itself:
+ *
+ *   - honeypot: a field that must be present and empty
+ *   - protection token: an encrypted timestamp|form|field triple
+ *
+ * Both are only enforced when the matching global setting is on, and both are
+ * harmless when it is off, so they are always returned.
+ *
+ * @param int $form_id
+ * @return array name => value pairs to submit alongside the form data.
+ */
+function ffinc2_rfq_spam_inputs($form_id) {
+    $form_id = absint($form_id);
+    $out = array();
+
+    $honeypot = apply_filters('fluentform/honeypot_name', 'item_' . $form_id . '__fluent_sf', $form_id);
+    $out[$honeypot] = '';
+
+    $token_class = 'FluentForm\\App\\Modules\\Form\\TokenBasedSpamProtection';
+    if (is_callable(array($token_class, 'getConversationalTokenInput'))) {
+        $token = call_user_func(array($token_class, 'getConversationalTokenInput'), $form_id);
+        if (is_array($token)) {
+            $out = array_merge($out, $token);
+        }
+    }
+
+    return $out;
+}
+
+/**
+ * Mint a fresh set of those inputs on demand.
+ *
+ * The protection token expires an hour after it is generated, so a listing page
+ * left open longer than that would otherwise fail with FF's opaque "Suspicious
+ * activity detected" message. The modal calls this immediately before
+ * submitting, which keeps the page valid for as long as it stays open.
+ *
+ * Only the RFQ forms are mintable here, and this grants no more than loading
+ * the page already does.
+ */
+add_action('wp_ajax_ffinc2_rfq_token', 'ffinc2_rfq_token_endpoint');
+add_action('wp_ajax_nopriv_ffinc2_rfq_token', 'ffinc2_rfq_token_endpoint');
+function ffinc2_rfq_token_endpoint() {
+    $form_id   = isset($_GET['form_id']) ? absint($_GET['form_id']) : 0;
+    $rfq_forms = array_map('intval', apply_filters('ffinc2_rfq_form_ids', array(10, 11)));
+
+    if (!in_array($form_id, $rfq_forms, true)) {
+        wp_send_json_error(array('message' => 'Unrecognised form.'), 400);
+    }
+
+    wp_send_json_success(ffinc2_rfq_spam_inputs($form_id));
+}

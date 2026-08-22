@@ -141,6 +141,14 @@ body.light-mode .pg-aura{opacity:.5}
 .sc:hover .sc-cta{background:var(--ac,#4A9FE0);color:#050D18}
 .more-btn{display:block;margin:0 auto;background:transparent;border:1px solid rgba(74,159,224,.28);color:#8DCAF2;padding:13px 32px;border-radius:10px;font-size:13px;font-weight:500;cursor:pointer;font-family:'Inter';transition:all .22s}
 .more-btn:hover{background:rgba(74,159,224,.1);border-color:rgba(74,159,224,.5);color:#fff}
+/* Wired CTAs: these were <button>s, now real links — keep them visually identical
+   and give keyboard users a visible focus ring. */
+a.hero-chip,a.more-btn,a.cta-btn{text-decoration:none}
+a.more-btn{width:max-content}
+.bento a.bcard{text-decoration:none;color:inherit}
+.hero-sb{align-items:center}
+.scr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+a.hero-chip:focus-visible,a.more-btn:focus-visible,a.cta-btn:focus-visible,.bento a.bcard:focus-visible,.hero-in:focus-visible,.hero-btn:focus-visible{outline:2px solid #8DCAF2;outline-offset:3px}
 
 /* ============================================================
    HOW IT WORKS + TRUST STATS — live animation kept, stats merged in
@@ -445,16 +453,16 @@ body.light-mode .pf-mq-item{color:#3A5E75}
 <div class="hero-pill"><div class="hero-dot"></div><span class="hero-pt">Live · Global B2B Database</span></div>
 <h1>The Global Wholesale Frozen Food Database</h1>
 <p class="hero-sub">Search the world's most comprehensive database of verified frozen food suppliers — manufacturers, distributors &amp; cold chain providers across 50+ countries.</p>
-<div class="hero-sb">
-<div class="hero-si"><i class="ti ti-search"></i><input class="hero-in" placeholder="Search suppliers, products, regions..."></div>
-<button class="hero-btn"><i class="ti ti-search" style="font-size:13px;margin-right:5px"></i>Search</button>
-</div>
+<form class="hero-sb" method="get" action="<?php echo esc_url( home_url( '/search/' ) ); ?>" role="search">
+<div class="hero-si"><i class="ti ti-search" aria-hidden="true"></i><label class="scr-only" for="hero-q">Search suppliers, products, regions</label><input class="hero-in" id="hero-q" type="search" name="s" placeholder="Search suppliers, products, regions..."></div>
+<button class="hero-btn" type="submit"><i class="ti ti-search" style="font-size:13px;margin-right:5px" aria-hidden="true"></i>Search</button>
+</form>
 <div class="hero-ql"><span class="hero-ql-l">Browse by:</span>
-<span class="hero-chip c-veg" style="color:#2ECC9A;background:rgba(46,204,154,.09);border-color:rgba(46,204,154,.24)"><i class="ti ti-leaf"></i>Fruits &amp; Veg</span>
-<span class="hero-chip c-poultry" style="color:#4A9FE0;background:rgba(74,159,224,.09);border-color:rgba(74,159,224,.24)">Poultry</span>
-<span class="hero-chip c-beef" style="color:#F59E0B;background:rgba(245,158,11,.09);border-color:rgba(245,158,11,.24)">Beef &amp; Meat</span>
-<span class="hero-chip c-seafood" style="color:#52DEB5;background:rgba(82,222,181,.09);border-color:rgba(82,222,181,.24)">Seafood</span>
-<span class="hero-chip c-cold" style="color:#A78BFA;background:rgba(167,139,250,.09);border-color:rgba(167,139,250,.24)"><i class="ti ti-truck"></i>Cold Chain</span>
+<a class="hero-chip c-veg" href="<?php echo esc_url( home_url( '/suppliers/category/frozen-fruits-vegetables/' ) ); ?>" style="color:#2ECC9A;background:rgba(46,204,154,.09);border-color:rgba(46,204,154,.24)"><i class="ti ti-leaf"></i>Fruits &amp; Veg</a>
+<a class="hero-chip c-poultry" href="<?php echo esc_url( home_url( '/suppliers/category/frozen-poultry/' ) ); ?>" style="color:#4A9FE0;background:rgba(74,159,224,.09);border-color:rgba(74,159,224,.24)">Poultry</a>
+<a class="hero-chip c-beef" href="<?php echo esc_url( home_url( '/suppliers/category/frozen-beef-meat/' ) ); ?>" style="color:#F59E0B;background:rgba(245,158,11,.09);border-color:rgba(245,158,11,.24)">Beef &amp; Meat</a>
+<a class="hero-chip c-seafood" href="<?php echo esc_url( home_url( '/suppliers/category/frozen-seafood/' ) ); ?>" style="color:#52DEB5;background:rgba(82,222,181,.09);border-color:rgba(82,222,181,.24)">Seafood</a>
+<a class="hero-chip c-cold" href="<?php echo esc_url( home_url( '/services/category/cold-chain-services/' ) ); ?>" style="color:#A78BFA;background:rgba(167,139,250,.09);border-color:rgba(167,139,250,.24)"><i class="ti ti-truck"></i>Cold Chain</a>
 </div>
 </div>
 <div class="hero-visual">
@@ -521,30 +529,30 @@ if (!empty($ffhome_items)) {
 <h2 class="cats-h">Wholesale frozen categories, <em>built for sourcing</em></h2>
 <p class="cats-sub">Four core categories, one cold chain layer connecting all of them. Zero middlemen, direct contact with every listing.</p>
 <div class="bento">
-<div class="bcard big" style="border-color:rgba(74,159,224,.22);background:linear-gradient(155deg,rgba(74,159,224,.1),rgba(18,34,52,.55) 60%)">
+<a class="bcard big" style="border-color:rgba(74,159,224,.22);background:linear-gradient(155deg,rgba(74,159,224,.1),rgba(18,34,52,.55) 60%)" href="<?php echo esc_url( home_url( '/suppliers/category/frozen-poultry/' ) ); ?>" aria-label="Browse Frozen Poultry suppliers">
 <div class="bicon" style="background:rgba(74,159,224,.16);border:1px solid rgba(74,159,224,.35)"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#4A9FE0" stroke-width="1.6"><path d="M9 21c0-6 1-10 1-13.5a2 2 0 114 0c0 3.5 1 7.5 1 13.5"/><path d="M8 21h8"/><path d="M10.2 10c1.2.6 2.4.6 3.6 0"/></svg></div>
 <div class="bname">Frozen Poultry</div>
 <div class="bdesc">Whole birds, portioned cuts and value-added lines from halal-certified exporters across 38+ countries.</div>
 <div class="bfoot"><span class="bcount"><b>180+</b> suppliers</span><div class="barr" style="border-color:rgba(74,159,224,.3);color:#4A9FE0"><i class="ti ti-arrow-right" style="font-size:14px"></i></div></div>
-</div>
-<div class="bcard" style="border-color:rgba(46,204,154,.22);background:linear-gradient(155deg,rgba(46,204,154,.1),rgba(18,34,52,.55) 65%)">
+</a>
+<a class="bcard" style="border-color:rgba(46,204,154,.22);background:linear-gradient(155deg,rgba(46,204,154,.1),rgba(18,34,52,.55) 65%)" href="<?php echo esc_url( home_url( '/suppliers/category/frozen-fruits-vegetables/' ) ); ?>" aria-label="Browse Fruits &amp; Vegetables suppliers">
 <div class="bicon" style="background:rgba(46,204,154,.16);border:1px solid rgba(46,204,154,.35)"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2ECC9A" stroke-width="1.6"><path d="M6 20c8 0 12-4 12-12 0-1-.1-2-.3-3-6 0-10 2-11 6"/><path d="M6 20c0-4 1-7 3-9"/></svg></div>
 <div class="bname">Fruits &amp; Vegetables</div>
 <div class="bdesc">IQF berries, tropical fruit and organic produce. Fastest-growing category — 6.2% CAGR.</div>
 <div class="bfoot"><span class="bcount">Launching — <b>be first listed</b></span><div class="barr" style="border-color:rgba(46,204,154,.3);color:#2ECC9A"><i class="ti ti-arrow-right" style="font-size:14px"></i></div></div>
-</div>
-<div class="bcard" style="border-color:rgba(245,158,11,.22);background:linear-gradient(155deg,rgba(245,158,11,.1),rgba(18,34,52,.55) 65%)">
+</a>
+<a class="bcard" style="border-color:rgba(245,158,11,.22);background:linear-gradient(155deg,rgba(245,158,11,.1),rgba(18,34,52,.55) 65%)" href="<?php echo esc_url( home_url( '/suppliers/category/frozen-beef-meat/' ) ); ?>" aria-label="Browse Beef &amp; Meat suppliers">
 <div class="bicon" style="background:rgba(245,158,11,.16);border:1px solid rgba(245,158,11,.35)"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="1.6"><ellipse cx="12" cy="12" rx="8.5" ry="5.5" transform="rotate(-18 12 12)"/><path d="M6.8 10.2c3.2 1.6 7.2 1.6 10.4 0M6.3 13.6c3.7 1.6 7.7 1.6 11.4 0" opacity=".55"/></svg></div>
 <div class="bname">Beef &amp; Meat</div>
 <div class="bdesc">Prime cuts and specialty meats, USDA-inspected across 48+ countries.</div>
 <div class="bfoot"><span class="bcount"><b>210+</b> suppliers</span><div class="barr" style="border-color:rgba(245,158,11,.3);color:#F59E0B"><i class="ti ti-arrow-right" style="font-size:14px"></i></div></div>
-</div>
-<div class="bcard" style="grid-column:span 2;border-color:rgba(82,222,181,.22);background:linear-gradient(155deg,rgba(82,222,181,.1),rgba(18,34,52,.55) 65%);flex-direction:row;align-items:center;justify-content:space-between;gap:24px">
+</a>
+<a class="bcard" style="grid-column:span 2;border-color:rgba(82,222,181,.22);background:linear-gradient(155deg,rgba(82,222,181,.1),rgba(18,34,52,.55) 65%);flex-direction:row;align-items:center;justify-content:space-between;gap:24px" href="<?php echo esc_url( home_url( '/suppliers/category/frozen-seafood/' ) ); ?>" aria-label="Browse Frozen Seafood suppliers">
 <div><div class="bicon" style="background:rgba(82,222,181,.16);border:1px solid rgba(82,222,181,.35)"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#52DEB5" stroke-width="1.6"><path d="M12 3c-3.2 2.2-5.2 5.4-5.2 9a5.2 5.2 0 0010.4 0c0-3.6-2-6.8-5.2-9z"/><path d="M12 4v13"/></svg></div>
 <div class="bname">Frozen Seafood</div>
 <div class="bdesc">Fillets, shrimp and shellfish from MSC-certified sustainable sources.</div></div>
 <div style="text-align:right"><span class="bcount" style="display:block;margin-bottom:10px"><b>165+</b> suppliers</span><div class="barr" style="border-color:rgba(82,222,181,.3);color:#52DEB5;margin-left:auto"><i class="ti ti-arrow-right" style="font-size:14px"></i></div></div>
-</div>
+</a>
 </div>
 </div>
 </section>
@@ -566,7 +574,7 @@ if (!empty($ffhome_items)) {
 <div class="sc" style="--ac:#F59E0B"><div class="sc-head"><div class="sc-logo" style="border:1px solid rgba(245,158,11,.3)"><div class="sc-li" style="background:#F59E0B"></div><span class="sc-lt" style="color:#F59E0B">HB</span></div><div class="sc-ng"><div class="sc-name">Highland Beef Co</div><div class="sc-loc"><i class="ti ti-map-pin" style="font-size:11px;color:#F59E0B"></i>Ireland · Est. 1987</div></div><div class="sc-bdgs"><span class="sc-f"><i class="ti ti-star" style="font-size:9.5px"></i>Featured</span><span class="sc-v"><i class="ti ti-circle-check" style="font-size:9.5px"></i>Verified</span></div></div><div class="sc-tags"><span class="sc-tag">Grass-Fed</span><span class="sc-tag">EU Origin</span></div><p class="sc-desc">Grass-fed beef from EU-inspected facilities, supplying retail and foodservice clients across 30+ countries.</p><div class="sc-stats"><div class="sc-stat"><span class="sc-sv">3T</span><span class="sc-sl">Min. Order</span></div><div class="sc-stat"><span class="sc-sv">30+</span><span class="sc-sl">Countries</span></div><div class="sc-stat"><span class="sc-sv">&lt;10h</span><span class="sc-sl">Response</span></div></div><div class="sc-certs"><span class="sc-cert">EU Organic</span><span class="sc-cert">BRC Grade A</span></div><div class="sc-foot"><div class="sc-rate">★★★★★ <span>4.9 · 21 reviews</span></div><button class="sc-cta">View Profile <i class="ti ti-arrow-right" style="font-size:12px"></i></button></div></div>
 <div class="sc" style="--ac:#52DEB5"><div class="sc-head"><div class="sc-logo" style="border:1px solid rgba(82,222,181,.3)"><div class="sc-li" style="background:#52DEB5"></div><span class="sc-lt" style="color:#52DEB5">PD</span></div><div class="sc-ng"><div class="sc-name">Pacific Deep Seafoods</div><div class="sc-loc"><i class="ti ti-map-pin" style="font-size:11px;color:#52DEB5"></i>Vietnam · Est. 2009</div></div><div class="sc-bdgs"><span class="sc-v"><i class="ti ti-circle-check" style="font-size:9.5px"></i>Verified</span></div></div><div class="sc-tags"><span class="sc-tag">Shrimp</span><span class="sc-tag">Squid</span></div><p class="sc-desc">Vertically integrated shrimp and cephalopod processor, BAP-certified farms through to export packing.</p><div class="sc-stats"><div class="sc-stat"><span class="sc-sv">1T</span><span class="sc-sl">Min. Order</span></div><div class="sc-stat"><span class="sc-sv">33</span><span class="sc-sl">Countries</span></div><div class="sc-stat"><span class="sc-sv">&lt;14h</span><span class="sc-sl">Response</span></div></div><div class="sc-certs"><span class="sc-cert">BAP Certified</span><span class="sc-cert">HACCP</span></div><div class="sc-foot"><div class="sc-rate">★★★★☆ <span>4.5 · 13 reviews</span></div><button class="sc-cta">View Profile <i class="ti ti-arrow-right" style="font-size:12px"></i></button></div></div>
 </div>
-<div style="text-align:center"><button class="more-btn">Browse all 750+ verified suppliers <i class="ti ti-arrow-right" style="font-size:13px;margin-left:4px"></i></button></div>
+<div style="text-align:center"><a class="more-btn" href="<?php echo esc_url( home_url( '/suppliers/' ) ); ?>">Browse all 750+ verified suppliers <i class="ti ti-arrow-right" style="font-size:13px;margin-left:4px" aria-hidden="true"></i></a></div>
 </div>
 </section>
 
@@ -671,7 +679,7 @@ window.FF_ICON = <?php echo wp_json_encode($ffnet_icon); ?>;
 <div class="cta-h">Ready to source<br>smarter?</div>
 <p class="cta-p">Find verified wholesale frozen food suppliers worldwide — direct contact, no brokers, zero commission on every order.</p>
 <div class="cta-proof b"><i class="ti ti-check" style="font-size:12px"></i>750+ verified suppliers across 50+ countries</div>
-<button class="cta-btn b"><i class="ti ti-search" style="font-size:16px"></i>Browse Suppliers <i class="ti ti-arrow-right" style="font-size:15px"></i></button>
+<a class="cta-btn b" href="<?php echo esc_url( home_url( '/suppliers/' ) ); ?>"><i class="ti ti-search" style="font-size:16px" aria-hidden="true"></i>Browse Suppliers <i class="ti ti-arrow-right" style="font-size:15px" aria-hidden="true"></i></a>
 </div>
 <div class="cta-div" id="ctadiv"></div>
 <div class="cta-col supps" id="ctaR">
@@ -680,7 +688,7 @@ window.FF_ICON = <?php echo wp_json_encode($ffnet_icon); ?>;
 <div class="cta-h">Reach global wholesale<br>buyers directly.</div>
 <p class="cta-p">List your frozen food business for free and start receiving direct purchase enquiries from wholesale buyers worldwide.</p>
 <div class="cta-proof s"><i class="ti ti-users" style="font-size:12px"></i>Join 340+ businesses already listed on FFInc</div>
-<button class="cta-btn s"><i class="ti ti-plus" style="font-size:16px"></i>Create Free Listing <i class="ti ti-arrow-right" style="font-size:15px"></i></button>
+<a class="cta-btn s" href="<?php echo esc_url( home_url( '/add-listing/' ) ); ?>"><i class="ti ti-plus" style="font-size:16px" aria-hidden="true"></i>Create Free Listing <i class="ti ti-arrow-right" style="font-size:15px" aria-hidden="true"></i></a>
 </div>
 </div>
 </section>
